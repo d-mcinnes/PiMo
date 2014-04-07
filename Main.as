@@ -1,14 +1,15 @@
 ﻿package  {
-	
 	import flash.display.MovieClip;
 	
-	
 	public class Main extends MovieClip {
-		
+		private var environment:Environment;
 		
 		public function Main() {
-			// constructor code
+			
+		}
+		
+		private function createEnvironment() {
+			this.environment = new Environment();
 		}
 	}
-	
 }
