@@ -26,7 +26,7 @@
 				//skeletonContainer = new Sprite();
 				//stag.addChild(skeletonContainer);
 				
-				device.addEventListener(CameraImageEvent.DEPTH_IMAGE_UPDATE, depthImageUpdateHandler);
+				//device.addEventListener(CameraImageEvent.DEPTH_IMAGE_UPDATE, depthImageUpdateHandler);
 				var settings:KinectSettings = new KinectSettings();
 				settings.depthEnabled = true;
 				
@@ -55,13 +55,13 @@
 			layout();
 		}
 		
-		protected function depthImageUpdateHandler(event:CameraImageEvent):void {
+		/*protected function depthImageUpdateHandler(event:CameraImageEvent):void {
 			depthBitmap.bitmapData = event.imageData;
-			skeletonContainer.graphics.clear();
+			//skeletonContainer.graphics.clear();
 			for each(var user:User in device.usersWithSkeleton) {
 				trace("Position: " + user.position.depth);
 			}
-		}
+		}*/
 		
 		protected function layout():void {
 			depthBitmap.x = (800 - depthBitmap.width) * .5;
