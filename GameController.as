@@ -1,6 +1,6 @@
 ﻿package  {
 	public class GameController {
-		private var animals:Array;
+		private var party:Array;
 
 		public function GameController() {
 			// constructor code
