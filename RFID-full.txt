@@ -1,4 +1,4 @@
-﻿import com.phidgets.*;
+import com.phidgets.*;
 import com.phidgets.events.*;
 
 var rfid:PhidgetRFID = new PhidgetRFID();

@@ -20,4 +20,7 @@
   <icon/>
   <customUpdateUI>false</customUpdateUI>
   <allowBrowserInvocation>false</allowBrowserInvocation>
+  <extensions>
+    <extensionID>com.as3nui.nativeExtensions.air.kinect</extensionID>
+  </extensions>
 </application>
