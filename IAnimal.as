@@ -7,7 +7,7 @@
 		public function idle():void;
 		
 		//Movement 'enthusiasm' increases with party size
-		public function move(partySize:int):void;
+		public function moveBySize(partySize:int):void;
 		public function moveCalm():void;
 		public function moveEager():void;
 		public function moveExcited():void;
