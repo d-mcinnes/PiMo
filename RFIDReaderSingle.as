@@ -40,12 +40,12 @@
 			 //You also need to close the device when you're done with it.
 		}
 		
-		function onError(evt:PhidgetErrorEvent):void {
+		private function onError(evt:PhidgetErrorEvent):void {
 			trace("onError");
 			trace(evt);
 		}
 		
-		function onAttach(evt:PhidgetEvent):void {
+		private function onAttach(evt:PhidgetEvent):void {
 			trace("onAttach");
 			trace(evt);
 		
@@ -61,7 +61,7 @@
 			//rfid.write(new PhidgetRFIDTag("Help me!!", PhidgetRFID.PHIDGET_RFID_PROTOCOL_PHIDGETS));
 		}
 		
-		function onDetach(evt:PhidgetEvent):void {
+		private function onDetach(evt:PhidgetEvent):void {
 			trace("onDetach");
 			trace(evt);
 			
@@ -69,7 +69,7 @@
 			rfid.Antenna = false;
 		}
 		
-		function onTag(evt:PhidgetDataEvent):void {
+		private function onTag(evt:PhidgetDataEvent):void {
 			trace("onTag: " + String(evt.Data));
 			
 			//funsies
@@ -80,7 +80,7 @@
 			}
 		}
 		
-		function onTagLoss(evt:PhidgetDataEvent):void {
+		private function onTagLoss(evt:PhidgetDataEvent):void {
 			trace("onTagLoss: " + String(evt.Data));
 		}
 		
