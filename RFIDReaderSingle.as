@@ -4,18 +4,23 @@
 	import com.phidgets.events.*;
 	
 	/***
-	 * Class for demonstrating the basics of RFID reader...stuff.
+	 * Class for handling one RFID reader (i.e. a single glove, or the claw).
 	 */
-	public class RFIDReader {
+	public class RFIDReaderSingle {
 		
 		//instance of the rfid reader
 		private var rfid:PhidgetRFID;
 		
+		//instance of the gamecontroller
+		private var gc:GameController;
+		
 		/**
 		 * Initialises the connection to the RFID reader.
 		 */
-		public function RFIDReader() {
+		public function RFIDReaderSingle(gc:GameController) {
+			
 			this.rfid = new PhidgetRFID();
+			this.gc = gc;
 			
 			rfid.addEventListener(PhidgetEvent.DETACH, onDetach);
 			rfid.addEventListener(PhidgetEvent.ATTACH, onAttach);
