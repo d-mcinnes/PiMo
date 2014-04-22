@@ -22,9 +22,6 @@
 			if(Kinect.isSupported()) {
 				this.kinect = Kinect.getDevice();
 				
-				this.depthBitmap = new Bitmap();
-				//document.addChild(this.depthBitmap);
-				
 				this.kinectSettings = new KinectSettings();
 				this.kinectSettings.depthEnabled = true;
 				this.kinectSettings.depthShowUserColors = true;
@@ -39,7 +36,7 @@
 				// Listen to when the kinect is ready
 				this.kinect.addEventListener(DeviceEvent.STARTED, kinectStarted);
 				
-				// RGB Update
+				// Depth Update
 				this.kinect.addEventListener(CameraImageEvent.DEPTH_IMAGE_UPDATE, depthImageUpdateHandler);
 				
 				this.kinect.start(this.kinectSettings);
@@ -71,17 +68,13 @@
 		}
 		
 		protected function rgbImageUpdateHandler(event:CameraImageEvent):void {
+			trace("rgbUpdate");
 			depthBitmap.bitmapData = event.imageData;
 		}
 		
 		protected function depthImageUpdateHandler(event:CameraImageEvent):void {
-			//depthBitmap.bitmapData = event.imageData;
-			//skeletonContainer.graphics.clear();
 			for each(var user:User in this.kinect.usersWithSkeleton) {
-				//trace("Position: " + user.position.depth);
-				//trace("Hello 1");
 				this.kinectSkeleton.setPoints(user);
-				//trace("Hello 2");
 			}
 		}
 		

@@ -47,6 +47,9 @@
 			this.setTorso(user.torso.position.depth);*/
 			
 			this.skeleton.graphics.clear();
+			while(this.skeleton.numChildren > 0) {
+				this.skeleton.removeChildAt(0);
+			}
 			try {
 				this.createLine(user.leftElbow.position.depth, user.leftHand.position.depth);
 				this.createLine(user.leftShoulder.position.depth, user.leftElbow.position.depth);
@@ -60,6 +63,12 @@
 				this.createLine(user.rightShoulder.position.depth, user.rightElbow.position.depth);
 				this.createLine(user.torso.position.depth, user.rightKnee.position.depth);
 				this.createLine(user.rightKnee.position.depth, user.rightFoot.position.depth);
+				//trace("HellO");
+				var headFill:Sprite = new Sprite();
+				headFill.graphics.beginFill(0x000000);
+				headFill.graphics.drawCircle(user.head.position.depth.x, user.head.position.depth.y, 20);
+				headFill.graphics.endFill();
+				this.skeleton.addChild(headFill);
 			} catch(e:Error) {
 				trace("Exception: " + e);
 			}
