@@ -17,7 +17,7 @@
 		private var torso:Point;
 		
 		public function KinectSkeleton() {
-			// constructor code
+			
 		}
 		
 		public function getHead():Point {return this.head;}
@@ -31,7 +31,7 @@
 		public function getRightHand():Point {return this.rightHand;}
 		public function getRightHip():Point {return this.rightHip;}
 		public function getRightKnee():Point {return this.rightKnee;}
-		public function getRightShoulder():Point {reutrn this.rightShoulder;}
+		public function getRightShoulder():Point {return this.rightShoulder;}
 		public function getTorso():Point {return this.torso;}
 		
 		public function setHead(point:Point) {this.head = point;}
