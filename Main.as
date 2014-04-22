@@ -10,7 +10,7 @@
 		public static var SIZE_Y:Number = 768;
 		
 		public function Main() {
-			this.gameController = new GameController();
+			this.gameController = new GameController(stage);
 			//createEnvironment();
 			//this.demo = new Demo(this.stage);
 			//var skeletonBonesDemo:SkeletonBonesDemo = new SkeletonBonesDemo();

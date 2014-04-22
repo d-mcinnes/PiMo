@@ -1,0 +1,9 @@
+﻿package  {
+	
+	public interface IScenery {
+		
+		
+		
+	}
+	
+}

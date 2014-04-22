@@ -1,5 +1,7 @@
 *.swf
 Main-app.xml
+main-app.xml
+PiMo-app.xml
 DemoBase.as
 KinectPlayer.as
 KinectPlayerContextBridge.as
