@@ -1,14 +1,15 @@
 ﻿package {
+	import flash.display.Bitmap;
+	import flash.display.Stage;
+	import flash.events.Event;
+	import flash.sampler.StackFrame;
+	
 	import com.as3nui.nativeExtensions.air.kinect.Kinect;
 	import com.as3nui.nativeExtensions.air.kinect.KinectSettings;
 	import com.as3nui.nativeExtensions.air.kinect.constants.CameraResolution;
 	import com.as3nui.nativeExtensions.air.kinect.data.User;
 	import com.as3nui.nativeExtensions.air.kinect.events.CameraImageEvent;
 	import com.as3nui.nativeExtensions.air.kinect.events.DeviceEvent;
-	import flash.display.Stage;
-	import flash.events.Event;
-	import flash.sampler.StackFrame;
-	import flash.display.Bitmap;
 	
 	public class KinectInput {
 		private var kinect:Kinect;
@@ -74,6 +75,21 @@
 		
 		protected function depthImageUpdateHandler(event:CameraImageEvent):void {
 			for each(var user:User in this.kinect.usersWithSkeleton) {
+				this.kinectSkeleton.setHead(user.head.position.depth);
+				this.kinectSkeleton.setLeftElbow(user.leftElbow.position.depth);
+				this.kinectSkeleton.setLeftHand(user.leftHand.position.depth);
+				this.kinectSkeleton.setLeftHip(user.leftHip.position.depth);
+				this.kinectSkeleton.setLeftKnee(user.leftKnee.position.depth);
+				this.kinectSkeleton.setLeftShoulder(user.leftShoulder.position.depth);
+				this.kinectSkeleton.setLeftFoot(user.leftFoot.position.depth);
+				this.kinectSkeleton.setNeck(user.neck.position.depth);
+				this.kinectSkeleton.setRightElbow(user.rightElbow.position.depth);
+				this.kinectSkeleton.setRightHand(user.rightHand.position.depth);
+				this.kinectSkeleton.setRightHip(user.rightHip.position.depth);
+				this.kinectSkeleton.setRightKnee(user.rightKnee.position.depth);
+				this.kinectSkeleton.setRightShoulder(user.rightShoulder.position.depth);
+				this.kinectSkeleton.setRightFoot(user.rightFoot.position.depth);
+				this.kinectSkeleton.setTorso(user.torso.position.depth);
 				this.kinectSkeleton.setPoints(user);
 			}
 		}
