@@ -1,5 +1,6 @@
 *.swf
 Main-app.xml
+main-app.xml
 DemoBase.as
 KinectPlayer.as
 KinectPlayerContextBridge.as
