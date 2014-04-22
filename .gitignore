@@ -1,2 +1,6 @@
 *.swf
 Main-app.xml
+DemoBase.as
+KinectPlayer.as
+KinectPlayerContextBridge.as
+SkeletonBonesDemo.as
