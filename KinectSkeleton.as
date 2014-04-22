@@ -1,5 +1,7 @@
 ﻿package  {
 	import flash.geom.Point;
+	import flash.display.Sprite;
+	import com.as3nui.nativeExtensions.air.kinect.data.User;
 
 	public class KinectSkeleton {
 		private var head:Point;
@@ -16,8 +18,55 @@
 		private var rightShoulder:Point;
 		private var torso:Point;
 		
+		private var skeleton:Sprite;
+		
 		public function KinectSkeleton() {
+			this.skeleton = new Sprite();
+		}
+		
+		private function createLine(point1:Point, point2:Point):void {
+			this.skeleton.graphics.lineStyle(1, 0, 1);
+			this.skeleton.graphics.moveTo(point1.x, point1.y);
+			this.skeleton.graphics.lineTo(point2.x, point2.y);
+		}
+		
+		public function setPoints(user:User):void {
+			/*this.setHead(user.head.position.depth);
+			this.setLeftElbow(user.leftElbow.position.depth);
+			this.setLeftHand(user.leftHand.position.depth);
+			this.setLeftHip(user.leftHip.position.depth);
+			this.setLeftKnee(user.leftKnee.position.depth);
+			this.setLeftShoulder(user.leftShoulder.position.depth);
+			this.setNeck(user.neck.position.depth);
+			this.setRightElbow(user.rightElbow.position.depth);
+			this.setRightHand(user.rightHand.position.depth);
+			this.setRightHip(user.rightHip.position.depth);
+			this.setRightKnee(user.rightKnee.position.depth);
+			this.setRightHip(user.rightHip.position.depth);
+			this.setRightShoulder(user.rightShoulder.position.depth);
+			this.setTorso(user.torso.position.depth);*/
 			
+			this.skeleton.graphics.clear();
+			try {
+				this.createLine(user.leftElbow.position.depth, user.leftHand.position.depth);
+				this.createLine(user.leftShoulder.position.depth, user.leftElbow.position.depth);
+				this.createLine(user.torso.position.depth, user.leftKnee.position.depth);
+				this.createLine(user.leftKnee.position.depth, user.leftFoot.position.depth);
+				this.createLine(user.leftShoulder.position.depth, user.neck.position.depth);
+				this.createLine(user.neck.position.depth, user.torso.position.depth);
+				this.createLine(user.neck.position.depth, user.head.position.depth);
+				this.createLine(user.rightShoulder.position.depth, user.neck.position.depth);
+				this.createLine(user.rightElbow.position.depth, user.rightHand.position.depth);
+				this.createLine(user.rightShoulder.position.depth, user.rightElbow.position.depth);
+				this.createLine(user.torso.position.depth, user.rightKnee.position.depth);
+				this.createLine(user.rightKnee.position.depth, user.rightFoot.position.depth);
+			} catch(e:Error) {
+				trace("Exception: " + e);
+			}
+			
+			/*this.skeleton.graphics.lineStyle(1, 0, 1);
+			this.skeleton.graphics.moveTo(20, 20);
+			this.skeleton.graphics.lineTo(60, 60);*/
 		}
 		
 		public function getHead():Point {return this.head;}
@@ -47,5 +96,7 @@
 		public function setRightKnee(point:Point) {this.rightKnee = point;}
 		public function setRightShoulder(point:Point) {this.rightShoulder = point;}
 		public function setTorso(point:Point) {this.torso = point;}
+		
+		public function getSkeleton():Sprite {return this.skeleton;}
 	}
 }
