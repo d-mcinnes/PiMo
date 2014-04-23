@@ -4,8 +4,8 @@
 	public class GameController {
 		private var document:Stage;
 		
-		private var kinectInput:KinectInput;
-		private var rfidReader:RFIDReaderSingle;
+		//private var kinectInput:KinectInput;
+		//private var rfidReader:RFIDReaderSingle;
 		
 		private var score:int; //cumulative score for this game, nonnegative
 		
@@ -32,6 +32,10 @@
 			
 			loadScene();
 			loadScenery();
+			
+			//while loop for playing game
+			
+			endGame();
 		}
 		
 		public function renderPlayer() {
@@ -40,36 +44,91 @@
 		}
 		
 		private function loadScene():void {
+			//TODO reset scene elements
+			//TODO set background
 			loadScenery();
 		}
 		
 		private function loadScenery():void {
 			this.scenery = new Array();
+			
+			var rand:int;
+			for (var i:int = 0; i < 3; ++i) {
+				//rand = 1 + Math.ceil(Math.random() + 3);
+				rand = 2; //TODO only using long grass for prototype
+				switch (rand) {
+					case 1:
+					scenery.push(SceneryTree);
+					break;
+					
+					case 2:
+					scenery.push(SceneryGrass);
+					break;
+					
+					case 3:
+					scenery.push(SceneryBurrow);
+					break;
+					
+					case 4:
+					scenery.push(SceneryFarm);
+					break;
+				}
+			}
+			
+			for each (var object in scenery) {
+				//TODO add image to scene
+				//update position data in class
+			}
 		}
 		
 		//private function isSceneComplete():Boolean {
 		
-		private function checkForScenery():void {
-			
+		private function checkForSceneryInteraction():void {
+			//get skeleton from kinect
+			//get positions for skeleton
+			//for each object in scenery
+			//get position
+			//get size
+			//calculate bounds
+			//check for overlap
+			//if overlap, spawnAnimal(object.getAnimal)
 		}
 		
-		private function spawnAnimal(scenery:Scenery):void {
-			
+		private function spawnAnimal(object:SceneryObject):void {
+			var animal:Animal = object.getAnimal();
+			wild.push(animal);
+			//add animal to stage
+			//start timer
+			//when timer ends, call despawnAnimal
 		}
 		
 		private function despawnAnimal(animal:Animal):void {
 			
 		}
 		
+		private function attachAnimal(animal:Animal):void {
+			//clear timer for despawnAnimal
+			//TODO check for animal interactions
+			party.push(animal);
+			score += animal.getScore();
+		}
+		
+		private function removeAnimal(animal:Animal):Boolean {
+			var index = party.indexOf(animal);
+			if (index >= 0) {
+				party.splice(index, 1);
+				score -= animal.getScore();
+				return true;
+			} else {
+				return false;
+			}
+		}
+		SW
 		private function activateTag(tag:String) {
 			
 		}
 		
 		private function deactivateTag(tag:String) {
-			
-		}
-		
-		private function attachAnimal(animal:Animal):void {
 			
 		}
 		
