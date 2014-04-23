@@ -1,4 +1,4 @@
 PiMo
 ====
 
-slutty puppy
+\ˈpi\ \ˈmü\
