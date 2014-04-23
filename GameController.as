@@ -4,7 +4,7 @@
 	public class GameController {
 		private var document:Stage;
 		
-		//private var kinectInput:KinectInput;
+		private var kinectInput:KinectInput;
 		//private var rfidReader:RFIDReaderSingle;
 		
 		private var score:int; //cumulative score for this game, nonnegative

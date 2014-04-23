@@ -14,15 +14,15 @@
 		}
 		
 		public function getPosition():Point {
-			
+			return this.position;
 		}
 		
 		public function getImage():Bitmap {
-			
+			return this.image;
 		}
 		
 		public function getAnimal():Animal {
-			
+			return null;
 		}
 		
 	}

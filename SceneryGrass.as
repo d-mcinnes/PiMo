@@ -9,15 +9,15 @@
 		}
 		
 		override public function getPosition():Point {
-			
+			return null;
 		}
 		
 		override public function getImage():Bitmap {
-			
+			return null;
 		}
 		
 		override public function getAnimal():Animal {
-			
+			return null;
 		}
 
 	}
