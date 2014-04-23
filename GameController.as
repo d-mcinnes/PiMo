@@ -123,7 +123,7 @@
 				return false;
 			}
 		}
-		SW
+		
 		private function activateTag(tag:String) {
 			
 		}
