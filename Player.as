@@ -42,9 +42,10 @@
 			//trace(this.x + ", " + this.y);
 			
 			var neckPoint:Point = getPolarPoint(new Point(0, 0), 
-												 getAngle(this.kinectSkeleton.getNeck().x, 
-														  this.kinectSkeleton.getNeck().y, 
-														  0, 0), 
+												 getAngle(this.kinectSkeleton.getTorso().x, 
+														  this.kinectSkeleton.getTorso().y, 
+														  this.kinectSkeleton.getNeck().x, 
+														  this.kinectSkeleton.getNeck().y), 
 												 10);
 			this.createLine(new Point(0, 0), neckPoint);
 			
@@ -55,6 +56,42 @@
 			var rightArmElbow = getPolarPoint(neckPoint, rightArmUpperAngle, 5);
 			this.createLine(neckPoint, rightArmElbow);
 			this.createLine(rightArmElbow, getPolarPoint(rightArmElbow, rightArmLowerAngle, 5));
+			
+			/** 
+			 ** Render Left Leg 
+			 **/
+			var leftKnee:Point = getPolarPoint(new Point(0, 0), 
+											   getAngle(this.kinectSkeleton.getTorso().x, 
+														this.kinectSkeleton.getTorso().y, 
+														this.kinectSkeleton.getLeftKnee().x, 
+														this.kinectSkeleton.getLeftKnee().y), 
+											   5);
+			this.createLine(new Point(0, 0), leftKnee);
+			this.createLine(leftKnee, getPolarPoint(leftKnee, 
+													getAngle(this.kinectSkeleton.getLeftKnee().x, 
+															 this.kinectSkeleton.getLeftKnee().y, 
+															 this.kinectSkeleton.getLeftFoot().x, 
+															 this.kinectSkeleton.getLeftFoot().y), 
+													5));
+			
+			/** 
+			 ** Render Right Leg 
+			 **/
+			var rightKnee:Point = getPolarPoint(new Point(0, 0),
+												getAngle(this.kinectSkeleton.getTorso().x, 
+														 this.kinectSkeleton.getTorso().y, 
+														 this.kinectSkeleton.getRightKnee().x, 
+														 this.kinectSkeleton.getRightKnee().y), 
+												5);
+			this.createLine(new Point(0, 0), rightKnee);
+			this.createLine(rightKnee, getPolarPoint(rightKnee,
+													 getAngle(this.kinectSkeleton.getRightKnee().x, 
+															  this.kinectSkeleton.getRightKnee().y, 
+															  this.kinectSkeleton.getRightFoot().x,
+															  this.kinectSkeleton.getRightFoot().y), 
+													 5));
+			
+			
 			
 			//trace("Create");
 			
