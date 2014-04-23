@@ -37,10 +37,19 @@
 													 this.kinectSkeleton.getRightHand().x,
 													 this.kinectSkeleton.getRightHand().y);
 			
-			this.clearPlayer();
-			this.x = 1024 * this.kinectSkeleton.getPositionRelative().x;
+			var xPosition = 1024 * this.kinectSkeleton.getPositionRelative().x;
+			if(xPosition <= 80) {
+				trace("Out of Bounds");
+				return;
+			} else if(xPosition >= 950) {
+				trace("Out of Bounds");
+				return;
+			} else {
+				this.x = xPosition;
+			}
 			//trace(this.x + ", " + this.y);
 			
+			this.clearPlayer();
 			var neckPoint:Point = getPolarPoint(new Point(0, 0), 
 												 getAngle(this.kinectSkeleton.getTorso().x, 
 														  this.kinectSkeleton.getTorso().y, 
