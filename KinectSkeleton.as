@@ -21,6 +21,7 @@
 		private var rightFoot:Point;
 		private var torso:Point;
 		
+		private var positionRelative:Point;
 		private var skeleton:Sprite;
 		
 		public function KinectSkeleton() {
@@ -113,6 +114,7 @@
 		public function getRightShoulder():Point {return this.rightShoulder;}
 		public function getRightFoot():Point {return this.rightFoot;}
 		public function getTorso():Point {return this.torso;}
+		public function getPositionRelative():Point {return this.positionRelative;}
 		
 		public function setHead(point:Point) {this.head = point;}
 		public function setLeftElbow(point:Point) {this.leftElbow = point;}
@@ -129,6 +131,7 @@
 		public function setRightShoulder(point:Point) {this.rightShoulder = point;}
 		public function setRightFoot(point:Point) {this.rightFoot = point;}
 		public function setTorso(point:Point) {this.torso = point;}
+		public function setPositionRelative(point:Point) {this.positionRelative = point;}
 		
 		public function getSkeleton():Sprite {return this.skeleton;}
 	}

@@ -38,14 +38,33 @@
 													 this.kinectSkeleton.getRightHand().y);
 			
 			this.clearPlayer();
+			this.x = 1024 * this.kinectSkeleton.getPositionRelative().x;
+			//trace(this.x + ", " + this.y);
 			
-			var leftArmElbow = getPolarPoint(new Point(0, 0), leftArmUpperAngle, 5);
-			this.createLine(new Point(0, 0), leftArmElbow);
+			var neckPoint:Point = getPolarPoint(new Point(0, 0), 
+												 getAngle(this.kinectSkeleton.getNeck().x, 
+														  this.kinectSkeleton.getNeck().y, 
+														  0, 0), 
+												 10);
+			this.createLine(new Point(0, 0), neckPoint);
+			
+			var leftArmElbow = getPolarPoint(neckPoint, leftArmUpperAngle, 5);
+			this.createLine(neckPoint, leftArmElbow);
 			this.createLine(leftArmElbow, getPolarPoint(leftArmElbow, leftArmLowerAngle, 5));
 			
-			var rightArmElbow = getPolarPoint(new Point(0, 0), rightArmUpperAngle, 5);
-			this.createLine(new Point(0, 0), rightArmElbow);
+			var rightArmElbow = getPolarPoint(neckPoint, rightArmUpperAngle, 5);
+			this.createLine(neckPoint, rightArmElbow);
 			this.createLine(rightArmElbow, getPolarPoint(rightArmElbow, rightArmLowerAngle, 5));
+			
+			//trace("Create");
+			
+			/*this.createLine(this.kinectSkeleton.getNeck(), 
+							getPolarPoint(this.kinectSkeleton.getNeck(), 
+										  getAngle(this.kinectSkeleton.getNeck().x, 
+												   this.kinectSkeleton.getNeck().y, 
+												   this.kinectSkeleton.getTorso().x, 
+												   this.kinectSkeleton.getTorso().y), 
+										  10));*/
 			
 			
 			//trace("Angles: " + leftArmUpperAngle + " " + leftArmLowerAngle + " " + rightArmUpperAngle + " " + rightArmLowerAngle);

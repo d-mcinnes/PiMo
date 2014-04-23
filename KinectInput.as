@@ -76,7 +76,6 @@
 		}
 		
 		protected function depthImageUpdateHandler(event:CameraImageEvent):void {
-			//trace("depth");
 			for each(var user:User in this.kinect.usersWithSkeleton) {
 				this.kinectSkeleton.setHead(user.head.position.depth);
 				this.kinectSkeleton.setLeftElbow(user.leftElbow.position.depth);
@@ -93,6 +92,7 @@
 				this.kinectSkeleton.setRightShoulder(user.rightShoulder.position.depth);
 				this.kinectSkeleton.setRightFoot(user.rightFoot.position.depth);
 				this.kinectSkeleton.setTorso(user.torso.position.depth);
+				this.kinectSkeleton.setPositionRelative(user.position.depthRelative);
 				//this.kinectSkeleton.setPoints(user);
 				this.gameController.renderPlayer();
 			}
