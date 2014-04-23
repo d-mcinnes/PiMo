@@ -12,6 +12,9 @@
 			// constructor code
 		}
 		
+		public function getScore():Number {
+			return 0;
+		}
 		
 	}
 }
