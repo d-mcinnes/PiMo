@@ -1,4 +1,6 @@
 ﻿package  {
+	import flash.display.Bitmap;
+	import flash.geom.Point;
 	
 	public class SceneryTree extends SceneryObject implements ISceneryObject {
 
@@ -6,15 +8,15 @@
 			
 		}
 		
-		public function getPosition():Point {
+		override public function getPosition():Point {
 			
 		}
 		
-		public function getImage():Bitmap {
+		override public function getImage():Bitmap {
 			
 		}
 		
-		public function getAnimal():Animal {
+		override public function getAnimal():Animal {
 			
 		}
 

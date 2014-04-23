@@ -1,12 +1,14 @@
 ﻿package  {
+	import flash.display.Bitmap;
+	import flash.geom.Point;
 	
 	public interface ISceneryObject {
 		
-		public function getPosition():Point;
+		function getPosition():Point;
 		
-		public function getImage():Bitmap;
+		function getImage():Bitmap;
 		
-		public function getAnimal():Animal;
+		function getAnimal():Animal;
 		
 	}
 	
