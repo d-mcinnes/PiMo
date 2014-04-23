@@ -12,20 +12,31 @@
 		private var scenery:Array; //interactable objects in the background
 		private var wild:Array; //animals in the scene, not following the player
 		private var party:Array; //animals currently following the player
+		private var player:Player;
 
 		/**
 		 * Controls the proceedings for one round of the game.
 		 */
 		public function GameController(document:Stage) {
 			this.document = document;
-			this.kinectInput = new KinectInput();
-			this.rfidReader = new RFIDReaderSingle(this);
+			this.kinectInput = new KinectInput(this.document, this);
+			//this.rfidReader = new RFIDReaderSingle(this);
 			this.score = 0;
 			this.wild = new Array();
 			this.party = new Array();
 			
+			this.player = new Player(this.kinectInput.getKinectSkeleton());
+			this.player.x = 50;
+			this.player.y = 400;
+			this.document.addChild(this.player);
+			
 			loadScene();
 			loadScenery();
+		}
+		
+		public function renderPlayer() {
+			//trace("Render");
+			this.player.renderPlayer();
 		}
 		
 		private function loadScene():void {

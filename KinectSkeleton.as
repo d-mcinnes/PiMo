@@ -71,6 +71,7 @@
 					  user.position.worldRelative.y + " Z:" +
 					  user.position.worldRelative.z);*/
 				//trace("HellO");
+				trace(this.getLeftElbow());
 				this.createLine(this.getLeftElbow(), this.getLeftHand());
 				this.createLine(this.getLeftShoulder(), this.getLeftElbow());
 				this.createLine(this.getTorso(), this.getLeftKnee());
