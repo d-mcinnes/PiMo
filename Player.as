@@ -12,6 +12,11 @@
 		public function Player(kinectSkeleton:KinectSkeleton) {
 			this.kinectSkeleton = kinectSkeleton;
 			this.player = new Sprite();
+			
+			this.player.graphics.lineStyle(3,0x00ff00);
+			this.player.graphics.beginFill(0x000000);
+			this.player.graphics.drawRect(0,0,100,100);
+			this.player.graphics.endFill();
 		}
 		
 		public function getPlayerAvatar():Sprite {return this.player;}

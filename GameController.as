@@ -1,7 +1,11 @@
 ﻿package  {
 	import flash.display.Stage;
+	import flash.display.Graphics;
+	import flash.display.Shape;
+	import flash.display.*;
 	import flash.utils.getTimer;
 	import flash.geom.Point;
+	import flash.geom.*;
 
 	public class GameController {
 		private var document:Stage;
@@ -24,7 +28,7 @@
 		public function GameController(document:Stage) {
 			this.document = document;
 			this.kinectInput = new KinectInput(this.document, this);
-			//this.rfidReader = new RFIDReaderSingle(this);
+			this.rfidReader = new RFIDReaderSingle(this);
 			this.score = 0;
 			this.wild = new Array();
 			this.party = new Array();
@@ -99,13 +103,24 @@
 		
 		public function checkForSceneryInteraction(leftPosition:Point, rightPosition:Point):void {
 			for each (var object in scenery) {
+				//trace("Object: " + "(" + object.x + ", " + object.y + ")" + " Hand: " + object.localToGlobal(leftPosition));
+				//var point:Point = localToGlobal(new Point(object.x, object.y));
 				if((Math.abs(object.x - (leftPosition.x * 1024)) <= 100) && 
 				   (Math.abs(object.y - (leftPosition.y * 1024)) <= 100)) {
-					trace("HIT");
+					trace("HIT LEFT");
 				} else {
 					trace("Object: (" + object.x + ", " + object.y + ") Player: (" + 
-						  leftPosition.x * 1024 + ", " + leftPosition.y * 1024 + ")");
+						  leftPosition.x * 1024 + ")");
+						  //trace(object.parent);
 				}
+				
+				
+				/*if((Math.abs(object.x - (rightPosition.x * 1024)) <= 100) &&
+				   (Math.abs(object.y - (rightPosition.y * 1024)) <= 100)) {
+					   trace("HIT RIGHT");
+				   } else {
+					   
+				   }*/
 				
 				/*if((object.x > this.player.getPlayerAvatar().x && object.x < (this.player.getPlayerAvatar().x + 
 																			  this.player.getPlayerAvatar().width)) && 

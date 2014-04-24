@@ -95,7 +95,8 @@
 				this.kinectSkeleton.setPositionRelative(user.position.depthRelative);
 				//this.kinectSkeleton.setPoints(user);
 				this.gameController.renderPlayer();
-				this.gameController.checkForSceneryInteraction(user.leftHand.position.depthRelative, user.rightHand.position.depthRelative);
+				this.gameController.checkForSceneryInteraction(user.leftHand.position.depthRelative, 
+															   user.rightHand.position.depthRelative);
 			}
 		}
 		
