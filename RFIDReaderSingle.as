@@ -71,17 +71,12 @@
 		
 		private function onTag(evt:PhidgetDataEvent):void {
 			trace("onTag: " + String(evt.Data));
-			
-			//funsies
-			if (rfid.LED == false) {
-				rfid.LED = true;
-			} else {
-				rfid.LED = false;
-			}
+			gc.activateTag(String(evt.Data));
 		}
 		
 		private function onTagLoss(evt:PhidgetDataEvent):void {
 			trace("onTagLoss: " + String(evt.Data));
+			gc.deactivateTag(String(evt.Data));
 		}
 		
 	}

@@ -26,7 +26,7 @@
 		
 		public static var SCREEN_SIZE_X:Number = 1024;
 		public static var SCREEN_SIZE_Y:Number = 600;
-		public static var GROUND_HEIGHT:Number = 300;
+		public static var GROUND_HEIGHT:Number = 350;
 
 		/**
 		 * Controls the proceedings for one round of the game.
@@ -58,6 +58,9 @@
 		
 		public function renderPlayer() {
 			this.player.renderPlayer();
+			for each (var animal in party) {
+				animal.x = GameController.SCREEN_SIZE_X * this.kinectInput.getKinectSkeleton().getPositionRelative().x - 30;
+			}
 			//var parent:Stage = this.document;
 			//this.document.setChildIndex(this.player.getPlayerAvatar(), this.document.numChildren-1);
 			//this.document.addChild(this.player.getPlayerAvatar());
@@ -201,7 +204,13 @@
 		private function attachAnimal(animal:Animal):void {
 			//clear timer for despawnAnimal
 			//TODO check for animal interactions
+			trace("Attach Animal");
 			party.push(animal);
+			for each (var object in wild) {
+				if(object == animal) {
+					wild.splice(wild.indexOf(animal), 1);
+				}
+			}
 			score += animal.getScore();
 		}
 		
@@ -216,11 +225,17 @@
 			}
 		}
 		
-		private function activateTag(tag:String) {
-			
+		public function activateTag(tag:String) {
+			//if(tag == '') {
+				for each (var animal in wild) {
+					//if(Class(getDefinitionByName(getQualifiedClassName(animal))) == 'Rabbit') {
+						attachAnimal(animal);
+					//}
+				}
+			//}
 		}
 		
-		private function deactivateTag(tag:String) {
+		public function deactivateTag(tag:String) {
 			
 		}
 		
