@@ -6,6 +6,8 @@
 	public class Player extends MovieClip {
 		private var kinectSkeleton:KinectSkeleton;
 		private var player:Sprite;
+		private var leftPoint:Point;
+		private var rightPoint:Point;
 
 		public function Player(kinectSkeleton:KinectSkeleton) {
 			this.kinectSkeleton = kinectSkeleton;
@@ -62,9 +64,13 @@
 			this.createLine(neckPoint, leftArmElbow);
 			this.createLine(leftArmElbow, getPolarPoint(leftArmElbow, leftArmLowerAngle, 5));
 			
+			this.leftPoint = getPolarPoint(leftArmElbow, leftArmLowerAngle, 5);
+			
 			var rightArmElbow = getPolarPoint(neckPoint, rightArmUpperAngle, 5);
 			this.createLine(neckPoint, rightArmElbow);
 			this.createLine(rightArmElbow, getPolarPoint(rightArmElbow, rightArmLowerAngle, 5));
+			
+			this.rightPoint = getPolarPoint(leftArmElbow, leftArmLowerAngle, 5);
 			
 			/** 
 			 ** Render Left Leg 
