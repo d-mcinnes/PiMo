@@ -1,13 +1,16 @@
 ﻿package  {
 	import flash.display.Stage;
+	import flash.utils.getTimer;
 
 	public class GameController {
 		private var document:Stage;
 		
 		private var kinectInput:KinectInput;
-		//private var rfidReader:RFIDReaderSingle;
+		private var rfidReader:RFIDReaderSingle;
 		
 		private var score:int; //cumulative score for this game, nonnegative
+		
+		private var gameDuration = 3*60*1000; //milliseconds
 		
 		private var scenery:Array; //interactable objects in the background
 		private var wild:Array; //animals in the scene, not following the player
@@ -20,7 +23,7 @@
 		public function GameController(document:Stage) {
 			this.document = document;
 			this.kinectInput = new KinectInput(this.document, this);
-			//this.rfidReader = new RFIDReaderSingle(this);
+			this.rfidReader = new RFIDReaderSingle(this);
 			this.score = 0;
 			this.wild = new Array();
 			this.party = new Array();
@@ -34,6 +37,10 @@
 			loadScenery();
 			
 			//while loop for playing game
+			var startTime:uint = getTimer();
+			while(getTimer() - startTime < this.gameDuration) {
+				checkForSceneryInteraction();
+			}
 			
 			endGame();
 		}

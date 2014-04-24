@@ -12,7 +12,7 @@
 			// constructor code
 		}
 		
-		public function getScore():Number {
+		public function getScore():int {
 			return 0;
 		}
 		
