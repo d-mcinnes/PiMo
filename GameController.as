@@ -3,6 +3,8 @@
 	import flash.display.Graphics;
 	import flash.display.Shape;
 	import flash.display.*;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	import flash.utils.getTimer;
 	import flash.geom.Point;
 	import flash.geom.*;
@@ -93,9 +95,12 @@
 				}
 			//}*/
 			
+			scenery.push(new Grass());
+			
 			for each (var object in scenery) {
 				object.x = (Math.floor(Math.random() * (950 - 70 + 1)) + 70);
 				object.y = GameController.GROUND_HEIGHT;
+				object.setIsActive(true);
 				this.document.addChild(object);
 				//TODO add image to scene
 				//update position data in class
@@ -108,17 +113,23 @@
 			for each (var object in scenery) {
 				//trace("Object: " + "(" + object.x + ", " + object.y + ")" + " Hand: " + object.localToGlobal(leftPosition));
 				//var point:Point = localToGlobal(new Point(object.x, object.y));
-				if((Math.abs(object.x - (leftPosition.x * GameController.SCREEN_SIZE_X)) <= 100) && 
-				   (Math.abs(object.y - (leftPosition.y * GameController.SCREEN_SIZE_X)) <= 100)) {
-					trace("HIT LEFT");
-					//this.party.push(new Rabbit());
-					spawnAnimal(object.getAnimal());
-				} else {
-					trace("Object: (" + object.x + ", " + object.y + ") Player: (" + 
-						  leftPosition.x * GameController.SCREEN_SIZE_X + ")");
-						  //trace(object.parent);
+				if(object.isActive()) {
+					if((Math.abs(object.x - (leftPosition.x * GameController.SCREEN_SIZE_X)) <= 100) && 
+					   (Math.abs(object.y - (leftPosition.y * GameController.SCREEN_SIZE_X)) <= 100)) {
+						trace("HIT LEFT");
+						//this.party.push(new Rabbit());
+						spawnAnimal(new Rabbit());
+						object.setIsActive(false);
+						
+						var timer:Timer = new Timer(10000);
+						timer.addEventListener(TimerEvent.TIMER, timerListener);
+						timer.start();
+					} else {
+						trace("Object: (" + object.x + ", " + object.y + ") Player: (" + 
+							  leftPosition.x * GameController.SCREEN_SIZE_X + ")");
+							  //trace(object.parent);
+					}
 				}
-				
 				
 				/*if((Math.abs(object.x - (rightPosition.x * 1024)) <= 100) &&
 				   (Math.abs(object.y - (rightPosition.y * 1024)) <= 100)) {
@@ -154,6 +165,18 @@
 			//if overlap, spawnAnimal(object.getAnimal)
 		}
 		
+		private function timerListener(e:TimerEvent):void {
+			trace("Timer");
+			for each (var object in scenery) {
+				if(!object.isActive()) {
+					object.setIsActive(true);
+				}
+			}
+			for each (var animal in wild) {
+				despawnAnimal(animal);
+			}
+		}
+		
 		private function spawnAnimal(animal:Animal):void {
 			//trace(object);
 			//var animal:Animal = object.getAnimal();
@@ -167,7 +190,12 @@
 		}
 		
 		private function despawnAnimal(animal:Animal):void {
-			
+			this.document.removeChild(animal);
+			for each (var object in wild) {
+				if(object == animal) {
+					wild.splice(wild.indexOf(object), 1);
+				}
+			}
 		}
 		
 		private function attachAnimal(animal:Animal):void {
