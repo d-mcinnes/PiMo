@@ -6,9 +6,6 @@
 		private var demo:Demo;
 		private var gameController:GameController;
 		
-		public static var SCREEN_SIZE_X:Number = 1024;
-		public static var SCREEN_SIZE_Y:Number = 600;
-		
 		public function Main() {
 			this.gameController = new GameController(stage);
 			//createEnvironment();

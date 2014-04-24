@@ -21,6 +21,10 @@
 		private var wild:Array; //animals in the scene, not following the player
 		private var party:Array; //animals currently following the player
 		private var player:Player;
+		
+		public static var SCREEN_SIZE_X:Number = 1024;
+		public static var SCREEN_SIZE_Y:Number = 600;
+		public static var GROUND_HEIGHT:Number = 300;
 
 		/**
 		 * Controls the proceedings for one round of the game.
@@ -51,7 +55,6 @@
 		}
 		
 		public function renderPlayer() {
-			//trace("Render");
 			this.player.renderPlayer();
 			//var parent:Stage = this.document;
 			//this.document.setChildIndex(this.player.getPlayerAvatar(), this.document.numChildren-1);
@@ -67,7 +70,7 @@
 		private function loadScenery():void {
 			this.scenery = new Array();
 			
-			var rand:int;
+			/*var rand:int;
 			//for (var i:int = 0; i < 3; ++i) {
 				//rand = 1 + Math.ceil(Math.random() + 3);
 				rand = 2; //TODO only using long grass for prototype
@@ -88,11 +91,11 @@
 					scenery.push(SceneryFarm);
 					break;
 				}
-			//}
+			//}*/
 			
 			for each (var object in scenery) {
 				object.x = (Math.floor(Math.random() * (950 - 70 + 1)) + 70);
-				object.y = 300;
+				object.y = GameController.GROUND_HEIGHT;
 				this.document.addChild(object);
 				//TODO add image to scene
 				//update position data in class
@@ -105,12 +108,14 @@
 			for each (var object in scenery) {
 				//trace("Object: " + "(" + object.x + ", " + object.y + ")" + " Hand: " + object.localToGlobal(leftPosition));
 				//var point:Point = localToGlobal(new Point(object.x, object.y));
-				if((Math.abs(object.x - (leftPosition.x * 1024)) <= 100) && 
-				   (Math.abs(object.y - (leftPosition.y * 1024)) <= 100)) {
+				if((Math.abs(object.x - (leftPosition.x * GameController.SCREEN_SIZE_X)) <= 100) && 
+				   (Math.abs(object.y - (leftPosition.y * GameController.SCREEN_SIZE_X)) <= 100)) {
 					trace("HIT LEFT");
+					//this.party.push(new Rabbit());
+					spawnAnimal(object.getAnimal());
 				} else {
 					trace("Object: (" + object.x + ", " + object.y + ") Player: (" + 
-						  leftPosition.x * 1024 + ")");
+						  leftPosition.x * GameController.SCREEN_SIZE_X + ")");
 						  //trace(object.parent);
 				}
 				
@@ -149,9 +154,13 @@
 			//if overlap, spawnAnimal(object.getAnimal)
 		}
 		
-		private function spawnAnimal(object:SceneryObject):void {
-			var animal:Animal = object.getAnimal();
+		private function spawnAnimal(animal:Animal):void {
+			//trace(object);
+			//var animal:Animal = object.getAnimal();
 			wild.push(animal);
+			animal.x = 100;
+			animal.y = GameController.GROUND_HEIGHT;
+			this.document.addChild(animal);
 			//add animal to stage
 			//start timer
 			//when timer ends, call despawnAnimal
