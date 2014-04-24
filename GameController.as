@@ -2,12 +2,10 @@
 	import flash.display.Stage;
 	import flash.display.Graphics;
 	import flash.display.Shape;
-	import flash.display.*;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
 	import flash.geom.Point;
-	import flash.geom.*;
 
 	public class GameController {
 		private var document:Stage;
@@ -32,6 +30,7 @@
 		 * Controls the proceedings for one round of the game.
 		 */
 		public function GameController(document:Stage) {
+			trace("HELLO");
 			this.document = document;
 			this.kinectInput = new KinectInput(this.document, this);
 			this.rfidReader = new RFIDReaderSingle(this);
@@ -229,7 +228,9 @@
 			//if(tag == '') {
 				for each (var animal in wild) {
 					//if(Class(getDefinitionByName(getQualifiedClassName(animal))) == 'Rabbit') {
+					if(animal.checkTag(tag)) {
 						attachAnimal(animal);
+					}
 					//}
 				}
 			//}
