@@ -6,6 +6,10 @@
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
 	import flash.geom.Point;
+	import flash.text.TextField;
+	import flash.text.TextFormat;
+	import flash.text.TextFormatAlign;
+	import flash.text.Font;
 
 	public class GameController {
 		private var document:Stage;
@@ -21,6 +25,8 @@
 		private var wild:Array; //animals in the scene, not following the player
 		private var party:Array; //animals currently following the player
 		private var player:Player;
+		private var scoreTextField:TextField;
+		private var textFormat:TextFormat;
 		
 		public static var SCREEN_SIZE_X:Number = 1024;
 		public static var SCREEN_SIZE_Y:Number = 600;
@@ -30,7 +36,6 @@
 		 * Controls the proceedings for one round of the game.
 		 */
 		public function GameController(document:Stage) {
-			trace("HELLO");
 			this.document = document;
 			this.kinectInput = new KinectInput(this.document, this);
 			this.rfidReader = new RFIDReaderSingle(this);
@@ -45,6 +50,23 @@
 			this.player.x = 50;
 			this.player.y = 400;
 			this.document.addChild(this.player);
+			
+			this.scoreTextField = new TextField();
+			this.scoreTextField.text = "Hello";
+			this.scoreTextField.y = 10;
+			this.scoreTextField.x = 825;
+			this.scoreTextField.width = 185;
+			this.scoreTextField.textColor = 0x000000;
+			
+			this.textFormat = new TextFormat();
+			this.textFormat.size = 25;
+			this.textFormat.align = TextFormatAlign.RIGHT;
+			this.textFormat.bold = true;
+			this.textFormat.font = new ScoreFont().fontName;
+			
+			this.scoreTextField.defaultTextFormat = this.textFormat;
+			this.scoreTextField.text = "Score: 0";
+			this.document.addChild(this.scoreTextField);
 			
 			//while loop for playing game
 			/*var startTime:uint = getTimer();
@@ -168,7 +190,6 @@
 		}
 		
 		private function timerListener(e:TimerEvent):void {
-			trace("Timer");
 			for each (var object in scenery) {
 				if(!object.isActive()) {
 					object.setIsActive(true);
@@ -205,6 +226,8 @@
 			//TODO check for animal interactions
 			trace("Attach Animal");
 			party.push(animal);
+			this.score += 10;
+			this.scoreTextField.text = "Score: " + this.score;
 			for each (var object in wild) {
 				if(object == animal) {
 					wild.splice(wild.indexOf(animal), 1);

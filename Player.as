@@ -64,6 +64,12 @@
 														  this.kinectSkeleton.getNeck().y), 
 												 10);
 			this.createLine(new Point(0, 0), neckPoint);
+			var playerHead:Head = new Head();
+			var playerHeadPoint:Point = getPolarPoint(neckPoint, getAngle(0, 0, neckPoint.x, neckPoint.y), 70);
+			playerHead.x = playerHeadPoint.x;
+			playerHead.y = playerHeadPoint.y;
+			playerHead.rotation = getAngle(0, 0, neckPoint.x, neckPoint.y);
+			this.addChild(playerHead);
 			
 			var leftArmElbow = getPolarPoint(neckPoint, leftArmUpperAngle, 5);
 			this.createLine(neckPoint, leftArmElbow);
@@ -150,13 +156,13 @@
 		
 		private function clearPlayer() {
 			this.graphics.clear();
-			/*while(this.numChildren > 0) {
+			while(this.numChildren > 0) {
 				this.removeChildAt(0);
-			}*/
+			}
 		}
 		
 		private function createLine(point1:Point, point2:Point):void {
-			this.graphics.lineStyle(1, 0, 1);
+			this.graphics.lineStyle(5, 0, 1);
 			this.graphics.moveTo(point1.x * 10, point1.y * 10);
 			this.graphics.lineTo(point2.x * 10, point2.y * 10);
 		}

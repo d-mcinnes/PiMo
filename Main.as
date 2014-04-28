@@ -1,5 +1,7 @@
 ﻿package  {
 	import flash.display.MovieClip;
+	import flash.display.StageDisplayState;
+	import flash.ui.Mouse;
 	
 	public class Main extends MovieClip {
 		private var environment:Environment;
@@ -8,6 +10,8 @@
 		
 		public function Main() {
 			this.gameController = new GameController(stage);
+			stage.displayState = StageDisplayState.FULL_SCREEN;
+			Mouse.hide();
 			//createEnvironment();
 			//this.demo = new Demo(this.stage);
 			//var skeletonBonesDemo:SkeletonBonesDemo = new SkeletonBonesDemo();
