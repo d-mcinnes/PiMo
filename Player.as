@@ -150,9 +150,9 @@
 		
 		private function clearPlayer() {
 			this.graphics.clear();
-			while(this.numChildren > 0) {
+			/*while(this.numChildren > 0) {
 				this.removeChildAt(0);
-			}
+			}*/
 		}
 		
 		private function createLine(point1:Point, point2:Point):void {
