@@ -37,10 +37,6 @@
 			//var leftArmLowerAngle:Number = this.kinectSkeleton.getLeftElbow() * this.kinectSkeleton.getLeftHand();
 			//var rightArmUpperAngle:Number = this.kinectSkeleton.getRightShoulder() * this.kinectSkeleton.getRightElbow();
 			//var rightArmLowerAngle:Number = this.kinectSkeleton.getRightElbow() * this.kinectSkeleton.getRightHand();
-			/*trace("[DISTANCE] W:" + this.kinectSkeleton.getDistance().w + 
-				  " X:" + this.kinectSkeleton.getDistance().x + 
-				  " Y:" + this.kinectSkeleton.getDistance().y + 
-				  " Z:" + this.kinectSkeleton.getDistance().z);*/
 			
 			var leftArmUpperAngle:Number = getAngle(this.kinectSkeleton.getLeftShoulder().x, 
 													this.kinectSkeleton.getLeftShoulder().y, 
@@ -60,29 +56,25 @@
 													 this.kinectSkeleton.getRightHand().y);
 			
 			var xPosition = 1024 * this.kinectSkeleton.getPositionRelative().x;
-			if(xPosition <= 80) {
-				trace("Out of Bounds");
+			if(xPosition <= 140) {
 				this.outOfBounds.visible = true;
 				return;
-			} else if(xPosition >= 950) {
-				trace("Out of Bounds");
+			} else if(xPosition >= 900) {
 				this.outOfBounds.visible = true;
 				return;
 			} else {
 				this.outOfBounds.visible = false;
 				this.x = xPosition;
 			}
-			//trace(this.x + ", " + this.y);
 			
-			this.clearPlayer();
 			if(this.kinectSkeleton.getDistance().z < 1.0) {
-				trace("TOO CLOSE");
 				this.outOfBounds.visible = true;
 				return;
 			} else {
 				this.outOfBounds.visible = false;
 			}
 			
+			this.clearPlayer();
 			var neckPoint:Point = getPolarPoint(new Point(0, 0), 
 												 getAngle(this.kinectSkeleton.getTorso().x, 
 														  this.kinectSkeleton.getTorso().y, 
