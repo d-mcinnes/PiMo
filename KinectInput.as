@@ -93,6 +93,7 @@
 				this.kinectSkeleton.setRightFoot(user.rightFoot.position.depth);
 				this.kinectSkeleton.setTorso(user.torso.position.depth);
 				this.kinectSkeleton.setPositionRelative(user.position.depthRelative);
+				this.kinectSkeleton.setDistance(user.position.worldRelative);
 				//this.kinectSkeleton.setPoints(user);
 				this.gameController.renderPlayer();
 				this.gameController.checkForSceneryInteraction(user.leftHand.position.depthRelative, 

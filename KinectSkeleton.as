@@ -3,6 +3,7 @@
 	import flash.geom.Point;
 	
 	import com.as3nui.nativeExtensions.air.kinect.data.User;
+	import flash.geom.Vector3D;
 
 	public class KinectSkeleton {
 		private var head:Point;
@@ -22,6 +23,7 @@
 		private var torso:Point;
 		
 		private var positionRelative:Point;
+		private var distance:Vector3D;
 		private var skeleton:Sprite;
 		
 		public function KinectSkeleton() {
@@ -72,7 +74,8 @@
 					  user.position.worldRelative.y + " Z:" +
 					  user.position.worldRelative.z);*/
 				//trace("HellO");
-				trace(this.getLeftElbow());
+				//trace(this.getLeftElbow());
+				trace("[DISTANCE] W:" + this.distance.w + " X:" + this.distance.x + " Y:" + this.distance.y + " Z:" + this.distance.z);
 				this.createLine(this.getLeftElbow(), this.getLeftHand());
 				this.createLine(this.getLeftShoulder(), this.getLeftElbow());
 				this.createLine(this.getTorso(), this.getLeftKnee());
@@ -115,6 +118,7 @@
 		public function getRightFoot():Point {return this.rightFoot;}
 		public function getTorso():Point {return this.torso;}
 		public function getPositionRelative():Point {return this.positionRelative;}
+		public function getDistance():Vector3D {return this.distance;}
 		
 		public function setHead(point:Point) {this.head = point;}
 		public function setLeftElbow(point:Point) {this.leftElbow = point;}
@@ -132,6 +136,7 @@
 		public function setRightFoot(point:Point) {this.rightFoot = point;}
 		public function setTorso(point:Point) {this.torso = point;}
 		public function setPositionRelative(point:Point) {this.positionRelative = point;}
+		public function setDistance(vector:Vector3D) {this.distance = vector;}
 		
 		public function getSkeleton():Sprite {return this.skeleton;}
 	}

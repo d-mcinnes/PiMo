@@ -26,6 +26,10 @@
 			//var leftArmLowerAngle:Number = this.kinectSkeleton.getLeftElbow() * this.kinectSkeleton.getLeftHand();
 			//var rightArmUpperAngle:Number = this.kinectSkeleton.getRightShoulder() * this.kinectSkeleton.getRightElbow();
 			//var rightArmLowerAngle:Number = this.kinectSkeleton.getRightElbow() * this.kinectSkeleton.getRightHand();
+			/*trace("[DISTANCE] W:" + this.kinectSkeleton.getDistance().w + 
+				  " X:" + this.kinectSkeleton.getDistance().x + 
+				  " Y:" + this.kinectSkeleton.getDistance().y + 
+				  " Z:" + this.kinectSkeleton.getDistance().z);*/
 			
 			var leftArmUpperAngle:Number = getAngle(this.kinectSkeleton.getLeftShoulder().x, 
 													this.kinectSkeleton.getLeftShoulder().y, 
@@ -57,6 +61,11 @@
 			//trace(this.x + ", " + this.y);
 			
 			this.clearPlayer();
+			if(this.kinectSkeleton.getDistance().z < 1.0) {
+				trace("TOO CLOSE");
+				return;
+			}
+			
 			var neckPoint:Point = getPolarPoint(new Point(0, 0), 
 												 getAngle(this.kinectSkeleton.getTorso().x, 
 														  this.kinectSkeleton.getTorso().y, 
