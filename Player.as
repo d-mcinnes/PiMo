@@ -2,16 +2,27 @@
 	import flash.display.Sprite;
 	import flash.geom.Point;
 	import flash.display.MovieClip;
+	import flash.display.Stage;
 	
 	public class Player extends MovieClip {
 		private var kinectSkeleton:KinectSkeleton;
 		private var player:Sprite;
+		private var document:Stage;
+		
 		private var leftPoint:Point;
 		private var rightPoint:Point;
+		private var outOfBounds:OutOfBoundsBackground;
 
-		public function Player(kinectSkeleton:KinectSkeleton) {
+		public function Player(kinectSkeleton:KinectSkeleton, document:Stage) {
 			this.kinectSkeleton = kinectSkeleton;
 			this.player = new Sprite();
+			this.document = document;
+			
+			this.outOfBounds = new OutOfBoundsBackground();
+			this.outOfBounds.x = 0;
+			this.outOfBounds.y = 0;
+			this.outOfBounds.visible = false;
+			this.document.addChild(this.outOfBounds);
 			
 			this.player.graphics.lineStyle(3,0x00ff00);
 			this.player.graphics.beginFill(0x000000);
@@ -51,11 +62,14 @@
 			var xPosition = 1024 * this.kinectSkeleton.getPositionRelative().x;
 			if(xPosition <= 80) {
 				trace("Out of Bounds");
+				this.outOfBounds.visible = true;
 				return;
 			} else if(xPosition >= 950) {
 				trace("Out of Bounds");
+				this.outOfBounds.visible = true;
 				return;
 			} else {
+				this.outOfBounds.visible = false;
 				this.x = xPosition;
 			}
 			//trace(this.x + ", " + this.y);
@@ -63,7 +77,10 @@
 			this.clearPlayer();
 			if(this.kinectSkeleton.getDistance().z < 1.0) {
 				trace("TOO CLOSE");
+				this.outOfBounds.visible = true;
 				return;
+			} else {
+				this.outOfBounds.visible = false;
 			}
 			
 			var neckPoint:Point = getPolarPoint(new Point(0, 0), 

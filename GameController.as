@@ -46,7 +46,7 @@
 			loadScene();
 			//loadScenery();
 			
-			this.player = new Player(this.kinectInput.getKinectSkeleton());
+			this.player = new Player(this.kinectInput.getKinectSkeleton(), this.document);
 			this.player.x = 50;
 			this.player.y = 400;
 			this.document.addChild(this.player);
