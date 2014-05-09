@@ -55,20 +55,18 @@
 			this.party = new Array();
 			
 			loadScene();
-			//loadScenery();
 			
-			//this.player = new Player(this.kinectInput.getKinectSkeleton(), this.document);
 			this.player = new Player(this);
 			this.player.x = 50;
 			this.player.y = 400;
 			this.stagePlayer.addChild(this.player);
 			
 			this.scoreTextField = new TextField();
-			this.scoreTextField.text = "Hello";
 			this.scoreTextField.y = 10;
 			this.scoreTextField.x = 825;
 			this.scoreTextField.width = 185;
 			this.scoreTextField.textColor = 0x000000;
+			this.scoreTextField.selectable = false;
 			
 			this.textFormat = new TextFormat();
 			this.textFormat.size = 25;
@@ -222,7 +220,7 @@
 			wild.push(animal);
 			animal.x = 100;
 			animal.y = GameController.GROUND_HEIGHT;
-			this.document.addChild(animal);
+			this.stageMain.addChild(animal);
 			//add animal to stage
 			//start timer
 			//when timer ends, call despawnAnimal
