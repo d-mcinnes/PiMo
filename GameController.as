@@ -165,15 +165,20 @@
 				//trace("Object: " + "(" + object.x + ", " + object.y + ")" + " Hand: " + object.localToGlobal(leftPosition));
 				//var point:Point = localToGlobal(new Point(object.x, object.y));
 				if(object.isActive()) {
+					if(this.player.getLeftPoint() == null || this.player.getRightPoint() == null) {
+						return;
+					}
 					//trace("X: " + leftPosition.x + " Y: " + leftPosition.y);
 					//trace(Math.abs(object.x - (leftPosition.x * GameController.SCREEN_SIZE_X)));
 					trace(" L:" + this.player.getLeftPoint() + "  R:" + this.player.getRightPoint());
-					trace("LG:" + this.document.localToGlobal(this.player.getLeftPoint()) + " RG:" + this.document.localToGlobal(this.player.getRightPoint()));
-					/*
-					if((Math.abs(object.x - (leftPosition.x * GameController.SCREEN_SIZE_X)) < 100) && 
-					   (Math.abs(object.y - (leftPosition.y * GameController.SCREEN_SIZE_Y)) < 100)) {
-						   */
-					if (checkObjectBounds(leftPosition, object)) {
+					trace("LG:" + this.player.localToGlobal(this.player.getLeftPoint()) + " RG:" + this.player.localToGlobal(this.player.getRightPoint()));
+					
+					if(((Math.abs(object.x - this.player.localToGlobal(this.player.getLeftPoint()).x) < 100) && 
+						 (Math.abs(object.y - this.player.localToGlobal(this.player.getLeftPoint()).y) < 100)) ||
+					   ((Math.abs(object.x - this.player.localToGlobal(this.player.getRightPoint()).x) < 100) && 
+						 (Math.abs(object.y - this.player.localToGlobal(this.player.getRightPoint()).y) < 100))) {
+						
+					//if (checkObjectBounds(leftPosition, object)) {
 						trace("HIT LEFT");
 						spawnAnimal(new Rabbit(), object.x, GameController.GROUND_HEIGHT);
 						object.setIsActive(false);
