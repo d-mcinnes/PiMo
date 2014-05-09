@@ -1,8 +1,11 @@
 ﻿package  {
-	import flash.display.Sprite;
-	import flash.geom.Point;
 	import flash.display.MovieClip;
+	import flash.display.Sprite;
 	import flash.display.Stage;
+	import flash.geom.Point;
+	import flash.text.TextField;
+	import flash.text.TextFormat;
+	import flash.text.Font;
 	
 	public class Player extends MovieClip {
 		private var gameController:GameController;
@@ -60,6 +63,7 @@
 													 this.gameController.getKinectSkeleton().getRightHand().y);
 			
 			if(this.gameController.getKinectSkeleton().getDistance().z < 1.0) {
+				this.outOfBounds.messageBox.text = "Too close to the Kinect.";
 				this.outOfBounds.visible = true;
 				return;
 			} else {
@@ -68,9 +72,11 @@
 			
 			var xPosition = 1024 * this.gameController.getKinectSkeleton().getPositionRelative().x;
 			if(xPosition <= 140) {
+				this.outOfBounds.messageBox.text = "Out of Bounds - Left.";
 				this.outOfBounds.visible = true;
 				return;
 			} else if(xPosition >= 900) {
+				this.outOfBounds.messageBox.text = "Out of Bounds - Right.";
 				this.outOfBounds.visible = true;
 				return;
 			} else {
@@ -103,8 +109,8 @@
 			this.createLine(neckPoint, rightArmElbow);
 			this.createLine(rightArmElbow, getPolarPoint(rightArmElbow, rightArmLowerAngle, 5));
 			
-			this.rightPoint = getPolarPoint(leftArmElbow, leftArmLowerAngle, 5);
-			
+			this.rightPoint = getPolarPoint(rightArmElbow, rightArmLowerAngle, 5);
+						
 			/** 
 			 ** Render Left Leg 
 			 **/
@@ -204,5 +210,14 @@
 			destinationPoint.y = startPoint.y + Math.round(distance * Math.sin( degrees * Math.PI / 180 ));
 			return destinationPoint;*/
 		}
+		
+		public function playerCleanup() {
+			while(this.numChildren > 0) {
+				this.removeChildAt(0);
+			}
+		}
+		
+		public function getLeftPoint():Point {return this.leftPoint;}
+		public function getRightPoint():Point {return this.rightPoint;}
 	}
 }

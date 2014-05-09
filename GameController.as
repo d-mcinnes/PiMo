@@ -2,22 +2,21 @@
 	import flash.display.Stage;
 	import flash.display.Graphics;
 	import flash.display.Shape;
+	import flash.display.Sprite;
 	import flash.events.TimerEvent;
+	import flash.geom.Point;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
-	import flash.geom.Point;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
 	import flash.text.Font;
-	import flash.display.Sprite;
 
 	public class GameController {
 		private var document:Stage;
 		private var stageOverlay:Sprite;
 		private var stageMain:Sprite;
 		private var stagePlayer:Sprite;
-		
 		private var kinectInput:KinectInput;
 		private var rfidReader:RFIDReaderSingle;
 		
@@ -96,9 +95,6 @@
 			for each (var animal in party) {
 				animal.x = GameController.SCREEN_SIZE_X * this.kinectInput.getKinectSkeleton().getPositionRelative().x - 30;
 			}
-			//var parent:Stage = this.document;
-			//this.document.setChildIndex(this.player.getPlayerAvatar(), this.document.numChildren-1);
-			//this.document.addChild(this.player.getPlayerAvatar());
 		}
 		
 		private function loadScene():void {
@@ -146,25 +142,48 @@
 		}
 		
 		//private function isSceneComplete():Boolean {
+			
+		public function checkObjectBounds(position:Point, object:Object):Boolean {
+			
+			/*trace("PAUL: " + (position.x * GameController.SCREEN_SIZE_X) + ", " + (object.x - 50));
+			trace("PAUL: " + (position.x * GameController.SCREEN_SIZE_X) + ", " + (object.x + 50));
+			trace("PAUL: " + (position.y * GameController.SCREEN_SIZE_Y) + ", " + (object.y - 50));
+			trace("PAUL: " + (position.y * GameController.SCREEN_SIZE_Y) + ", " + (object.y + 50));
+			*/
+			if (position.x * GameController.SCREEN_SIZE_X > object.x - 50
+					&& position.x * GameController.SCREEN_SIZE_X < object.x + object.width + 50
+					&& position.y * GameController.SCREEN_SIZE_Y > object.y - 50
+					&& position.y * GameController.SCREEN_SIZE_Y < object.y + object.height + 50) {
+				return true;
+			} else {
+				return false;
+			}
+		}
 		
 		public function checkForSceneryInteraction(leftPosition:Point, rightPosition:Point):void {
 			for each (var object in scenery) {
 				//trace("Object: " + "(" + object.x + ", " + object.y + ")" + " Hand: " + object.localToGlobal(leftPosition));
 				//var point:Point = localToGlobal(new Point(object.x, object.y));
 				if(object.isActive()) {
-					if((Math.abs(object.x - (leftPosition.x * GameController.SCREEN_SIZE_X)) <= 100) && 
-					   (Math.abs(object.y - (leftPosition.y * GameController.SCREEN_SIZE_X)) <= 100)) {
+					//trace("X: " + leftPosition.x + " Y: " + leftPosition.y);
+					//trace(Math.abs(object.x - (leftPosition.x * GameController.SCREEN_SIZE_X)));
+					trace(" L:" + this.player.getLeftPoint() + "  R:" + this.player.getRightPoint());
+					trace("LG:" + this.document.localToGlobal(this.player.getLeftPoint()) + " RG:" + this.document.localToGlobal(this.player.getRightPoint()));
+					/*
+					if((Math.abs(object.x - (leftPosition.x * GameController.SCREEN_SIZE_X)) < 100) && 
+					   (Math.abs(object.y - (leftPosition.y * GameController.SCREEN_SIZE_Y)) < 100)) {
+						   */
+					if (checkObjectBounds(leftPosition, object)) {
 						trace("HIT LEFT");
-						//this.party.push(new Rabbit());
-						spawnAnimal(new Rabbit());
+						spawnAnimal(new Rabbit(), object.x, GameController.GROUND_HEIGHT);
 						object.setIsActive(false);
 						
 						var timer:Timer = new Timer(10000);
 						timer.addEventListener(TimerEvent.TIMER, timerListener);
 						timer.start();
 					} else {
-						trace("Object: (" + object.x + ", " + object.y + ") Player: (" + 
-							  leftPosition.x * GameController.SCREEN_SIZE_X + ")");
+						//trace("Object: (" + object.x + ", " + object.y + ") Player: (" + 
+						//	  leftPosition.x * GameController.SCREEN_SIZE_X + ")");
 							  //trace(object.parent);
 					}
 				}
@@ -214,20 +233,15 @@
 			}
 		}
 		
-		private function spawnAnimal(animal:Animal):void {
-			//trace(object);
-			//var animal:Animal = object.getAnimal();
+		private function spawnAnimal(animal:Animal, x:Number, y:Number):void {
 			wild.push(animal);
-			animal.x = 100;
-			animal.y = GameController.GROUND_HEIGHT;
+			animal.x = x;
+			animal.y = y;
 			this.stageMain.addChild(animal);
-			//add animal to stage
-			//start timer
-			//when timer ends, call despawnAnimal
 		}
 		
 		private function despawnAnimal(animal:Animal):void {
-			this.document.removeChild(animal);
+			this.stageMain.removeChild(animal);
 			for each (var object in wild) {
 				if(object == animal) {
 					wild.splice(wild.indexOf(object), 1);
@@ -262,15 +276,13 @@
 		}
 		
 		public function activateTag(tag:String) {
-			//if(tag == '') {
-				for each (var animal in wild) {
-					//if(Class(getDefinitionByName(getQualifiedClassName(animal))) == 'Rabbit') {
-					if(animal.checkTag(tag)) {
-						attachAnimal(animal);
-					}
-					//}
+			for each (var animal in wild) {
+				//if(Class(getDefinitionByName(getQualifiedClassName(animal))) == 'Rabbit') {
+				if(animal.checkTag(tag)) {
+					attachAnimal(animal);
 				}
-			//}
+				//}
+			}
 		}
 		
 		public function deactivateTag(tag:String) {
@@ -279,6 +291,38 @@
 		
 		private function endGame():void {
 			
+		}
+		
+		public function gameCleanup() {
+			/* Cleanup Classes */
+			this.kinectInput.kinectInputCleanup();
+			this.player.playerCleanup();
+			
+			/* Clear Stage */
+			while(this.stageOverlay.numChildren > 0) {
+				this.stageOverlay.removeChildAt(0);
+			}
+			while(this.stagePlayer.numChildren > 0) {
+				this.stagePlayer.removeChildAt(0);
+			}
+			while(this.stageMain.numChildren > 0) {
+				this.stageMain.removeChildAt(0);
+			}
+			this.document.removeChild(this.stageOverlay);
+			this.document.removeChild(this.stagePlayer);
+			this.document.removeChild(this.stageMain);
+			
+			/* Cleanup Variables */
+			this.kinectInput = null;
+			this.rfidReader = null;
+			this.score = 0;
+			this.gameDuration = null;
+			this.scenery = null;
+			this.wild = null;
+			this.party = null;
+			this.player = null;
+			this.scoreTextField = null;
+			this.textFormat = null;
 		}
 	}
 }

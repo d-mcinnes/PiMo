@@ -100,5 +100,13 @@
 		}
 		
 		public function getKinectSkeleton():KinectSkeleton {return this.kinectSkeleton;}
+		
+		public function kinectInputCleanup() {
+			this.kinect.removeEventListener(DeviceEvent.STARTED, kinectStarted);
+			this.kinect.removeEventListener(CameraImageEvent.DEPTH_IMAGE_UPDATE, depthImageUpdateHandler);
+			this.kinect.removeEventListener(Event.ENTER_FRAME, on_enter_frame);
+			this.kinect.removeEventListener(Event.EXIT_FRAME, on_exit_frame);
+			this.kinect = null;
+		}
 	}
 }
