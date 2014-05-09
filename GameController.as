@@ -10,9 +10,13 @@
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
 	import flash.text.Font;
+	import flash.display.Sprite;
 
 	public class GameController {
 		private var document:Stage;
+		private var stageOverlay:Sprite;
+		private var stageMain:Sprite;
+		private var stagePlayer:Sprite;
 		
 		private var kinectInput:KinectInput;
 		private var rfidReader:RFIDReaderSingle;
@@ -37,7 +41,14 @@
 		 */
 		public function GameController(document:Stage) {
 			this.document = document;
-			this.kinectInput = new KinectInput(this.document, this);
+			this.stageMain = new Sprite();
+			this.document.addChild(this.stageMain);
+			this.stagePlayer = new Sprite();
+			this.document.addChild(this.stagePlayer);
+			this.stageOverlay = new Sprite();
+			this.document.addChild(this.stageOverlay);
+			
+			this.kinectInput = new KinectInput(this);
 			this.rfidReader = new RFIDReaderSingle(this);
 			this.score = 0;
 			this.wild = new Array();
@@ -46,10 +57,11 @@
 			loadScene();
 			//loadScenery();
 			
-			this.player = new Player(this.kinectInput.getKinectSkeleton(), this.document);
+			//this.player = new Player(this.kinectInput.getKinectSkeleton(), this.document);
+			this.player = new Player(this);
 			this.player.x = 50;
 			this.player.y = 400;
-			this.document.addChild(this.player);
+			this.stagePlayer.addChild(this.player);
 			
 			this.scoreTextField = new TextField();
 			this.scoreTextField.text = "Hello";
@@ -76,6 +88,10 @@
 			
 			endGame();*/
 		}
+		
+		public function getStageMain():Sprite {return this.stageMain;}
+		public function getStageOverlay():Sprite {return this.stageOverlay;}
+		public function getKinectSkeleton():KinectSkeleton {return this.kinectInput.getKinectSkeleton();}
 		
 		public function renderPlayer() {
 			this.player.renderPlayer();
@@ -125,7 +141,7 @@
 				object.x = (Math.floor(Math.random() * (950 - 70 + 1)) + 70);
 				object.y = GameController.GROUND_HEIGHT;
 				object.setIsActive(true);
-				this.document.addChild(object);
+				this.stageMain.addChild(object);
 				//TODO add image to scene
 				//update position data in class
 			}

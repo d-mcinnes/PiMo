@@ -16,11 +16,9 @@
 		private var kinectSettings:KinectSettings;
 		private var kinectSkeleton:KinectSkeleton;
 		private var depthBitmap:Bitmap;
-		private var document:Stage;
 		private var gameController:GameController;
 		
-		public function KinectInput(document:Stage, gameController:GameController) {
-			this.document = document;
+		public function KinectInput(gameController:GameController) {
 			this.gameController = gameController;
 			if(Kinect.isSupported()) {
 				this.kinect = Kinect.getDevice();
@@ -32,7 +30,7 @@
 				this.kinectSettings.rgbResolution = CameraResolution.RESOLUTION_1280_960;
 				this.kinectSettings.skeletonEnabled = true;
 				this.kinectSkeleton = new KinectSkeleton();
-				this.document.addChild(this.kinectSkeleton.getSkeleton());
+				this.gameController.getStageMain().addChild(this.kinectSkeleton.getSkeleton());
 				this.kinectSkeleton.getSkeleton().x = 20;
 				this.kinectSkeleton.getSkeleton().y = 400;
 				

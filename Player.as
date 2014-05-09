@@ -5,6 +5,7 @@
 	import flash.display.Stage;
 	
 	public class Player extends MovieClip {
+		private var gameController:GameController;
 		private var kinectSkeleton:KinectSkeleton;
 		private var player:Sprite;
 		private var document:Stage;
@@ -13,16 +14,19 @@
 		private var rightPoint:Point;
 		private var outOfBounds:OutOfBoundsBackground;
 
-		public function Player(kinectSkeleton:KinectSkeleton, document:Stage) {
-			this.kinectSkeleton = kinectSkeleton;
+		//public function Player(kinectSkeleton:KinectSkeleton, document:Stage) {
+		public function Player(gameController:GameController) {
+			this.gameController = gameController;
+			//this.gameController.getKinectSkeleton() = kinectSkeleton;
+			// this.gameController.getKinectSkeleton()
 			this.player = new Sprite();
-			this.document = document;
+			//this.document = document;
 			
 			this.outOfBounds = new OutOfBoundsBackground();
 			this.outOfBounds.x = 0;
 			this.outOfBounds.y = 0;
 			this.outOfBounds.visible = false;
-			this.document.addChild(this.outOfBounds);
+			this.gameController.getStageOverlay().addChild(this.outOfBounds);
 			
 			this.player.graphics.lineStyle(3,0x00ff00);
 			this.player.graphics.beginFill(0x000000);
@@ -33,29 +37,36 @@
 		public function getPlayerAvatar():Sprite {return this.player;}
 		
 		public function renderPlayer() {
-			//var leftArmUpperAngle:Number = this.kinectSkeleton.getLeftShoulder() * this.kinectSkeleton.getLeftElbow();
-			//var leftArmLowerAngle:Number = this.kinectSkeleton.getLeftElbow() * this.kinectSkeleton.getLeftHand();
-			//var rightArmUpperAngle:Number = this.kinectSkeleton.getRightShoulder() * this.kinectSkeleton.getRightElbow();
-			//var rightArmLowerAngle:Number = this.kinectSkeleton.getRightElbow() * this.kinectSkeleton.getRightHand();
+			//var leftArmUpperAngle:Number = this.gameController.getKinectSkeleton().getLeftShoulder() * this.gameController.getKinectSkeleton().getLeftElbow();
+			//var leftArmLowerAngle:Number = this.gameController.getKinectSkeleton().getLeftElbow() * this.gameController.getKinectSkeleton().getLeftHand();
+			//var rightArmUpperAngle:Number = this.gameController.getKinectSkeleton().getRightShoulder() * this.gameController.getKinectSkeleton().getRightElbow();
+			//var rightArmLowerAngle:Number = this.gameController.getKinectSkeleton().getRightElbow() * this.gameController.getKinectSkeleton().getRightHand();
 			
-			var leftArmUpperAngle:Number = getAngle(this.kinectSkeleton.getLeftShoulder().x, 
-													this.kinectSkeleton.getLeftShoulder().y, 
-													this.kinectSkeleton.getLeftElbow().x, 
-													this.kinectSkeleton.getLeftElbow().y);
-			var leftArmLowerAngle:Number = getAngle(this.kinectSkeleton.getLeftElbow().x, 
-													this.kinectSkeleton.getLeftElbow().y, 
-													this.kinectSkeleton.getLeftHand().x, 
-													this.kinectSkeleton.getLeftHand().y);
-			var rightArmUpperAngle:Number = getAngle(this.kinectSkeleton.getRightShoulder().x, 
-													 this.kinectSkeleton.getRightShoulder().y, 
-													 this.kinectSkeleton.getRightElbow().x, 
-													 this.kinectSkeleton.getRightElbow().y);
-			var rightArmLowerAngle:Number = getAngle(this.kinectSkeleton.getRightElbow().x, 
-													 this.kinectSkeleton.getRightElbow().y, 
-													 this.kinectSkeleton.getRightHand().x,
-													 this.kinectSkeleton.getRightHand().y);
+			var leftArmUpperAngle:Number = getAngle(this.gameController.getKinectSkeleton().getLeftShoulder().x, 
+													this.gameController.getKinectSkeleton().getLeftShoulder().y, 
+													this.gameController.getKinectSkeleton().getLeftElbow().x, 
+													this.gameController.getKinectSkeleton().getLeftElbow().y);
+			var leftArmLowerAngle:Number = getAngle(this.gameController.getKinectSkeleton().getLeftElbow().x, 
+													this.gameController.getKinectSkeleton().getLeftElbow().y, 
+													this.gameController.getKinectSkeleton().getLeftHand().x, 
+													this.gameController.getKinectSkeleton().getLeftHand().y);
+			var rightArmUpperAngle:Number = getAngle(this.gameController.getKinectSkeleton().getRightShoulder().x, 
+													 this.gameController.getKinectSkeleton().getRightShoulder().y, 
+													 this.gameController.getKinectSkeleton().getRightElbow().x, 
+													 this.gameController.getKinectSkeleton().getRightElbow().y);
+			var rightArmLowerAngle:Number = getAngle(this.gameController.getKinectSkeleton().getRightElbow().x, 
+													 this.gameController.getKinectSkeleton().getRightElbow().y, 
+													 this.gameController.getKinectSkeleton().getRightHand().x,
+													 this.gameController.getKinectSkeleton().getRightHand().y);
 			
-			var xPosition = 1024 * this.kinectSkeleton.getPositionRelative().x;
+			if(this.gameController.getKinectSkeleton().getDistance().z < 1.0) {
+				this.outOfBounds.visible = true;
+				return;
+			} else {
+				this.outOfBounds.visible = false;
+			}
+			
+			var xPosition = 1024 * this.gameController.getKinectSkeleton().getPositionRelative().x;
 			if(xPosition <= 140) {
 				this.outOfBounds.visible = true;
 				return;
@@ -67,19 +78,12 @@
 				this.x = xPosition;
 			}
 			
-			if(this.kinectSkeleton.getDistance().z < 1.0) {
-				this.outOfBounds.visible = true;
-				return;
-			} else {
-				this.outOfBounds.visible = false;
-			}
-			
 			this.clearPlayer();
 			var neckPoint:Point = getPolarPoint(new Point(0, 0), 
-												 getAngle(this.kinectSkeleton.getTorso().x, 
-														  this.kinectSkeleton.getTorso().y, 
-														  this.kinectSkeleton.getNeck().x, 
-														  this.kinectSkeleton.getNeck().y), 
+												 getAngle(this.gameController.getKinectSkeleton().getTorso().x, 
+														  this.gameController.getKinectSkeleton().getTorso().y, 
+														  this.gameController.getKinectSkeleton().getNeck().x, 
+														  this.gameController.getKinectSkeleton().getNeck().y), 
 												 10);
 			this.createLine(new Point(0, 0), neckPoint);
 			var playerHead:Head = new Head();
@@ -105,46 +109,46 @@
 			 ** Render Left Leg 
 			 **/
 			var leftKnee:Point = getPolarPoint(new Point(0, 0), 
-											   getAngle(this.kinectSkeleton.getTorso().x, 
-														this.kinectSkeleton.getTorso().y, 
-														this.kinectSkeleton.getLeftKnee().x, 
-														this.kinectSkeleton.getLeftKnee().y), 
+											   getAngle(this.gameController.getKinectSkeleton().getTorso().x, 
+														this.gameController.getKinectSkeleton().getTorso().y, 
+														this.gameController.getKinectSkeleton().getLeftKnee().x, 
+														this.gameController.getKinectSkeleton().getLeftKnee().y), 
 											   5);
 			this.createLine(new Point(0, 0), leftKnee);
 			this.createLine(leftKnee, getPolarPoint(leftKnee, 
-													getAngle(this.kinectSkeleton.getLeftKnee().x, 
-															 this.kinectSkeleton.getLeftKnee().y, 
-															 this.kinectSkeleton.getLeftFoot().x, 
-															 this.kinectSkeleton.getLeftFoot().y), 
+													getAngle(this.gameController.getKinectSkeleton().getLeftKnee().x, 
+															 this.gameController.getKinectSkeleton().getLeftKnee().y, 
+															 this.gameController.getKinectSkeleton().getLeftFoot().x, 
+															 this.gameController.getKinectSkeleton().getLeftFoot().y), 
 													5));
 			
 			/** 
 			 ** Render Right Leg 
 			 **/
 			var rightKnee:Point = getPolarPoint(new Point(0, 0),
-												getAngle(this.kinectSkeleton.getTorso().x, 
-														 this.kinectSkeleton.getTorso().y, 
-														 this.kinectSkeleton.getRightKnee().x, 
-														 this.kinectSkeleton.getRightKnee().y), 
+												getAngle(this.gameController.getKinectSkeleton().getTorso().x, 
+														 this.gameController.getKinectSkeleton().getTorso().y, 
+														 this.gameController.getKinectSkeleton().getRightKnee().x, 
+														 this.gameController.getKinectSkeleton().getRightKnee().y), 
 												5);
 			this.createLine(new Point(0, 0), rightKnee);
 			this.createLine(rightKnee, getPolarPoint(rightKnee,
-													 getAngle(this.kinectSkeleton.getRightKnee().x, 
-															  this.kinectSkeleton.getRightKnee().y, 
-															  this.kinectSkeleton.getRightFoot().x,
-															  this.kinectSkeleton.getRightFoot().y), 
+													 getAngle(this.gameController.getKinectSkeleton().getRightKnee().x, 
+															  this.gameController.getKinectSkeleton().getRightKnee().y, 
+															  this.gameController.getKinectSkeleton().getRightFoot().x,
+															  this.gameController.getKinectSkeleton().getRightFoot().y), 
 													 5));
 			
 			
 			
 			//trace("Create");
 			
-			/*this.createLine(this.kinectSkeleton.getNeck(), 
-							getPolarPoint(this.kinectSkeleton.getNeck(), 
-										  getAngle(this.kinectSkeleton.getNeck().x, 
-												   this.kinectSkeleton.getNeck().y, 
-												   this.kinectSkeleton.getTorso().x, 
-												   this.kinectSkeleton.getTorso().y), 
+			/*this.createLine(this.gameController.getKinectSkeleton().getNeck(), 
+							getPolarPoint(this.gameController.getKinectSkeleton().getNeck(), 
+										  getAngle(this.gameController.getKinectSkeleton().getNeck().x, 
+												   this.gameController.getKinectSkeleton().getNeck().y, 
+												   this.gameController.getKinectSkeleton().getTorso().x, 
+												   this.gameController.getKinectSkeleton().getTorso().y), 
 										  10));*/
 			
 			
@@ -152,22 +156,22 @@
 			
 			/*clearPlayer();
 			
-			this.createLine(this.kinectSkeleton.getLeftElbow(), this.kinectSkeleton.getLeftHand());
-			this.createLine(this.kinectSkeleton.getLeftShoulder(), this.kinectSkeleton.getLeftElbow());
-			this.createLine(this.kinectSkeleton.getTorso(), this.kinectSkeleton.getLeftKnee());
-			this.createLine(this.kinectSkeleton.getLeftKnee(), this.kinectSkeleton.getLeftFoot());
-			this.createLine(this.kinectSkeleton.getLeftShoulder(), this.kinectSkeleton.getNeck());
-			this.createLine(this.kinectSkeleton.getNeck(), this.kinectSkeleton.getTorso());
-			this.createLine(this.kinectSkeleton.getNeck(), this.kinectSkeleton.getHead());
-			this.createLine(this.kinectSkeleton.getRightShoulder(), this.kinectSkeleton.getNeck());
-			this.createLine(this.kinectSkeleton.getRightElbow(), this.kinectSkeleton.getRightHand());
-			this.createLine(this.kinectSkeleton.getRightShoulder(), this.kinectSkeleton.getRightElbow());
-			this.createLine(this.kinectSkeleton.getTorso(), this.kinectSkeleton.getRightKnee());
-			this.createLine(this.kinectSkeleton.getRightKnee(), this.kinectSkeleton.getRightFoot());
+			this.createLine(this.gameController.getKinectSkeleton().getLeftElbow(), this.gameController.getKinectSkeleton().getLeftHand());
+			this.createLine(this.gameController.getKinectSkeleton().getLeftShoulder(), this.gameController.getKinectSkeleton().getLeftElbow());
+			this.createLine(this.gameController.getKinectSkeleton().getTorso(), this.gameController.getKinectSkeleton().getLeftKnee());
+			this.createLine(this.gameController.getKinectSkeleton().getLeftKnee(), this.gameController.getKinectSkeleton().getLeftFoot());
+			this.createLine(this.gameController.getKinectSkeleton().getLeftShoulder(), this.gameController.getKinectSkeleton().getNeck());
+			this.createLine(this.gameController.getKinectSkeleton().getNeck(), this.gameController.getKinectSkeleton().getTorso());
+			this.createLine(this.gameController.getKinectSkeleton().getNeck(), this.gameController.getKinectSkeleton().getHead());
+			this.createLine(this.gameController.getKinectSkeleton().getRightShoulder(), this.gameController.getKinectSkeleton().getNeck());
+			this.createLine(this.gameController.getKinectSkeleton().getRightElbow(), this.gameController.getKinectSkeleton().getRightHand());
+			this.createLine(this.gameController.getKinectSkeleton().getRightShoulder(), this.gameController.getKinectSkeleton().getRightElbow());
+			this.createLine(this.gameController.getKinectSkeleton().getTorso(), this.gameController.getKinectSkeleton().getRightKnee());
+			this.createLine(this.gameController.getKinectSkeleton().getRightKnee(), this.gameController.getKinectSkeleton().getRightFoot());
 			
 			var headFill:Sprite = new Sprite();
 			headFill.graphics.beginFill(0x000000);
-			headFill.graphics.drawCircle(this.kinectSkeleton.getHead().x, this.kinectSkeleton.getHead().y, 20);
+			headFill.graphics.drawCircle(this.gameController.getKinectSkeleton().getHead().x, this.gameController.getKinectSkeleton().getHead().y, 20);
 			headFill.graphics.endFill();
 			this.player.addChild(headFill);*/
 		}
