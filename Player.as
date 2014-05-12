@@ -20,10 +20,7 @@
 		//public function Player(kinectSkeleton:KinectSkeleton, document:Stage) {
 		public function Player(gameController:GameController) {
 			this.gameController = gameController;
-			//this.gameController.getKinectSkeleton() = kinectSkeleton;
-			// this.gameController.getKinectSkeleton()
 			this.player = new Sprite();
-			//this.document = document;
 			
 			this.outOfBounds = new OutOfBoundsBackground();
 			this.outOfBounds.x = 0;
@@ -41,11 +38,6 @@
 		
 		/** Renders the player on the screen. **/
 		public function renderPlayer() {
-			//var leftArmUpperAngle:Number = this.gameController.getKinectSkeleton().getLeftShoulder() * this.gameController.getKinectSkeleton().getLeftElbow();
-			//var leftArmLowerAngle:Number = this.gameController.getKinectSkeleton().getLeftElbow() * this.gameController.getKinectSkeleton().getLeftHand();
-			//var rightArmUpperAngle:Number = this.gameController.getKinectSkeleton().getRightShoulder() * this.gameController.getKinectSkeleton().getRightElbow();
-			//var rightArmLowerAngle:Number = this.gameController.getKinectSkeleton().getRightElbow() * this.gameController.getKinectSkeleton().getRightHand();
-			
 			var leftArmUpperAngle:Number = getAngle(this.gameController.getKinectSkeleton().getLeftShoulder().x, 
 													this.gameController.getKinectSkeleton().getLeftShoulder().y, 
 													this.gameController.getKinectSkeleton().getLeftElbow().x, 
@@ -145,42 +137,6 @@
 															  this.gameController.getKinectSkeleton().getRightFoot().x,
 															  this.gameController.getKinectSkeleton().getRightFoot().y), 
 													 5));
-			
-			
-			
-			//trace("Create");
-			
-			/*this.createLine(this.gameController.getKinectSkeleton().getNeck(), 
-							getPolarPoint(this.gameController.getKinectSkeleton().getNeck(), 
-										  getAngle(this.gameController.getKinectSkeleton().getNeck().x, 
-												   this.gameController.getKinectSkeleton().getNeck().y, 
-												   this.gameController.getKinectSkeleton().getTorso().x, 
-												   this.gameController.getKinectSkeleton().getTorso().y), 
-										  10));*/
-			
-			
-			//trace("Angles: " + leftArmUpperAngle + " " + leftArmLowerAngle + " " + rightArmUpperAngle + " " + rightArmLowerAngle);
-			
-			/*clearPlayer();
-			
-			this.createLine(this.gameController.getKinectSkeleton().getLeftElbow(), this.gameController.getKinectSkeleton().getLeftHand());
-			this.createLine(this.gameController.getKinectSkeleton().getLeftShoulder(), this.gameController.getKinectSkeleton().getLeftElbow());
-			this.createLine(this.gameController.getKinectSkeleton().getTorso(), this.gameController.getKinectSkeleton().getLeftKnee());
-			this.createLine(this.gameController.getKinectSkeleton().getLeftKnee(), this.gameController.getKinectSkeleton().getLeftFoot());
-			this.createLine(this.gameController.getKinectSkeleton().getLeftShoulder(), this.gameController.getKinectSkeleton().getNeck());
-			this.createLine(this.gameController.getKinectSkeleton().getNeck(), this.gameController.getKinectSkeleton().getTorso());
-			this.createLine(this.gameController.getKinectSkeleton().getNeck(), this.gameController.getKinectSkeleton().getHead());
-			this.createLine(this.gameController.getKinectSkeleton().getRightShoulder(), this.gameController.getKinectSkeleton().getNeck());
-			this.createLine(this.gameController.getKinectSkeleton().getRightElbow(), this.gameController.getKinectSkeleton().getRightHand());
-			this.createLine(this.gameController.getKinectSkeleton().getRightShoulder(), this.gameController.getKinectSkeleton().getRightElbow());
-			this.createLine(this.gameController.getKinectSkeleton().getTorso(), this.gameController.getKinectSkeleton().getRightKnee());
-			this.createLine(this.gameController.getKinectSkeleton().getRightKnee(), this.gameController.getKinectSkeleton().getRightFoot());
-			
-			var headFill:Sprite = new Sprite();
-			headFill.graphics.beginFill(0x000000);
-			headFill.graphics.drawCircle(this.gameController.getKinectSkeleton().getHead().x, this.gameController.getKinectSkeleton().getHead().y, 20);
-			headFill.graphics.endFill();
-			this.player.addChild(headFill);*/
 		}
 		
 		/** Clears the player currently rendered on the screen. **/
@@ -199,19 +155,12 @@
 		}
 		
 		private function getAngle(x1:Number, y1:Number, x2:Number, y2:Number):Number {
-			/*var dx:Number = x2 - x1;
-			var dy:Number = y2 - y1;
-			return Math.atan2(dy,dx);*/
 			return Math.atan2(y2 - y1, x2 - x1);
 		}
 		
 		private function getPolarPoint(startPoint:Point, degrees:Number, distance:Number):Point {
 			return new Point(startPoint.x + Math.round(distance * Math.cos( degrees /* * Math.PI / 180 */)), 
 							 startPoint.y + Math.round(distance * Math.sin( degrees /* * Math.PI / 180 */)));
-			/*var destinationPoint:Point = new Point();
-			destinationPoint.x = startPoint.x + Math.round(distance * Math.cos( degrees * Math.PI / 180 ));
-			destinationPoint.y = startPoint.y + Math.round(distance * Math.sin( degrees * Math.PI / 180 ));
-			return destinationPoint;*/
 		}
 		
 		/** Cleanup function, removes all objects added to the stage in

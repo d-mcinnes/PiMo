@@ -109,30 +109,6 @@
 		/** Loads the scenery for the current scene. **/
 		private function loadScenery():void {
 			this.scenery = new Array();
-			
-			/*var rand:int;
-			//for (var i:int = 0; i < 3; ++i) {
-				//rand = 1 + Math.ceil(Math.random() + 3);
-				rand = 2; //TODO only using long grass for prototype
-				switch (rand) {
-					case 1:
-					scenery.push(SceneryTree);
-					break;
-					
-					case 2:
-					scenery.push(new Grass());
-					break;
-					
-					case 3:
-					scenery.push(SceneryBurrow);
-					break;
-					
-					case 4:
-					scenery.push(SceneryFarm);
-					break;
-				}
-			//}*/
-			
 			scenery.push(new Grass());
 			
 			for each (var object in scenery) {
@@ -140,8 +116,6 @@
 				object.y = GameController.GROUND_HEIGHT;
 				object.setIsActive(true);
 				this.stageMain.addChild(object);
-				//TODO add image to scene
-				//update position data in class
 			}
 		}
 		
@@ -150,12 +124,6 @@
 		/** Checks to see whether or not the user is in the current bounds of the
 		 ** screen. **/
 		public function checkObjectBounds(position:Point, object:Object):Boolean {
-			
-			/*trace("PAUL: " + (position.x * GameController.SCREEN_SIZE_X) + ", " + (object.x - 50));
-			trace("PAUL: " + (position.x * GameController.SCREEN_SIZE_X) + ", " + (object.x + 50));
-			trace("PAUL: " + (position.y * GameController.SCREEN_SIZE_Y) + ", " + (object.y - 50));
-			trace("PAUL: " + (position.y * GameController.SCREEN_SIZE_Y) + ", " + (object.y + 50));
-			*/
 			if (position.x * GameController.SCREEN_SIZE_X > object.x - 50
 					&& position.x * GameController.SCREEN_SIZE_X < object.x + object.width + 50
 					&& position.y * GameController.SCREEN_SIZE_Y > object.y - 50
@@ -170,69 +138,23 @@
 		 ** the Kinect is updated. **/
 		public function checkForSceneryInteraction(leftPosition:Point, rightPosition:Point):void {
 			for each (var object in scenery) {
-				//trace("Object: " + "(" + object.x + ", " + object.y + ")" + " Hand: " + object.localToGlobal(leftPosition));
-				//var point:Point = localToGlobal(new Point(object.x, object.y));
 				if(object.isActive()) {
 					if(this.player.getLeftPoint() == null || this.player.getRightPoint() == null) {
 						return;
 					}
-					//trace("X: " + leftPosition.x + " Y: " + leftPosition.y);
-					//trace(Math.abs(object.x - (leftPosition.x * GameController.SCREEN_SIZE_X)));
-					trace(" L:" + this.player.getLeftPoint() + "  R:" + this.player.getRightPoint());
-					trace("LG:" + this.player.localToGlobal(this.player.getLeftPoint()) + " RG:" + this.player.localToGlobal(this.player.getRightPoint()));
-					
 					if(((Math.abs(object.x - this.player.localToGlobal(this.player.getLeftPoint()).x) < 100) && 
 						 (Math.abs(object.y - this.player.localToGlobal(this.player.getLeftPoint()).y) < 100)) ||
 					   ((Math.abs(object.x - this.player.localToGlobal(this.player.getRightPoint()).x) < 100) && 
 						 (Math.abs(object.y - this.player.localToGlobal(this.player.getRightPoint()).y) < 100))) {
-						
-					//if (checkObjectBounds(leftPosition, object)) {
-						trace("HIT LEFT");
 						spawnAnimal(new Rabbit(), object.x, GameController.GROUND_HEIGHT);
 						object.setIsActive(false);
 						
 						var timer:Timer = new Timer(10000);
 						timer.addEventListener(TimerEvent.TIMER, timerListener);
 						timer.start();
-					} else {
-						//trace("Object: (" + object.x + ", " + object.y + ") Player: (" + 
-						//	  leftPosition.x * GameController.SCREEN_SIZE_X + ")");
-							  //trace(object.parent);
 					}
 				}
-				
-				/*if((Math.abs(object.x - (rightPosition.x * 1024)) <= 100) &&
-				   (Math.abs(object.y - (rightPosition.y * 1024)) <= 100)) {
-					   trace("HIT RIGHT");
-				   } else {
-					   
-				   }*/
-				
-				/*if((object.x > this.player.getPlayerAvatar().x && object.x < (this.player.getPlayerAvatar().x + 
-																			  this.player.getPlayerAvatar().width)) && 
-				   (object.y > this.player.getPlayerAvatar().y && object.y < (this.player.getPlayerAvatar().y + 
-																			  this.player.getPlayerAvatar().height))) {
-					trace("HIT");
-				} else {
-					trace("Object: (" + object.x + ", " + object.y + ") Player: (" + 
-						  this.player.getPlayerAvatar().x + ", " + this.player.getPlayerAvatar().y + ")");
-					//trace("MISS");
-				}*/
 			}
-			//if(this.player.getPlayerAvatar().x) {
-			//if(this.document.grass_mc.hitTestObject(this.player.player)) {
-				//trace("HIT");
-			//} else {
-			//	trace("MISS");
-			//}
-			//get skeleton from kinect
-			//get positions for skeleton
-			//for each object in scenery
-			//get position
-			//get size
-			//calculate bounds
-			//check for overlap
-			//if overlap, spawnAnimal(object.getAnimal)
 		}
 		
 		/** Runs when the despawn animal timer expires. **/
@@ -270,7 +192,6 @@
 		private function attachAnimal(animal:Animal):void {
 			//clear timer for despawnAnimal
 			//TODO check for animal interactions
-			trace("Attach Animal");
 			party.push(animal);
 			this.score += 10;
 			this.scoreTextField.text = "Score: " + this.score;
@@ -297,11 +218,9 @@
 		/** Runs when the player activates one of the Arduino tags. **/
 		public function activateTag(tag:String) {
 			for each (var animal in wild) {
-				//if(Class(getDefinitionByName(getQualifiedClassName(animal))) == 'Rabbit') {
 				if(animal.checkTag(tag)) {
 					attachAnimal(animal);
 				}
-				//}
 			}
 		}
 		

@@ -35,7 +35,7 @@
 			this.skeleton.graphics.lineTo(point2.x, point2.y);
 		}
 		
-		public function setPoints(user:User):void {
+		public function setPointsOLD(user:User):void {
 			/*this.setHead(user.head.position.depth);
 			this.setLeftElbow(user.leftElbow.position.depth);
 			this.setLeftHand(user.leftHand.position.depth);
