@@ -55,7 +55,7 @@
 			trace("Enter Frame");
 			for each(var user:User in this.kinect.usersWithSkeleton) {
 				trace("Hello 1");
-				this.kinectSkeleton.setPoints(user);
+				//this.kinectSkeleton.setPoints(user);
 				trace("Hello 2");
 			}
 		}
