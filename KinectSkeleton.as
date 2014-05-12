@@ -1,9 +1,8 @@
 ﻿package  {
 	import flash.display.Sprite;
 	import flash.geom.Point;
-	
-	import com.as3nui.nativeExtensions.air.kinect.data.User;
 	import flash.geom.Vector3D;
+	import com.as3nui.nativeExtensions.air.kinect.data.User;
 
 	public class KinectSkeleton {
 		private var head:Point;

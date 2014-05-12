@@ -64,15 +64,18 @@
 			trace("Exit Frame");
 		}
 		
+		/** Runs when the Kinect has been successfuly started. **/
 		private function kinectStarted(e:DeviceEvent):void {
 			trace("kinect has started");
 		}
 		
+		/** Runs when the RGB Image is updated. **/
 		protected function rgbImageUpdateHandler(event:CameraImageEvent):void {
 			trace("rgbUpdate");
 			depthBitmap.bitmapData = event.imageData;
 		}
 		
+		/** Runs when the Depth Image is updated. **/
 		protected function depthImageUpdateHandler(event:CameraImageEvent):void {
 			for each(var user:User in this.kinect.usersWithSkeleton) {
 				this.kinectSkeleton.setHead(user.head.position.depth);
@@ -101,6 +104,8 @@
 		
 		public function getKinectSkeleton():KinectSkeleton {return this.kinectSkeleton;}
 		
+		/** Cleanup function, cleans up and removes all the event listenrs
+		 ** for the Kinect. **/
 		public function kinectInputCleanup() {
 			this.kinect.removeEventListener(DeviceEvent.STARTED, kinectStarted);
 			this.kinect.removeEventListener(CameraImageEvent.DEPTH_IMAGE_UPDATE, depthImageUpdateHandler);

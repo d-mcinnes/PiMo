@@ -39,6 +39,7 @@
 		
 		public function getPlayerAvatar():Sprite {return this.player;}
 		
+		/** Renders the player on the screen. **/
 		public function renderPlayer() {
 			//var leftArmUpperAngle:Number = this.gameController.getKinectSkeleton().getLeftShoulder() * this.gameController.getKinectSkeleton().getLeftElbow();
 			//var leftArmLowerAngle:Number = this.gameController.getKinectSkeleton().getLeftElbow() * this.gameController.getKinectSkeleton().getLeftHand();
@@ -182,6 +183,7 @@
 			this.player.addChild(headFill);*/
 		}
 		
+		/** Clears the player currently rendered on the screen. **/
 		private function clearPlayer() {
 			this.graphics.clear();
 			while(this.numChildren > 0) {
@@ -189,6 +191,7 @@
 			}
 		}
 		
+		/** Creates a line between two points. **/
 		private function createLine(point1:Point, point2:Point):void {
 			this.graphics.lineStyle(5, 0, 1);
 			this.graphics.moveTo(point1.x * 10, point1.y * 10);
@@ -211,6 +214,8 @@
 			return destinationPoint;*/
 		}
 		
+		/** Cleanup function, removes all objects added to the stage in
+		 ** this class. **/
 		public function playerCleanup() {
 			while(this.numChildren > 0) {
 				this.removeChildAt(0);

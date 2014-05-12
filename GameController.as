@@ -90,6 +90,8 @@
 		public function getStageOverlay():Sprite {return this.stageOverlay;}
 		public function getKinectSkeleton():KinectSkeleton {return this.kinectInput.getKinectSkeleton();}
 		
+		/** Renders the player, as well as any animals which are currently following
+		 ** the player. **/
 		public function renderPlayer() {
 			this.player.renderPlayer();
 			for each (var animal in party) {
@@ -97,12 +99,14 @@
 			}
 		}
 		
+		/** Loads a scene. **/
 		private function loadScene():void {
 			//TODO reset scene elements
 			//TODO set background
 			loadScenery();
 		}
 		
+		/** Loads the scenery for the current scene. **/
 		private function loadScenery():void {
 			this.scenery = new Array();
 			
@@ -142,7 +146,9 @@
 		}
 		
 		//private function isSceneComplete():Boolean {
-			
+		
+		/** Checks to see whether or not the user is in the current bounds of the
+		 ** screen. **/
 		public function checkObjectBounds(position:Point, object:Object):Boolean {
 			
 			/*trace("PAUL: " + (position.x * GameController.SCREEN_SIZE_X) + ", " + (object.x - 50));
@@ -160,6 +166,8 @@
 			}
 		}
 		
+		/** Checks for any scenery interaction from the player. Runs every time
+		 ** the Kinect is updated. **/
 		public function checkForSceneryInteraction(leftPosition:Point, rightPosition:Point):void {
 			for each (var object in scenery) {
 				//trace("Object: " + "(" + object.x + ", " + object.y + ")" + " Hand: " + object.localToGlobal(leftPosition));
@@ -227,6 +235,7 @@
 			//if overlap, spawnAnimal(object.getAnimal)
 		}
 		
+		/** Runs when the despawn animal timer expires. **/
 		private function timerListener(e:TimerEvent):void {
 			for each (var object in scenery) {
 				if(!object.isActive()) {
@@ -238,6 +247,8 @@
 			}
 		}
 		
+		/** Spawns an animal at the given point. Takes an animal, and an x and
+		 ** y coordinates. **/
 		private function spawnAnimal(animal:Animal, x:Number, y:Number):void {
 			wild.push(animal);
 			animal.x = x;
@@ -245,6 +256,7 @@
 			this.stageMain.addChild(animal);
 		}
 		
+		/** Despawns an animal from the screen. **/
 		private function despawnAnimal(animal:Animal):void {
 			this.stageMain.removeChild(animal);
 			for each (var object in wild) {
@@ -254,6 +266,7 @@
 			}
 		}
 		
+		/** Adds an animal to the players party. **/
 		private function attachAnimal(animal:Animal):void {
 			//clear timer for despawnAnimal
 			//TODO check for animal interactions
@@ -269,6 +282,7 @@
 			score += animal.getScore();
 		}
 		
+		/** Removes an animal from the players party. **/
 		private function removeAnimal(animal:Animal):Boolean {
 			var index = party.indexOf(animal);
 			if (index >= 0) {
@@ -280,6 +294,7 @@
 			}
 		}
 		
+		/** Runs when the player activates one of the Arduino tags. **/
 		public function activateTag(tag:String) {
 			for each (var animal in wild) {
 				//if(Class(getDefinitionByName(getQualifiedClassName(animal))) == 'Rabbit') {
@@ -290,14 +305,14 @@
 			}
 		}
 		
+		/** Ruins when the player deactivates one of the Arduino tags. **/
 		public function deactivateTag(tag:String) {
 			
 		}
 		
-		private function endGame():void {
-			
-		}
-		
+		/** Resets this instance of the Game Controller, removing all instances
+		 ** of the KinectInput and Player classes, as well as removing all event
+		 ** listeners and clearing the stage. **/
 		public function gameCleanup() {
 			/* Cleanup Classes */
 			this.kinectInput.kinectInputCleanup();
@@ -328,6 +343,11 @@
 			this.player = null;
 			this.scoreTextField = null;
 			this.textFormat = null;
+		}
+		
+		/** Ends the current game. **/
+		private function endGame():void {
+			
 		}
 	}
 }
