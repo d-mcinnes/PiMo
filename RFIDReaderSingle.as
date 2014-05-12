@@ -41,12 +41,10 @@
 		}
 		
 		private function onError(evt:PhidgetErrorEvent):void {
-			trace("onError");
 			trace(evt);
 		}
 		
 		private function onAttach(evt:PhidgetEvent):void {
-			trace("onAttach");
 			trace(evt);
 		
 			trace("Phidgetstatus: " + rfid.Name);	
@@ -62,7 +60,6 @@
 		}
 		
 		private function onDetach(evt:PhidgetEvent):void {
-			trace("onDetach");
 			trace(evt);
 			
 			rfid.LED = false;

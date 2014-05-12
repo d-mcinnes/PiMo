@@ -38,6 +38,7 @@
 		
 		/** Renders the player on the screen. **/
 		public function renderPlayer() {
+			/* Calculate Angles. */
 			var leftArmUpperAngle:Number = getAngle(this.gameController.getKinectSkeleton().getLeftShoulder().x, 
 													this.gameController.getKinectSkeleton().getLeftShoulder().y, 
 													this.gameController.getKinectSkeleton().getLeftElbow().x, 
@@ -55,6 +56,7 @@
 													 this.gameController.getKinectSkeleton().getRightHand().x,
 													 this.gameController.getKinectSkeleton().getRightHand().y);
 			
+			/* Check distance from the Kinect. */
 			if(this.gameController.getKinectSkeleton().getDistance().z < 1.0) {
 				this.outOfBounds.messageBox.text = "Too close to the Kinect.";
 				this.outOfBounds.visible = true;
@@ -63,6 +65,7 @@
 				this.outOfBounds.visible = false;
 			}
 			
+			/* Check whether the user is out of the bounds of the screen. */
 			var xPosition = 1024 * this.gameController.getKinectSkeleton().getPositionRelative().x;
 			if(xPosition <= 140) {
 				this.outOfBounds.messageBox.text = "Out of Bounds - Left.";
@@ -77,6 +80,7 @@
 				this.x = xPosition;
 			}
 			
+			/* Clear current Player and create Neck and Head. */
 			this.clearPlayer();
 			var neckPoint:Point = getPolarPoint(new Point(0, 0), 
 												 getAngle(this.gameController.getKinectSkeleton().getTorso().x, 
@@ -92,21 +96,19 @@
 			playerHead.rotation = getAngle(0, 0, neckPoint.x, neckPoint.y);
 			this.addChild(playerHead);
 			
+			/* Render Left Arm */
 			var leftArmElbow = getPolarPoint(neckPoint, leftArmUpperAngle, 5);
 			this.createLine(neckPoint, leftArmElbow);
 			this.createLine(leftArmElbow, getPolarPoint(leftArmElbow, leftArmLowerAngle, 5));
-			
 			this.leftPoint = getPolarPoint(leftArmElbow, leftArmLowerAngle, 5);
 			
+			/* Render Right Arm */
 			var rightArmElbow = getPolarPoint(neckPoint, rightArmUpperAngle, 5);
 			this.createLine(neckPoint, rightArmElbow);
 			this.createLine(rightArmElbow, getPolarPoint(rightArmElbow, rightArmLowerAngle, 5));
-			
 			this.rightPoint = getPolarPoint(rightArmElbow, rightArmLowerAngle, 5);
 						
-			/** 
-			 ** Render Left Leg 
-			 **/
+			/* Render Left Leg */
 			var leftKnee:Point = getPolarPoint(new Point(0, 0), 
 											   getAngle(this.gameController.getKinectSkeleton().getTorso().x, 
 														this.gameController.getKinectSkeleton().getTorso().y, 
@@ -121,9 +123,7 @@
 															 this.gameController.getKinectSkeleton().getLeftFoot().y), 
 													5));
 			
-			/** 
-			 ** Render Right Leg 
-			 **/
+			/* Render Right Leg */
 			var rightKnee:Point = getPolarPoint(new Point(0, 0),
 												getAngle(this.gameController.getKinectSkeleton().getTorso().x, 
 														 this.gameController.getKinectSkeleton().getTorso().y, 

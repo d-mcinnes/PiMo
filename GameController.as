@@ -50,8 +50,8 @@
 			this.kinectInput = new KinectInput(this);
 			this.rfidReader = new RFIDReaderSingle(this);
 			this.score = 0;
-			this.wild = new Array();
 			this.party = new Array();
+			this.wild = new Array();
 			
 			loadScene();
 			
@@ -74,7 +74,7 @@
 			this.textFormat.font = new ScoreFont().fontName;
 			
 			this.scoreTextField.defaultTextFormat = this.textFormat;
-			this.scoreTextField.text = "Score: 0";
+			this.scoreTextField.text = "Score: " + this.score;
 			this.document.addChild(this.scoreTextField);
 			
 			//while loop for playing game
