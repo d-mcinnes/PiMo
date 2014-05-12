@@ -122,12 +122,12 @@
 		//private function isSceneComplete():Boolean {
 		
 		/** Checks to see whether or not the user is in the current bounds of the
-		 ** screen. **/
-		public function checkObjectBounds(position:Point, object:Object):Boolean {
-			if (position.x * GameController.SCREEN_SIZE_X > object.x - 50
-					&& position.x * GameController.SCREEN_SIZE_X < object.x + object.width + 50
-					&& position.y * GameController.SCREEN_SIZE_Y > object.y - 50
-					&& position.y * GameController.SCREEN_SIZE_Y < object.y + object.height + 50) {
+		 ** screen. Takes a Scenery object and returns a Boolean. **/
+		public function checkObjectBounds(object:Object):Boolean {
+			if(((Math.abs(object.x - this.player.localToGlobal(this.player.getLeftPoint()).x) < 100) && 
+						 (Math.abs(object.y - this.player.localToGlobal(this.player.getLeftPoint()).y) < 100)) ||
+					   ((Math.abs(object.x - this.player.localToGlobal(this.player.getRightPoint()).x) < 100) && 
+						 (Math.abs(object.y - this.player.localToGlobal(this.player.getRightPoint()).y) < 100))) {
 				return true;
 			} else {
 				return false;
@@ -142,15 +142,12 @@
 					if(this.player.getLeftPoint() == null || this.player.getRightPoint() == null) {
 						return;
 					}
-					if(((Math.abs(object.x - this.player.localToGlobal(this.player.getLeftPoint()).x) < 100) && 
-						 (Math.abs(object.y - this.player.localToGlobal(this.player.getLeftPoint()).y) < 100)) ||
-					   ((Math.abs(object.x - this.player.localToGlobal(this.player.getRightPoint()).x) < 100) && 
-						 (Math.abs(object.y - this.player.localToGlobal(this.player.getRightPoint()).y) < 100))) {
-						spawnAnimal(new Rabbit(), object.x, GameController.GROUND_HEIGHT);
-						object.setIsActive(false);
-						
+					if(checkObjectBounds(object)) {
+						var animal:Animal = new Rabbit();
 						var timer:Timer = new Timer(10000);
-						timer.addEventListener(TimerEvent.TIMER, timerListener);
+						spawnAnimal(animal, object.x, GameController.GROUND_HEIGHT);
+						object.setIsActive(false);
+						timer.addEventListener(TimerEvent.TIMER, despawnTimer(animal, object));
 						timer.start();
 					}
 				}
@@ -158,7 +155,18 @@
 		}
 		
 		/** Runs when the despawn animal timer expires. **/
-		private function timerListener(e:TimerEvent):void {
+		public function despawnTimer(animal:Animal, scenery:Object):Function {
+			return function(e:TimerEvent):void {
+				if(!scenery.isActive()) {
+					scenery.setIsActive(true);
+				}
+				despawnAnimal(animal);
+			}
+		}
+		
+		/** Runs when the despawn animal timer expires. **/
+		/*private function timerListener(e:TimerEvent, num:Number):void {
+			trace("Num: " + num);
 			for each (var object in scenery) {
 				if(!object.isActive()) {
 					object.setIsActive(true);
@@ -167,7 +175,7 @@
 			for each (var animal in wild) {
 				despawnAnimal(animal);
 			}
-		}
+		}*/
 		
 		/** Spawns an animal at the given point. Takes an animal, and an x and
 		 ** y coordinates. **/
@@ -180,7 +188,11 @@
 		
 		/** Despawns an animal from the screen. **/
 		private function despawnAnimal(animal:Animal):void {
-			this.stageMain.removeChild(animal);
+			try {
+				this.stageMain.removeChild(animal);
+			} catch(e:Error) {
+				trace("Error Removing Animal: Does not Exist.");
+			}
 			for each (var object in wild) {
 				if(object == animal) {
 					wild.splice(wild.indexOf(object), 1);

@@ -11,7 +11,7 @@
 		private var gameController:GameController;
 		
 		public function Main() {
-			stage.displayState = StageDisplayState.FULL_SCREEN;
+			stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, detectKeyPress);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, restartGame);
 			Mouse.hide();
@@ -40,6 +40,7 @@
 			}
 		}
 		
+		/** Starts a new game. **/
 		private function startGame() {
 			this.gameController = new GameController(stage);
 		}
