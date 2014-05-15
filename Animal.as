@@ -16,6 +16,10 @@
 			this.timer.start();
 		}
 		
+		public function setTimerEvent(func:Function) {
+			this.timer.addEventListener(TimerEvent.TIMER, func);
+		}
+		
 		private function timerEvent(e:TimerEvent) {
 			trace("Removing Animal...");
 			this.timer.reset();

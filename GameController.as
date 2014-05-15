@@ -101,7 +101,7 @@
 			this.player.renderPlayer();
 			for each (var animal in party) {
 				index++;
-				animal.x = GameController.SCREEN_SIZE_X * this.kinectInput.getKinectSkeleton().getPositionRelative().x - 20 - (index * 20);
+				animal.x = GameController.SCREEN_SIZE_X * this.kinectInput.getKinectSkeleton().getPositionRelative().x - 200 - (index * 30);
 			}
 		}
 		
@@ -189,8 +189,14 @@
 			wild.push(animal);
 			animal.x = x;
 			animal.y = y;
+			animal.setTimerEvent(animalDespawnTimerEvent);
 			animal.startTimer();
 			this.stageMain.addChild(animal);
+		}
+		
+		private function animalDespawnTimerEvent(e:TimerEvent) {
+			trace("Animal Stuff");
+			
 		}
 		
 		/** Despawns an animal from the screen. **/
