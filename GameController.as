@@ -5,12 +5,14 @@
 	import flash.display.Sprite;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
+	import flash.ui.Keyboard;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
 	import flash.text.Font;
+	import flash.events.KeyboardEvent;
 
 	public class GameController {
 		private var document:Stage;
@@ -77,6 +79,8 @@
 			this.scoreTextField.text = "Score: " + this.score;
 			this.document.addChild(this.scoreTextField);
 			
+			this.document.addEventListener(KeyboardEvent.KEY_DOWN, keySpacePress);
+			
 			//while loop for playing game
 			/*var startTime:uint = getTimer();
 			while(getTimer() - startTime < this.gameDuration) {
@@ -93,9 +97,11 @@
 		/** Renders the player, as well as any animals which are currently following
 		 ** the player. **/
 		public function renderPlayer() {
+			var index:Number = 0;
 			this.player.renderPlayer();
 			for each (var animal in party) {
-				animal.x = GameController.SCREEN_SIZE_X * this.kinectInput.getKinectSkeleton().getPositionRelative().x - 30;
+				index++;
+				animal.x = GameController.SCREEN_SIZE_X * this.kinectInput.getKinectSkeleton().getPositionRelative().x - 20 - (index * 20);
 			}
 		}
 		
@@ -144,11 +150,11 @@
 					}
 					if(checkObjectBounds(object)) {
 						var animal:Animal = new Rabbit();
-						var timer:Timer = new Timer(10000);
+						//var timer:Timer = new Timer(10000);
 						spawnAnimal(animal, object.x, GameController.GROUND_HEIGHT);
 						object.setIsActive(false);
-						timer.addEventListener(TimerEvent.TIMER, despawnTimer(animal, object));
-						timer.start();
+						//timer.addEventListener(TimerEvent.TIMER, despawnTimer(animal, object));
+						//timer.start();
 					}
 				}
 			}
@@ -183,6 +189,7 @@
 			wild.push(animal);
 			animal.x = x;
 			animal.y = y;
+			animal.startTimer();
 			this.stageMain.addChild(animal);
 		}
 		
@@ -239,6 +246,13 @@
 		/** Ruins when the player deactivates one of the Arduino tags. **/
 		public function deactivateTag(tag:String) {
 			
+		}
+		
+		/** Runs when the user presses the space key **/
+		private function keySpacePress(e:KeyboardEvent) {
+			if(e.keyCode == Keyboard.SPACE) {
+				this.activateTag('010232cd72');
+			}
 		}
 		
 		/** Resets this instance of the Game Controller, removing all instances
