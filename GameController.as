@@ -195,8 +195,7 @@
 		}
 		
 		private function animalDespawnTimerEvent(e:TimerEvent) {
-			trace("Animal Stuff");
-			
+			trace("animalDespawnTimerEvent");
 		}
 		
 		/** Despawns an animal from the screen. **/

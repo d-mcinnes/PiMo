@@ -17,13 +17,14 @@
 		}
 		
 		public function setTimerEvent(func:Function) {
+			//this.timer.addEventListener(TimerEvent.TIMER, func);
 			this.timer.addEventListener(TimerEvent.TIMER, func);
 		}
 		
 		private function timerEvent(e:TimerEvent) {
 			trace("Removing Animal...");
 			this.timer.reset();
-			trace("Parent: " + this.parent.toString());
+			//trace("Parent: " + this.parent.toString());
 			//this.parent[this.name].despawnAnimal(this);
 		}
 		
