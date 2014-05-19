@@ -15,8 +15,7 @@
 		}
 		
 		private function timerEvent(e:TimerEvent) {
-			trace(this.toString());
-			trace("[" + this.toString() + "] " + "Removing Scenery");
+			GameController.debugMessage("Removing Scenery");
 			this.timer.reset();
 			this.setIsActive(true);
 		}

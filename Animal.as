@@ -6,6 +6,7 @@
 	public class Animal extends MovieClip {
 		private var tags:Array = [];
 		private var timer:Timer;
+		private var animalName:String = "";
 		
 		public function Animal() {
 			this.timer = new Timer(8000);
@@ -26,7 +27,7 @@
 		}
 		
 		private function timerEvent(e:TimerEvent) {
-			trace("Removing Animal...");
+			GameController.debugMessage("Removing Animal");
 			this.timer.reset();
 			//trace("Parent: " + this.parent.toString());
 			//this.parent[this.name].despawnAnimal(this);
@@ -38,6 +39,9 @@
 		
 		public function setTags(tags:Array) {this.tags = tags;}
 		public function getTags():Array {return this.tags;}
+		
+		public function setName(animalName:String) {this.animalName = animalName;}
+		public function getName():String {return this.animalName;}
 		
 		public function checkTag(tag:String):Boolean {
 			for each(var object in this.tags) {
