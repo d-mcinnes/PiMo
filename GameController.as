@@ -39,6 +39,7 @@
 		public static var SCREEN_SIZE_X:Number = 1024;
 		public static var SCREEN_SIZE_Y:Number = 600;
 		public static var GROUND_HEIGHT:Number = 350;
+		public static var DEBUG_MODE_ON:Boolean = true;
 
 		/**
 		 * Controls the proceedings for one round of the game.
@@ -83,6 +84,9 @@
 			this.document.addChild(this.scoreTextField);
 			
 			this.document.addEventListener(KeyboardEvent.KEY_DOWN, keySpacePress);
+			
+			//trace("[" + this + "] " + "Game Controller Started");
+			GameController.debugMessage("Game Controller Started");
 			
 			//while loop for playing game
 			/*var startTime:uint = getTimer();
@@ -200,7 +204,7 @@
 		}
 		
 		private function animalDespawnTimerEvent(e:TimerEvent) {
-			trace("animalDespawnTimerEvent");
+			trace("[" + this + "] " + "Animal Despawn Timer Event");
 		}
 		
 		/** Despawns an animal from the screen. **/
@@ -208,7 +212,7 @@
 			try {
 				this.stageMain.removeChild(animal);
 			} catch(e:Error) {
-				trace("Error Removing Animal: Does not Exist.");
+				trace("[" + this.toString() + "] " + "Error Removing Animal: Does not Exist.");
 			}
 			for each (var object in wild) {
 				if(object == animal) {
@@ -303,6 +307,14 @@
 		/** Ends the current game. **/
 		private function endGame():void {
 			
+		}
+		
+		/** Takes a string and prints a debug message. **/
+		public static function debugMessage(text:String):void {
+			if(GameController.DEBUG_MODE_ON == true) {
+				var location:String = new Error().getStackTrace().match( /(?<=\/|\\)\w+?.as:\d+?(?=])/g )[1].replace( ":" , ", line " );
+				trace("[" + getTimer() + "] " + text + " [" + location + "]");
+			}
 		}
 	}
 }

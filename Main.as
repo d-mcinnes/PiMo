@@ -24,6 +24,16 @@
 			startGame();
 		}
 		
+		/** Starts a new game. **/
+		private function startGame() {
+			this.gameController = new GameController(stage);
+		}
+		
+		/** Shortcuts 
+		 ** 	F5 - Restart Game
+		 **		F6 - Toggle Debug Mode
+		 **/
+		
 		/** Restarts the game when the user presses the F5 key. **/
 		private function restartGame(e:KeyboardEvent) {
 			if(e.keyCode == Keyboard.F5) {
@@ -32,11 +42,14 @@
 				this.gameController = null;
 				startGame();
 			}
-		}
-		
-		/** Starts a new game. **/
-		private function startGame() {
-			this.gameController = new GameController(stage);
+			if(e.keyCode == Keyboard.F6) {
+				GameController.DEBUG_MODE_ON = !GameController.DEBUG_MODE_ON;
+				if(GameController.DEBUG_MODE_ON == true) {
+					trace("Debugging On...");
+				} else {
+					trace("Debugging Off...");
+				}
+			}
 		}
 	}
 }
