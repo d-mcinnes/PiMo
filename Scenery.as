@@ -9,6 +9,7 @@
 		private var timer:Timer;
 
 		public function Scenery() {
+			this.active = false;
 			this.timer = new Timer(10000);
 			this.timer.addEventListener(TimerEvent.TIMER, timerEvent);
 		}

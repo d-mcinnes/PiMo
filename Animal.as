@@ -12,6 +12,10 @@
 			this.timer.addEventListener(TimerEvent.TIMER, timerEvent);
 		}
 		
+		public function interactionAttach():Boolean {
+			return false;
+		}
+		
 		public function startTimer() {
 			this.timer.start();
 		}

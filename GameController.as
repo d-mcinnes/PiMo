@@ -13,6 +13,9 @@
 	import flash.text.TextFormatAlign;
 	import flash.text.Font;
 	import flash.events.KeyboardEvent;
+	
+	import deco3850.animals.*;
+	import deco3850.scenery.*;
 
 	public class GameController {
 		private var document:Stage;
@@ -149,7 +152,9 @@
 						return;
 					}
 					if(checkObjectBounds(object)) {
+						//var animal:Animal = new Rabbit();
 						var animal:Animal = new Rabbit();
+						trace(animal.interactionAttach());
 						//var timer:Timer = new Timer(10000);
 						spawnAnimal(animal, object.x, GameController.GROUND_HEIGHT);
 						object.setIsActive(false);
