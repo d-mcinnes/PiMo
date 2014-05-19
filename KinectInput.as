@@ -45,7 +45,6 @@
 				// Update Skeleton
 				this.kinect.addEventListener(Event.ENTER_FRAME, on_enter_frame, false, 0, true);
 				this.kinect.addEventListener(Event.EXIT_FRAME, on_exit_frame, false, 0, true);
-				trace("Done");
 			} else {
 				trace("Kinect not supported.");
 			}
@@ -66,7 +65,7 @@
 		
 		/** Runs when the Kinect has been successfuly started. **/
 		private function kinectStarted(e:DeviceEvent):void {
-			trace("kinect has started");
+			GameController.debugMessage("Kinect has Started");
 		}
 		
 		/** Runs when the RGB Image is updated. **/

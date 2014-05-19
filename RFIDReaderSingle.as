@@ -27,9 +27,7 @@
 			rfid.addEventListener(PhidgetErrorEvent.ERROR, onError);
 			rfid.addEventListener(PhidgetDataEvent.TAG, onTag);
 			rfid.addEventListener(PhidgetDataEvent.TAG_LOST, onTagLoss);
-			
 			rfid.open("localhost", 5001);
-			
 			/*
 			 * It takes time to connect to the device, so trying to access the device 
 			 * at this point in the code (immediately or too soon after opening the 
@@ -41,7 +39,8 @@
 		}
 		
 		private function onError(evt:PhidgetErrorEvent):void {
-			trace(evt);
+			GameController.debugMessage(evt.toString());
+			//trace(evt);
 		}
 		
 		private function onAttach(evt:PhidgetEvent):void {
