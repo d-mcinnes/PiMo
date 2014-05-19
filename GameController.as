@@ -8,6 +8,7 @@
 	import flash.ui.Keyboard;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
+	import flash.utils.PadZero;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
@@ -158,10 +159,10 @@
 					if(checkObjectBounds(object)) {
 						//var animal:Animal = new Rabbit();
 						var animal:Animal = new Rabbit();
-						trace(animal.interactionAttach());
 						//var timer:Timer = new Timer(10000);
 						spawnAnimal(animal, object.x, GameController.GROUND_HEIGHT);
 						object.setIsActive(false);
+						GameController.debugMessage("Spawning " + animal.getName() + " at [" + object.x  + ", " + object.y + "]");
 						//timer.addEventListener(TimerEvent.TIMER, despawnTimer(animal, object));
 						//timer.start();
 					}
@@ -204,7 +205,7 @@
 		}
 		
 		private function animalDespawnTimerEvent(e:TimerEvent) {
-			trace("[" + this + "] " + "Animal Despawn Timer Event");
+			GameController.debugMessage("Animal Despawn Timer Event");
 		}
 		
 		/** Despawns an animal from the screen. **/
@@ -212,7 +213,7 @@
 			try {
 				this.stageMain.removeChild(animal);
 			} catch(e:Error) {
-				trace("[" + this.toString() + "] " + "Error Removing Animal: Does not Exist.");
+				GameController.debugMessage("Error removing animal: does not exist");
 			}
 			for each (var object in wild) {
 				if(object == animal) {
@@ -273,6 +274,8 @@
 		 ** of the KinectInput and Player classes, as well as removing all event
 		 ** listeners and clearing the stage. **/
 		public function gameCleanup() {
+			GameController.debugMessage("Cleaning up game controller");
+			
 			/* Cleanup Classes */
 			this.kinectInput.kinectInputCleanup();
 			this.player.playerCleanup();
@@ -309,11 +312,29 @@
 			
 		}
 		
+		/*private function millisecondsToTimecode(milliseconds:int):String {
+			var seconds:int = Math.floor((milliseconds/1000) % 60);
+			var strSeconds:String = (seconds < 10) ? ("0" + String(seconds)):String(seconds);
+			var minutes:int = Math.round(Math.floor((milliseconds/1000)/60));
+			var strMinutes:String = (minutes < 10) ? ("0" + String(minutes)):String(minutes);
+			var strMilliseconds:String = milliseconds.toString();
+			strMilliseconds = strMilliseconds.slice(strMilliseconds.length -3, strMilliseconds.length)
+			var timeCode:String = strMinutes + ":" + strSeconds + ':' + strMilliseconds;
+			return timeCode;
+		}*/
+		
 		/** Takes a string and prints a debug message. **/
 		public static function debugMessage(text:String):void {
 			if(GameController.DEBUG_MODE_ON == true) {
 				var location:String = new Error().getStackTrace().match( /(?<=\/|\\)\w+?.as:\d+?(?=])/g )[1].replace( ":" , ", line " );
-				trace("[" + getTimer() + "] " + text + " [" + location + "]");
+				var x:int = getTimer() / 1000;
+				var seconds:int = x % 60;
+				x /= 60;
+				var minutes:int = x % 60;
+				x /= 60;
+				var hours:int = x % 24;
+				
+				trace("[" + PadZero.convert(hours) + ":" + PadZero.convert(minutes) + ":" + PadZero.convert(seconds) + "]" + "[" + location + "] " + text);
 			}
 		}
 	}
