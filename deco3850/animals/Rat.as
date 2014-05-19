@@ -6,6 +6,7 @@
 		public function Rat() {
 			this.setName("Rat");
 			this.setTags(['010232cd72', '010238914a', '0102387557']);
+			this.setScore(10);
 		}
 	}
 }

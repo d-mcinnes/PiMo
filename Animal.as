@@ -5,15 +5,17 @@
 	import flash.utils.Timer;
 	
 	public class Animal extends MovieClip {
+		private var animalName:String = "";
+		private var score:Number = 0;
 		private var tags:Array = [];
 		private var timer:Timer;
-		private var animalName:String = "";
 		
 		public function Animal() {
 			this.timer = new Timer(8000);
 			this.timer.addEventListener(TimerEvent.TIMER, timerEvent);
 		}
 		
+		/** Runs when the game attempts to attach an animal to the player. **/
 		public function interactionAttach():Boolean {
 			return false;
 		}
@@ -23,20 +25,16 @@
 		}
 		
 		public function setTimerEvent(func:Function) {
-			//this.timer.addEventListener(TimerEvent.TIMER, func);
 			this.timer.addEventListener(TimerEvent.TIMER, func);
 		}
 		
 		private function timerEvent(e:TimerEvent) {
 			Debug.debugMessage("Removing Animal");
 			this.timer.reset();
-			//trace("Parent: " + this.parent.toString());
-			//this.parent[this.name].despawnAnimal(this);
 		}
 		
-		public function getScore():Number {
-			return 0;
-		}
+		public function setScore(score:Number) {this.score = score;}
+		public function getScore():Number {return this.score;}
 		
 		public function setTags(tags:Array) {this.tags = tags;}
 		public function getTags():Array {return this.tags;}
@@ -44,6 +42,7 @@
 		public function setName(animalName:String) {this.animalName = animalName;}
 		public function getName():String {return this.animalName;}
 		
+		/** Checks to see if the tag is associated with the animal. **/
 		public function checkTag(tag:String):Boolean {
 			for each(var object in this.tags) {
 				if(object == tag) {

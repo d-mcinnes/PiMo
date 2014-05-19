@@ -13,10 +13,11 @@
 				x /= 60;
 				var hours:int = x % 24;
 				
-				trace("[" + Debug.padChar(hours.toString(), 2, '0', true) + 
+				var output:String = "[" + Debug.padChar(hours.toString(), 2, '0', true) + 
 					  ":" + Debug.padChar(minutes.toString(), 2, '0', true) + 
 					  ":" + Debug.padChar(seconds.toString(), 2, '0', true) + 
-					  "]" + Debug.padChar(("[" + location + "] "), 40, ' ', false) + text);
+					  "]" + Debug.padChar(("[" + location + "] "), 40, ' ', false) + text;
+				trace(output);
 			}
 		}
 		

@@ -47,7 +47,7 @@
 				this.kinect.addEventListener(Event.ENTER_FRAME, on_enter_frame, false, 0, true);
 				this.kinect.addEventListener(Event.EXIT_FRAME, on_exit_frame, false, 0, true);
 			} else {
-				trace("Kinect not supported.");
+				Debug.debugMessage("Kinect not supported");
 			}
 		}
 		
@@ -107,11 +107,16 @@
 		/** Cleanup function, cleans up and removes all the event listenrs
 		 ** for the Kinect. **/
 		public function kinectInputCleanup() {
-			this.kinect.removeEventListener(DeviceEvent.STARTED, kinectStarted);
-			this.kinect.removeEventListener(CameraImageEvent.DEPTH_IMAGE_UPDATE, depthImageUpdateHandler);
-			this.kinect.removeEventListener(Event.ENTER_FRAME, on_enter_frame);
-			this.kinect.removeEventListener(Event.EXIT_FRAME, on_exit_frame);
-			this.kinect = null;
+			try {
+				this.kinect.removeEventListener(DeviceEvent.STARTED, kinectStarted);
+				this.kinect.removeEventListener(CameraImageEvent.DEPTH_IMAGE_UPDATE, depthImageUpdateHandler);
+				this.kinect.removeEventListener(Event.ENTER_FRAME, on_enter_frame);
+				this.kinect.removeEventListener(Event.EXIT_FRAME, on_exit_frame);
+				this.kinect = null;
+				Debug.debugMessage("Cleaning up Kinect");
+			} catch(e:Error) {
+				Debug.debugMessage("Error cleaning up Kinect");
+			}
 		}
 	}
 }

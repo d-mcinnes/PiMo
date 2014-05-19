@@ -10,7 +10,6 @@
 	import flash.ui.Keyboard;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
-	import flash.utils.PadZero;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
@@ -42,6 +41,7 @@
 		public static var SCREEN_SIZE_Y:Number = 600;
 		public static var GROUND_HEIGHT:Number = 350;
 		public static var DEBUG_MODE_ON:Boolean = true;
+		public static var DEBUG_DISPLAY_MODE_ON:Boolean = false;
 
 		/**
 		 * Controls the proceedings for one round of the game.
@@ -87,7 +87,6 @@
 			
 			this.document.addEventListener(KeyboardEvent.KEY_DOWN, keySpacePress);
 			
-			//trace("[" + this + "] " + "Game Controller Started");
 			Debug.debugMessage("Game Controller Started");
 			
 			//while loop for playing game
@@ -228,14 +227,15 @@
 			//clear timer for despawnAnimal
 			//TODO check for animal interactions
 			party.push(animal);
-			this.score += 10;
+			this.score += animal.getScore();
 			this.scoreTextField.text = "Score: " + this.score;
 			for each (var object in wild) {
 				if(object == animal) {
 					wild.splice(wild.indexOf(animal), 1);
 				}
 			}
-			score += animal.getScore();
+			Debug.debugMessage("Attaching " + animal.getName());
+			//score += animal.getScore();
 		}
 		
 		/** Removes an animal from the players party. **/
