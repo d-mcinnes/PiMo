@@ -1,8 +1,10 @@
 ﻿package  {
+	import flash.debug.Debug;
 	import flash.display.Stage;
 	import flash.display.Graphics;
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.events.KeyboardEvent;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.ui.Keyboard;
@@ -13,7 +15,6 @@
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
 	import flash.text.Font;
-	import flash.events.KeyboardEvent;
 	
 	import deco3850.animals.*;
 	import deco3850.scenery.*;
@@ -87,7 +88,7 @@
 			this.document.addEventListener(KeyboardEvent.KEY_DOWN, keySpacePress);
 			
 			//trace("[" + this + "] " + "Game Controller Started");
-			GameController.debugMessage("Game Controller Started");
+			Debug.debugMessage("Game Controller Started");
 			
 			//while loop for playing game
 			/*var startTime:uint = getTimer();
@@ -162,7 +163,7 @@
 						//var timer:Timer = new Timer(10000);
 						spawnAnimal(animal, object.x, GameController.GROUND_HEIGHT);
 						object.setIsActive(false);
-						GameController.debugMessage("Spawning " + animal.getName() + " at [" + object.x  + ", " + object.y + "]");
+						Debug.debugMessage("Spawning " + animal.getName() + " at [" + object.x  + ", " + object.y + "]");
 						//timer.addEventListener(TimerEvent.TIMER, despawnTimer(animal, object));
 						//timer.start();
 					}
@@ -205,7 +206,7 @@
 		}
 		
 		private function animalDespawnTimerEvent(e:TimerEvent) {
-			GameController.debugMessage("Animal Despawn Timer Event");
+			Debug.debugMessage("Animal Despawn Timer Event");
 		}
 		
 		/** Despawns an animal from the screen. **/
@@ -213,7 +214,7 @@
 			try {
 				this.stageMain.removeChild(animal);
 			} catch(e:Error) {
-				GameController.debugMessage("Error removing animal: does not exist");
+				Debug.debugMessage("Error removing animal: does not exist");
 			}
 			for each (var object in wild) {
 				if(object == animal) {
@@ -274,7 +275,7 @@
 		 ** of the KinectInput and Player classes, as well as removing all event
 		 ** listeners and clearing the stage. **/
 		public function gameCleanup() {
-			GameController.debugMessage("Cleaning up game controller");
+			Debug.debugMessage("Cleaning up game controller");
 			
 			/* Cleanup Classes */
 			this.kinectInput.kinectInputCleanup();
@@ -324,7 +325,7 @@
 		}*/
 		
 		/** Takes a string and prints a debug message. **/
-		public static function debugMessage(text:String):void {
+		/*public static function debugMessage2(text:String):void {
 			if(GameController.DEBUG_MODE_ON == true) {
 				var location:String = new Error().getStackTrace().match( /(?<=\/|\\)\w+?.as:\d+?(?=])/g )[1].replace( ":" , ", line " );
 				var x:int = getTimer() / 1000;
@@ -336,6 +337,6 @@
 				
 				trace("[" + PadZero.convert(hours) + ":" + PadZero.convert(minutes) + ":" + PadZero.convert(seconds) + "]" + "[" + location + "] " + text);
 			}
-		}
+		}*/
 	}
 }

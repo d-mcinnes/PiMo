@@ -1,4 +1,5 @@
-﻿package  {
+﻿package {
+	import flash.debug.Debug;
 	import flash.display.MovieClip;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
@@ -27,7 +28,7 @@
 		}
 		
 		private function timerEvent(e:TimerEvent) {
-			GameController.debugMessage("Removing Animal");
+			Debug.debugMessage("Removing Animal");
 			this.timer.reset();
 			//trace("Parent: " + this.parent.toString());
 			//this.parent[this.name].despawnAnimal(this);

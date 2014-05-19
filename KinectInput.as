@@ -1,4 +1,5 @@
 ﻿package {
+	import flash.debug.Debug;
 	import flash.display.Bitmap;
 	import flash.display.Stage;
 	import flash.events.Event;
@@ -65,7 +66,7 @@
 		
 		/** Runs when the Kinect has been successfuly started. **/
 		private function kinectStarted(e:DeviceEvent):void {
-			GameController.debugMessage("Kinect has Started");
+			Debug.debugMessage("Kinect has Started");
 		}
 		
 		/** Runs when the RGB Image is updated. **/

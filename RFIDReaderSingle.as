@@ -1,5 +1,5 @@
 ﻿package  {
-	
+	import flash.debug.Debug;
 	import com.phidgets.*;
 	import com.phidgets.events.*;
 	
@@ -39,7 +39,7 @@
 		}
 		
 		private function onError(evt:PhidgetErrorEvent):void {
-			GameController.debugMessage(evt.toString());
+			Debug.debugMessage(evt.toString());
 			//trace(evt);
 		}
 		

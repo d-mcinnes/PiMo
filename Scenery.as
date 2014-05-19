@@ -1,4 +1,5 @@
 ﻿package  {
+	import flash.debug.Debug;
 	import flash.display.MovieClip;
 	import flash.events.TimerEvent;
 	import flash.filters.ColorMatrixFilter;
@@ -15,7 +16,7 @@
 		}
 		
 		private function timerEvent(e:TimerEvent) {
-			GameController.debugMessage("Removing Scenery");
+			Debug.debugMessage("Removing Scenery");
 			this.timer.reset();
 			this.setIsActive(true);
 		}
