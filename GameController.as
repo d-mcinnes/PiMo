@@ -122,44 +122,7 @@
 		
 		/** Loads a scene. **/
 		private function loadScene():void {
-			//TODO reset scene elements
-			//TODO set background
 			loadScenery();
-		}
-		
-		/** Takes a position and creates the scenery object. **/
-		private function createSceneryObject22(type:Class, x:Number, y:Number):Scenery {
-			var object:Scenery = new type();
-			return object;
-		}
-		
-		/** Loads the scenery for the current scene. **/
-		private function loadScenery_Obsolete():void {
-			this.scenery = new Array();
-			
-			/* Create Farm */
-			this.scenery.push(new Farm((Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 100 + 1)) + 100), 
-									   GameController.GROUND_HEIGHT));
-			
-			/* Create Tree(s) */
-			for(var i:int = 0; i < (Math.floor(Math.random() * 2) + 1); i++) {
-				this.scenery.push(new Tree((Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 150 + 1)) + 150), 
-									   GameController.GROUND_HEIGHT));
-			}
-			
-			/* Create Grass */
-			for(var n:int = 0; n < (Math.floor(Math.random() * 4) + 1); n++) {
-				this.scenery.push(new Grass((Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 150 + 1)) + 150), 
-											GameController.GROUND_HEIGHT));
-			}
-			//scenery.push(new Grass());
-			
-			//for each (var object in scenery) {
-				//object.x = (Math.floor(Math.random() * (950 - 70 + 1)) + 70);
-				//object.y = GameController.GROUND_HEIGHT;
-				//object.setIsActive(true);
-				//this.stageMain.addChild(object);
-			//}
 		}
 		
 		/** Returns an array of all scenery objects on the stage. **/
@@ -179,7 +142,6 @@
 		private function sceneryCheckPosition(x:Number):Boolean {
 			for each(var object in this.getScenery()) {
 				if(x > object.x && x < object.x + object.width) {
-					Debug.debugMessage("Check Position: False");
 					return false;
 				}
 			}
@@ -207,7 +169,6 @@
 				for(var count:int = 0; count < 100; count++ ) {
 					x = (Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 150 + 1)) + 150);
 					if(sceneryCheckPosition(x) == true) {
-						Debug.debugMessage("Loop Break");
 						break;
 					}
 				}
@@ -221,8 +182,6 @@
 											GameController.GROUND_HEIGHT + 20));
 			}
 		}
-		
-		//private function isSceneComplete():Boolean {
 		
 		/** Checks to see whether or not the user is in the current bounds of the
 		 ** screen. Takes a Scenery object and returns a Boolean. **/
