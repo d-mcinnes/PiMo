@@ -39,7 +39,7 @@
 		
 		public static var SCREEN_SIZE_X:Number = 1024;
 		public static var SCREEN_SIZE_Y:Number = 600;
-		public static var GROUND_HEIGHT:Number = 350;
+		public static var GROUND_HEIGHT:Number = 440;
 		public static var DEBUG_MODE_ON:Boolean = true;
 		public static var DEBUG_DISPLAY_MODE_ON:Boolean = false;
 
@@ -127,7 +127,7 @@
 		}
 		
 		/** Loads the scenery for the current scene. **/
-		private function loadScenery():void {
+		private function loadScenery_Obsolete():void {
 			this.scenery = new Array();
 			
 			/* Create Farm */
@@ -153,6 +153,41 @@
 				//object.setIsActive(true);
 				this.stageMain.addChild(object);
 			}
+		}
+		
+		/** Takes a x position and checks whether or not it collides with any other
+		 ** objects. **/
+		private function sceneryCheckPosition(x:Number):Boolean {
+			for each(var object in this.scenery) {
+				if(x > object.x && x < object.x + object.width) {
+					return false;
+				}
+			}
+			return true;
+		}
+		
+		/** Loads the scenery for the current scene. **/
+		private function loadScenery():void {
+			this.scenery = new Array();
+			
+			/* Create Farm */
+			this.scenery.push(new Farm((Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 550 + 1)) + 100), 
+									   GameController.GROUND_HEIGHT));
+			
+			/* Create Tree(s) */
+			for(var i:int = 0; i < (Math.floor(Math.random() * 2) + 1); i++) {
+				var x:Number = (Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 150 + 1)) + 150);
+				this.scenery.push(new Tree(x, GameController.GROUND_HEIGHT, 
+										   (Math.random() * 0.5 + 0.750)));
+			}
+			
+			/* Create Grass */
+			for(var n:int = 0; n < (Math.floor(Math.random() * 4) + 1); n++) {
+				this.scenery.push(new Grass((Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 150 + 1)) + 150), 
+											GameController.GROUND_HEIGHT));
+			}
+			
+			for each (var object in scenery) {this.stageMain.addChild(object);}
 		}
 		
 		//private function isSceneComplete():Boolean {
