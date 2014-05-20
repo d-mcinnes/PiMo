@@ -8,6 +8,9 @@
 	public class Scenery extends MovieClip {
 		private var active:Boolean = false;
 		private var timer:Timer;
+		private var sceneryName:String;
+		private var gameController:GameController;
+		private var animalSpawnType:Class;
 
 		public function Scenery() {
 			this.active = false;
@@ -15,12 +18,19 @@
 			this.timer.addEventListener(TimerEvent.TIMER, timerEvent);
 		}
 		
+		/** Resets the scenery object. **/
 		private function timerEvent(e:TimerEvent) {
-			Debug.debugMessage("Removing Scenery");
+			Debug.debugMessage("Setting scenery object " + this.getName() + " to active");
 			this.timer.reset();
 			this.setIsActive(true);
 		}
 		
+		/** Runs when the user interacts with the scenery object. **/
+		public function sceneryInteraction() {
+			
+		}
+		
+		/** Takes a Boolean and sets whether or not the object is active. **/
 		public function setIsActive(active:Boolean) {
 			this.active = active;
 			if(!active) {
@@ -31,6 +41,13 @@
 			}
 		}
 		
+		/** Returns whether or not the scenery object is active. **/
 		public function isActive():Boolean {return this.active;}
+		
+		public function getName():String {return this.sceneryName;}
+		public function setName(name:String) {this.sceneryName = name;}
+		
+		public function getAnimalSpawnType():Class {return this.animalSpawnType;}
+		public function setAnimalSpawnType(type:Class) {this.animalSpawnType = type;}
 	}
 }

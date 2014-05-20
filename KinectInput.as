@@ -41,17 +41,18 @@
 				// Depth Update
 				this.kinect.addEventListener(CameraImageEvent.DEPTH_IMAGE_UPDATE, depthImageUpdateHandler);
 				
+				// Start Kinect
 				this.kinect.start(this.kinectSettings);
 				
 				// Update Skeleton
-				this.kinect.addEventListener(Event.ENTER_FRAME, on_enter_frame, false, 0, true);
-				this.kinect.addEventListener(Event.EXIT_FRAME, on_exit_frame, false, 0, true);
+				//this.kinect.addEventListener(Event.ENTER_FRAME, on_enter_frame, false, 0, true);
+				//this.kinect.addEventListener(Event.EXIT_FRAME, on_exit_frame, false, 0, true);
 			} else {
 				Debug.debugMessage("Kinect not supported");
 			}
 		}
 		
-		private function on_enter_frame() {
+		/*private function on_enter_frame() {
 			trace("Enter Frame");
 			for each(var user:User in this.kinect.usersWithSkeleton) {
 				trace("Hello 1");
@@ -62,7 +63,7 @@
 		
 		private function on_exit_frame() {
 			trace("Exit Frame");
-		}
+		}*/
 		
 		/** Runs when the Kinect has been successfuly started. **/
 		private function kinectStarted(e:DeviceEvent):void {
@@ -71,7 +72,6 @@
 		
 		/** Runs when the RGB Image is updated. **/
 		protected function rgbImageUpdateHandler(event:CameraImageEvent):void {
-			trace("rgbUpdate");
 			depthBitmap.bitmapData = event.imageData;
 		}
 		
@@ -110,12 +110,12 @@
 			try {
 				this.kinect.removeEventListener(DeviceEvent.STARTED, kinectStarted);
 				this.kinect.removeEventListener(CameraImageEvent.DEPTH_IMAGE_UPDATE, depthImageUpdateHandler);
-				this.kinect.removeEventListener(Event.ENTER_FRAME, on_enter_frame);
-				this.kinect.removeEventListener(Event.EXIT_FRAME, on_exit_frame);
+				//this.kinect.removeEventListener(Event.ENTER_FRAME, on_enter_frame);
+				//this.kinect.removeEventListener(Event.EXIT_FRAME, on_exit_frame);
 				this.kinect = null;
 				Debug.debugMessage("Cleaning up Kinect");
 			} catch(e:Error) {
-				Debug.debugMessage("Error cleaning up Kinect");
+				Debug.debugMessage("Error cleaning up Kinect [" + e + "]");
 			}
 		}
 	}

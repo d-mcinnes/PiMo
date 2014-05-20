@@ -157,14 +157,23 @@
 						return;
 					}
 					if(checkObjectBounds(object)) {
-						//var animal:Animal = new Rabbit();
-						var animal:Animal = new Rabbit();
-						//var timer:Timer = new Timer(10000);
+						object.sceneryInteraction();
+						var type:Class = object.getAnimalSpawnType();
+						var animal:Animal = new type();
 						spawnAnimal(animal, object.x, GameController.GROUND_HEIGHT);
 						object.setIsActive(false);
 						Debug.debugMessage("Spawning " + animal.getName() + " at [" + object.x  + ", " + object.y + "]");
 						//timer.addEventListener(TimerEvent.TIMER, despawnTimer(animal, object));
 						//timer.start();
+						/*
+						//var animal:Animal = new Rabbit();
+						var animal:Animal = new Owl();
+						//var timer:Timer = new Timer(10000);
+						spawnAnimal(animal, object.x, GameController.GROUND_HEIGHT);
+						object.setIsActive(false);
+						Debug.debugMessage("Spawning " + animal.getName() + " at [" + object.x  + ", " + object.y + "]");
+						//timer.addEventListener(TimerEvent.TIMER, despawnTimer(animal, object));
+						//timer.start();*/
 					}
 				}
 			}
