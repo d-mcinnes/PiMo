@@ -160,6 +160,7 @@
 		private function sceneryCheckPosition(x:Number):Boolean {
 			for each(var object in this.scenery) {
 				if(x > object.x && x < object.x + object.width) {
+					Debug.debugMessage("Check Position: False");
 					return false;
 				}
 			}
@@ -176,7 +177,15 @@
 			
 			/* Create Tree(s) */
 			for(var i:int = 0; i < (Math.floor(Math.random() * 2) + 1); i++) {
-				var x:Number = (Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 150 + 1)) + 150);
+				//var x:Number = (Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 150 + 1)) + 150);
+				var x:Number = 0;
+				for(var count:int = 0; count < 100; count++ ) {
+					x = (Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 150 + 1)) + 150);
+					if(sceneryCheckPosition(x) == true) {
+						Debug.debugMessage("Loop Break");
+						break;
+					}
+				}
 				this.scenery.push(new Tree(x, GameController.GROUND_HEIGHT, 
 										   (Math.random() * 0.5 + 0.750)));
 			}
