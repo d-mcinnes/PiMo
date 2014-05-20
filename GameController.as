@@ -22,7 +22,9 @@
 		private var document:Stage;
 		private var stageOverlay:Sprite;
 		private var stageMain:Sprite;
+		private var stageBackground:Sprite;
 		private var stagePlayer:Sprite;
+		private var stageForeground:Sprite;
 		private var kinectInput:KinectInput;
 		private var rfidReader:RFIDReaderSingle;
 		
@@ -49,11 +51,10 @@
 		public function GameController(document:Stage) {
 			this.document = document;
 			this.stageMain = new Sprite();
-			this.document.addChild(this.stageMain);
+			this.stageBackground = new Sprite();
 			this.stagePlayer = new Sprite();
-			this.document.addChild(this.stagePlayer);
+			this.stageForeground = new Sprite();
 			this.stageOverlay = new Sprite();
-			this.document.addChild(this.stageOverlay);
 			
 			this.kinectInput = new KinectInput(this);
 			this.rfidReader = new RFIDReaderSingle(this);
@@ -86,6 +87,12 @@
 			this.document.addChild(this.scoreTextField);
 			
 			this.document.addEventListener(KeyboardEvent.KEY_DOWN, keySpacePress);
+			
+			this.document.addChild(this.stageMain);
+			this.document.addChild(this.stageBackground);
+			this.document.addChild(this.stagePlayer);
+			this.document.addChild(this.stageForeground);
+			this.document.addChild(this.stageOverlay);
 			
 			Debug.debugMessage("Game Controller Started");
 			
@@ -121,7 +128,7 @@
 		}
 		
 		/** Takes a position and creates the scenery object. **/
-		private function createSceneryObject(type:Class, x:Number, y:Number):Scenery {
+		private function createSceneryObject22(type:Class, x:Number, y:Number):Scenery {
 			var object:Scenery = new type();
 			return object;
 		}
@@ -147,18 +154,30 @@
 			}
 			//scenery.push(new Grass());
 			
-			for each (var object in scenery) {
+			//for each (var object in scenery) {
 				//object.x = (Math.floor(Math.random() * (950 - 70 + 1)) + 70);
 				//object.y = GameController.GROUND_HEIGHT;
 				//object.setIsActive(true);
-				this.stageMain.addChild(object);
+				//this.stageMain.addChild(object);
+			//}
+		}
+		
+		/** Returns an array of all scenery objects on the stage. **/
+		private function getScenery():Array {
+			var scenery:Array = new Array;
+			for(var i:int = 0; i < this.stageBackground.numChildren; i++) {
+				this.scenery.push(this.stageBackground.getChildAt(i));
 			}
+			for(var n:int = 0; n < this.stageForeground.numChildren; n++) {
+				this.scenery.push(this.stageForeground.getChildAt(n));
+			}
+			return scenery;
 		}
 		
 		/** Takes a x position and checks whether or not it collides with any other
 		 ** objects. **/
 		private function sceneryCheckPosition(x:Number):Boolean {
-			for each(var object in this.scenery) {
+			for each(var object in this.getScenery()) {
 				if(x > object.x && x < object.x + object.width) {
 					Debug.debugMessage("Check Position: False");
 					return false;
@@ -167,17 +186,23 @@
 			return true;
 		}
 		
+		/** Takes a scenery object and a sprite, and adds the scenery object to the
+		 ** game. Returns the scenery object when completed. **/
+		private function sceneryCreateObject2(object:Scenery, sprite:Sprite):Scenery {
+			this.scenery.push(object);
+			return object;
+		}
+		
 		/** Loads the scenery for the current scene. **/
 		private function loadScenery():void {
 			this.scenery = new Array();
 			
 			/* Create Farm */
-			this.scenery.push(new Farm((Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 550 + 1)) + 100), 
+			this.stageBackground.addChild(new Farm((Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 550 + 1)) + 100), 
 									   GameController.GROUND_HEIGHT));
 			
 			/* Create Tree(s) */
 			for(var i:int = 0; i < (Math.floor(Math.random() * 2) + 1); i++) {
-				//var x:Number = (Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 150 + 1)) + 150);
 				var x:Number = 0;
 				for(var count:int = 0; count < 100; count++ ) {
 					x = (Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 150 + 1)) + 150);
@@ -186,17 +211,15 @@
 						break;
 					}
 				}
-				this.scenery.push(new Tree(x, GameController.GROUND_HEIGHT, 
+				this.stageBackground.addChild(new Tree(x, GameController.GROUND_HEIGHT, 
 										   (Math.random() * 0.5 + 0.750)));
 			}
 			
 			/* Create Grass */
 			for(var n:int = 0; n < (Math.floor(Math.random() * 4) + 1); n++) {
-				this.scenery.push(new Grass((Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 150 + 1)) + 150), 
-											GameController.GROUND_HEIGHT));
+				this.stageForeground.addChild(new Grass((Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 150 + 1)) + 150), 
+											GameController.GROUND_HEIGHT + 20));
 			}
-			
-			for each (var object in scenery) {this.stageMain.addChild(object);}
 		}
 		
 		//private function isSceneComplete():Boolean {
@@ -357,17 +380,15 @@
 			this.player.playerCleanup();
 			
 			/* Clear Stage */
-			while(this.stageOverlay.numChildren > 0) {
-				this.stageOverlay.removeChildAt(0);
-			}
-			while(this.stagePlayer.numChildren > 0) {
-				this.stagePlayer.removeChildAt(0);
-			}
-			while(this.stageMain.numChildren > 0) {
-				this.stageMain.removeChildAt(0);
-			}
+			while(this.stageOverlay.numChildren > 0) {this.stageOverlay.removeChildAt(0);}
+			while(this.stagePlayer.numChildren > 0) {this.stagePlayer.removeChildAt(0);}
+			while(this.stageMain.numChildren > 0) {this.stageMain.removeChildAt(0);}
+			while(this.stageBackground.numChildren > 0) {this.stageBackground.removeChildAt(0);}
+			while(this.stageForeground.numChildren > 0) {this.stageForeground.removeChildAt(0);}
 			this.document.removeChild(this.stageOverlay);
+			this.document.removeChild(this.stageBackground);
 			this.document.removeChild(this.stagePlayer);
+			this.document.removeChild(this.stageForeground);
 			this.document.removeChild(this.stageMain);
 			
 			/* Cleanup Variables */

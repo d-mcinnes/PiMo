@@ -16,6 +16,9 @@
 		private var leftPoint:Point;
 		private var rightPoint:Point;
 		private var outOfBounds:OutOfBoundsBackground;
+		
+		private var SIZE_LIMB:Number = 3;
+		private var SIZE_CHEST:Number = 6;
 
 		//public function Player(kinectSkeleton:KinectSkeleton, document:Stage) {
 		public function Player(gameController:GameController) {
@@ -87,26 +90,26 @@
 														  this.gameController.getKinectSkeleton().getTorso().y, 
 														  this.gameController.getKinectSkeleton().getNeck().x, 
 														  this.gameController.getKinectSkeleton().getNeck().y), 
-												 10);
+												 SIZE_CHEST);
 			this.createLine(new Point(0, 0), neckPoint);
 			var playerHead:Head = new Head();
-			var playerHeadPoint:Point = getPolarPoint(neckPoint, getAngle(0, 0, neckPoint.x, neckPoint.y), 70);
+			var playerHeadPoint:Point = getPolarPoint(neckPoint, getAngle(0, 0, neckPoint.x, neckPoint.y), 50);
 			playerHead.x = playerHeadPoint.x;
 			playerHead.y = playerHeadPoint.y;
 			playerHead.rotation = getAngle(0, 0, neckPoint.x, neckPoint.y);
 			this.addChild(playerHead);
 			
 			/* Render Left Arm */
-			var leftArmElbow = getPolarPoint(neckPoint, leftArmUpperAngle, 5);
+			var leftArmElbow = getPolarPoint(neckPoint, leftArmUpperAngle, SIZE_LIMB);
 			this.createLine(neckPoint, leftArmElbow);
-			this.createLine(leftArmElbow, getPolarPoint(leftArmElbow, leftArmLowerAngle, 5));
-			this.leftPoint = getPolarPoint(leftArmElbow, leftArmLowerAngle, 5);
+			this.createLine(leftArmElbow, getPolarPoint(leftArmElbow, leftArmLowerAngle, SIZE_LIMB));
+			this.leftPoint = getPolarPoint(leftArmElbow, leftArmLowerAngle, SIZE_LIMB);
 			
 			/* Render Right Arm */
-			var rightArmElbow = getPolarPoint(neckPoint, rightArmUpperAngle, 5);
+			var rightArmElbow = getPolarPoint(neckPoint, rightArmUpperAngle, SIZE_LIMB);
 			this.createLine(neckPoint, rightArmElbow);
-			this.createLine(rightArmElbow, getPolarPoint(rightArmElbow, rightArmLowerAngle, 5));
-			this.rightPoint = getPolarPoint(rightArmElbow, rightArmLowerAngle, 5);
+			this.createLine(rightArmElbow, getPolarPoint(rightArmElbow, rightArmLowerAngle, SIZE_LIMB));
+			this.rightPoint = getPolarPoint(rightArmElbow, rightArmLowerAngle, SIZE_LIMB);
 						
 			/* Render Left Leg */
 			var leftKnee:Point = getPolarPoint(new Point(0, 0), 
@@ -114,14 +117,14 @@
 														this.gameController.getKinectSkeleton().getTorso().y, 
 														this.gameController.getKinectSkeleton().getLeftKnee().x, 
 														this.gameController.getKinectSkeleton().getLeftKnee().y), 
-											   5);
+											   SIZE_LIMB);
 			this.createLine(new Point(0, 0), leftKnee);
 			this.createLine(leftKnee, getPolarPoint(leftKnee, 
 													getAngle(this.gameController.getKinectSkeleton().getLeftKnee().x, 
 															 this.gameController.getKinectSkeleton().getLeftKnee().y, 
 															 this.gameController.getKinectSkeleton().getLeftFoot().x, 
 															 this.gameController.getKinectSkeleton().getLeftFoot().y), 
-													5));
+													SIZE_LIMB));
 			
 			/* Render Right Leg */
 			var rightKnee:Point = getPolarPoint(new Point(0, 0),
@@ -129,14 +132,14 @@
 														 this.gameController.getKinectSkeleton().getTorso().y, 
 														 this.gameController.getKinectSkeleton().getRightKnee().x, 
 														 this.gameController.getKinectSkeleton().getRightKnee().y), 
-												5);
+												SIZE_LIMB);
 			this.createLine(new Point(0, 0), rightKnee);
 			this.createLine(rightKnee, getPolarPoint(rightKnee,
 													 getAngle(this.gameController.getKinectSkeleton().getRightKnee().x, 
 															  this.gameController.getKinectSkeleton().getRightKnee().y, 
 															  this.gameController.getKinectSkeleton().getRightFoot().x,
 															  this.gameController.getKinectSkeleton().getRightFoot().y), 
-													 5));
+													 SIZE_LIMB));
 		}
 		
 		/** Clears the player currently rendered on the screen. **/
