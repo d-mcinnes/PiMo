@@ -28,6 +28,7 @@
 			this.timer.addEventListener(TimerEvent.TIMER, func);
 		}
 		
+		/** Runs when _____ **/
 		private function timerEvent(e:TimerEvent) {
 			Debug.debugMessage("Removing Animal");
 			this.timer.reset();

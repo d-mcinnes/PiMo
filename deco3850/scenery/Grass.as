@@ -3,9 +3,12 @@
 	import flash.utils.getDefinitionByName;
 	
 	public class Grass extends Scenery {
-		public function Grass() {
+		public function Grass(x:Number = 0, y:Number = 0) {
 			this.setName("Grass");
-			this.setAnimalSpawnType(getDefinitionByName('deco3850.animals.Owl') as Class);
+			this.x = x;
+			this.y = y;
+			this.setCooldownPeriod(1000);
+			this.setAnimalSpawnType(getDefinitionByName('deco3850.animals.Rabbit') as Class);
 		}
 		
 		override public function sceneryInteraction() {

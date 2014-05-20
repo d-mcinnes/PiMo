@@ -11,6 +11,7 @@
 		private var sceneryName:String;
 		private var gameController:GameController;
 		private var animalSpawnType:Class;
+		private var cooldownPeriod:Number = 0;
 
 		public function Scenery() {
 			this.active = false;
@@ -49,5 +50,11 @@
 		
 		public function getAnimalSpawnType():Class {return this.animalSpawnType;}
 		public function setAnimalSpawnType(type:Class) {this.animalSpawnType = type;}
+		
+		public function getCooldownPeriod():Number {return this.cooldownPeriod;}
+		public function setCooldownPeriod(time:Number) {
+			this.cooldownPeriod = time;
+			this.timer.delay = time;
+		}
 	}
 }
