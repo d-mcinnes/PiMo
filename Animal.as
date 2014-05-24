@@ -30,7 +30,7 @@
 		
 		/** Runs when _____ **/
 		private function timerEvent(e:TimerEvent) {
-			Debug.debugMessage("Removing Animal");
+			Debug.debugMessage("Removing Animal " + this);
 			this.timer.reset();
 		}
 		

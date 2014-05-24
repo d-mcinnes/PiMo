@@ -12,6 +12,14 @@
 	import com.as3nui.nativeExtensions.air.kinect.events.CameraImageEvent;
 	import com.as3nui.nativeExtensions.air.kinect.events.DeviceEvent;
 	
+	import com.as3nui.nativeExtensions.air.kinect.events.CameraImageEvent;
+	import com.as3nui.nativeExtensions.air.kinect.events.DeviceErrorEvent;
+	import com.as3nui.nativeExtensions.air.kinect.events.DeviceEvent;
+	import com.as3nui.nativeExtensions.air.kinect.events.DeviceInfoEvent;
+	import com.as3nui.nativeExtensions.air.kinect.events.PointCloudEvent;
+	import com.as3nui.nativeExtensions.air.kinect.events.UserEvent;
+	import com.as3nui.nativeExtensions.air.kinect.events.UserFrameEvent;
+	
 	public class KinectInput {
 		private var kinect:Kinect;
 		private var kinectSettings:KinectSettings;
@@ -31,7 +39,6 @@
 				this.kinectSettings.rgbResolution = CameraResolution.RESOLUTION_1280_960;
 				this.kinectSettings.skeletonEnabled = true;
 				this.kinectSkeleton = new KinectSkeleton();
-				this.gameController.getStageMain().addChild(this.kinectSkeleton.getSkeleton());
 				this.kinectSkeleton.getSkeleton().x = 20;
 				this.kinectSkeleton.getSkeleton().y = 400;
 				
@@ -40,6 +47,7 @@
 				
 				// Depth Update
 				this.kinect.addEventListener(CameraImageEvent.DEPTH_IMAGE_UPDATE, depthImageUpdateHandler);
+				this.kinect.addEventListener(UserEvent.USERS_ADDED, kinectUserAdded);
 				
 				// Start Kinect
 				this.kinect.start(this.kinectSettings);
@@ -50,6 +58,17 @@
 			} else {
 				Debug.debugMessage("Kinect not supported");
 			}
+		}
+		
+		private function kinectUserAdded(e:UserEvent) {
+			try {
+				this.kinect.removeEventListener(UserEvent.USERS_ADDED, kinectUserAdded);
+			} catch(e:Error) {
+				Debug.debugMessage(e.toString());
+			}
+			Debug.debugMessage("Starting game");
+			this.gameController.startGame();
+			this.gameController.getStageMain().addChild(this.kinectSkeleton.getSkeleton());
 		}
 		
 		/*private function on_enter_frame() {
@@ -110,8 +129,6 @@
 			try {
 				this.kinect.removeEventListener(DeviceEvent.STARTED, kinectStarted);
 				this.kinect.removeEventListener(CameraImageEvent.DEPTH_IMAGE_UPDATE, depthImageUpdateHandler);
-				//this.kinect.removeEventListener(Event.ENTER_FRAME, on_enter_frame);
-				//this.kinect.removeEventListener(Event.EXIT_FRAME, on_exit_frame);
 				this.kinect = null;
 				Debug.debugMessage("Cleaning up Kinect");
 			} catch(e:Error) {

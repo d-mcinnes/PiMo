@@ -33,7 +33,6 @@
 		
 		private var score:int; //cumulative score for this game, nonnegative
 		
-		//private var gameDuration = 2*60*1000; //milliseconds
 		private var gameTimer:Timer;
 		private var gameIncrement:Number = 2 * 60;
 		
@@ -57,6 +56,13 @@
 		 */
 		public function GameController(document:Stage) {
 			this.document = document;
+			this.kinectInput = new KinectInput(this);
+			this.rfidReader = new RFIDReaderSingle(this);
+			
+			Debug.debugMessage("Game Controller Started");
+		}
+		
+		public function startGame() {
 			this.stageMain = new Sprite();
 			this.stageBackground = new Sprite();
 			this.stageAnimals = new Sprite();
@@ -64,8 +70,6 @@
 			this.stageForeground = new Sprite();
 			this.stageOverlay = new Sprite();
 			
-			this.kinectInput = new KinectInput(this);
-			this.rfidReader = new RFIDReaderSingle(this);
 			this.score = 0;
 			this.party = new Array();
 			this.wild = new Array();
@@ -125,15 +129,7 @@
 			this.timerTextField.text = "Time: " + Debug.padChar(String(Math.floor(((this.gameIncrement - this.gameTimer.currentCount) / 60) % 60)), 2, '0', true) + 
 				":" + Debug.padChar(String((this.gameIncrement - this.gameTimer.currentCount) % 60), 2, '0', true);
 			
-			Debug.debugMessage("Game Controller Started");
-			
-			//while loop for playing game
-			/*var startTime:uint = getTimer();
-			while(getTimer() - startTime < this.gameDuration) {
-				checkForSceneryInteraction();
-			}
-			
-			endGame();*/
+			Debug.debugMessage("Game Started");
 		}
 		
 		public function getStageMain():Sprite {return this.stageMain;}
@@ -162,14 +158,6 @@
 		/** Returns an array of all scenery objects on the stage. **/
 		private function getScenery():Array {
 			return this.scenery;
-			/*var scenery:Array = new Array;
-			for(var i:int = 0; i < this.stageBackground.numChildren; i++) {
-				this.scenery.push(this.stageBackground.getChildAt(i));
-			}
-			for(var n:int = 0; n < this.stageForeground.numChildren; n++) {
-				this.scenery.push(this.stageForeground.getChildAt(n));
-			}
-			return scenery;*/
 		}
 		
 		/** Takes a x position and checks whether or not it collides with any other
@@ -189,7 +177,7 @@
 			for each(var object in this.getScenery()) {
 				if((x > object.x && x < object.x + object.width) || 
 				   (width > object.x && width < object.x + object.width)) {
-					Debug.debugMessage("Bad position: " + x);
+					//Debug.debugMessage("Bad position: " + x);
 					return false;
 				}
 			}
@@ -231,8 +219,6 @@
 				tree.setIsActive(true);
 				this.scenery.push(tree);
 				this.stageBackground.addChild(tree);
-				//this.stageBackground.addChild(new Tree(x, GameController.GROUND_HEIGHT, 
-				//						   (Math.random() * 0.5 + 0.750)));
 			//}
 			
 			/* Create Grass */
@@ -274,17 +260,6 @@
 						spawnAnimal(animal, object.x, GameController.GROUND_HEIGHT);
 						object.setIsActive(false);
 						Debug.debugMessage("Spawning " + animal.getName() + " at [" + object.x  + ", " + object.y + "]");
-						//timer.addEventListener(TimerEvent.TIMER, despawnTimer(animal, object));
-						//timer.start();
-						/*
-						//var animal:Animal = new Rabbit();
-						var animal:Animal = new Owl();
-						//var timer:Timer = new Timer(10000);
-						spawnAnimal(animal, object.x, GameController.GROUND_HEIGHT);
-						object.setIsActive(false);
-						Debug.debugMessage("Spawning " + animal.getName() + " at [" + object.x  + ", " + object.y + "]");
-						//timer.addEventListener(TimerEvent.TIMER, despawnTimer(animal, object));
-						//timer.start();*/
 					}
 				}
 			}
@@ -299,19 +274,6 @@
 				despawnAnimal(animal);
 			}
 		}
-		
-		/** Runs when the despawn animal timer expires. **/
-		/*private function timerListener(e:TimerEvent, num:Number):void {
-			trace("Num: " + num);
-			for each (var object in scenery) {
-				if(!object.isActive()) {
-					object.setIsActive(true);
-				}
-			}
-			for each (var animal in wild) {
-				despawnAnimal(animal);
-			}
-		}*/
 		
 		/** Spawns an animal at the given point. Takes an animal, and an x and
 		 ** y coordinates. **/
@@ -345,7 +307,7 @@
 			try {
 				this.stageAnimals.removeChild(animal);
 			} catch(e:Error) {
-				Debug.debugMessage("Error removing animal: does not exist");
+				Debug.debugMessage(e.toString());
 			}
 			for each (var object in wild) {
 				if(object == animal) {
@@ -416,8 +378,6 @@
 		
 		/** Runs when _____ **/
 		private function gameTimerEvent(e:TimerEvent) {
-			//Debug.debugMessage("Game Timer: " + (this.gameIncrement - this.gameTimer.currentCount));
-			//this.timerTextField.text = "Timer: " + String((this.gameIncrement - this.gameTimer.currentCount));
 			this.timerTextField.text = "Time: " + Debug.padChar(String(Math.floor(((this.gameIncrement - this.gameTimer.currentCount) / 60) % 60)), 2, '0', true) + 
 				":" + Debug.padChar(String((this.gameIncrement - this.gameTimer.currentCount) % 60), 2, '0', true);
 			if((this.gameIncrement - this.gameTimer.currentCount) <= 0) {
@@ -444,61 +404,43 @@
 			Debug.debugMessage("Cleaning up game controller");
 			
 			/* Cleanup Classes */
-			this.kinectInput.kinectInputCleanup();
-			this.player.playerCleanup();
+			try {
+				this.kinectInput.kinectInputCleanup();
+				this.player.playerCleanup();
+			} catch(e:Error) {
+				Debug.debugMessage(e.toString());
+			}
 			
 			/* Clear Stage */
-			this.sceneCleanup();
-			while(this.stagePlayer.numChildren > 0) {this.stagePlayer.removeChildAt(0);}
-			while(this.stageOverlay.numChildren > 0) {this.stageOverlay.removeChildAt(0);}
-			this.document.removeChild(this.stageOverlay);
-			this.document.removeChild(this.stageBackground);
-			this.document.removeChild(this.stagePlayer);
-			this.document.removeChild(this.stageForeground);
-			this.document.removeChild(this.stageMain);
+			try {
+				this.sceneCleanup();
+				while(this.stagePlayer.numChildren > 0) {this.stagePlayer.removeChildAt(0);}
+				while(this.stageOverlay.numChildren > 0) {this.stageOverlay.removeChildAt(0);}
+				this.document.removeChild(this.stageOverlay);
+				this.document.removeChild(this.stageBackground);
+				this.document.removeChild(this.stagePlayer);
+				this.document.removeChild(this.stageForeground);
+				this.document.removeChild(this.stageMain);
+			} catch(e:Error) {
+				Debug.debugMessage(e.toString());
+			}
 			
 			/* Cleanup Variables */
-			this.kinectInput = null;
-			this.rfidReader = null;
-			this.score = 0;
-			//this.gameDuration = null;
-			//this.scenery = null;
-			//this.wild = null;
-			//this.party = null;
-			this.player = null;
-			this.scoreTextField = null;
-			this.textFormat = null;
+			try {
+				this.kinectInput = null;
+				this.rfidReader = null;
+				this.score = 0;
+				this.player = null;
+				this.scoreTextField = null;
+				this.textFormat = null;
+			} catch(e:Error) {
+				Debug.debugMessage(e.toString());
+			}
 		}
 		
 		/** Ends the current game. **/
 		private function endGame():void {
 			
 		}
-		
-		/*private function millisecondsToTimecode(milliseconds:int):String {
-			var seconds:int = Math.floor((milliseconds/1000) % 60);
-			var strSeconds:String = (seconds < 10) ? ("0" + String(seconds)):String(seconds);
-			var minutes:int = Math.round(Math.floor((milliseconds/1000)/60));
-			var strMinutes:String = (minutes < 10) ? ("0" + String(minutes)):String(minutes);
-			var strMilliseconds:String = milliseconds.toString();
-			strMilliseconds = strMilliseconds.slice(strMilliseconds.length -3, strMilliseconds.length)
-			var timeCode:String = strMinutes + ":" + strSeconds + ':' + strMilliseconds;
-			return timeCode;
-		}*/
-		
-		/** Takes a string and prints a debug message. **/
-		/*public static function debugMessage2(text:String):void {
-			if(GameController.DEBUG_MODE_ON == true) {
-				var location:String = new Error().getStackTrace().match( /(?<=\/|\\)\w+?.as:\d+?(?=])/g )[1].replace( ":" , ", line " );
-				var x:int = getTimer() / 1000;
-				var seconds:int = x % 60;
-				x /= 60;
-				var minutes:int = x % 60;
-				x /= 60;
-				var hours:int = x % 24;
-				
-				trace("[" + PadZero.convert(hours) + ":" + PadZero.convert(minutes) + ":" + PadZero.convert(seconds) + "]" + "[" + location + "] " + text);
-			}
-		}*/
 	}
 }

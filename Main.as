@@ -43,9 +43,10 @@
 			if(e.keyCode == Keyboard.F5) {
 				trace("================================================================================");
 				this.gameController.gameCleanup();
-				this.gameController = null;
+				//this.gameController = null;
+				this.gameController.startGame();
 				Debug.debugMessage("Restarting game");
-				startGame();
+				//startGame();
 			}
 			if(e.keyCode == Keyboard.F6) {
 				GameController.DEBUG_MODE_ON = !GameController.DEBUG_MODE_ON;
