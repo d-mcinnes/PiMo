@@ -25,6 +25,7 @@
 		private var stageOverlay:Sprite;
 		private var stageMain:Sprite;
 		private var stageBackground:Sprite;
+		private var stageAnimals:Sprite;
 		private var stagePlayer:Sprite;
 		private var stageForeground:Sprite;
 		private var kinectInput:KinectInput;
@@ -58,6 +59,7 @@
 			this.document = document;
 			this.stageMain = new Sprite();
 			this.stageBackground = new Sprite();
+			this.stageAnimals = new Sprite();
 			this.stagePlayer = new Sprite();
 			this.stageForeground = new Sprite();
 			this.stageOverlay = new Sprite();
@@ -111,6 +113,7 @@
 			
 			this.document.addChild(this.stageMain);
 			this.document.addChild(this.stageBackground);
+			this.document.addChild(this.stageAnimals);
 			this.document.addChild(this.stagePlayer);
 			this.document.addChild(this.stageForeground);
 			this.document.addChild(this.stageOverlay);
@@ -316,19 +319,31 @@
 			this.wild.push(animal);
 			animal.x = x;
 			animal.y = y;
-			animal.setTimerEvent(animalDespawnTimerEvent);
+			animal.setTimerEvent(animalDespawnTimerEvent(animal));
 			animal.startTimer();
-			this.stageMain.addChild(animal);
+			this.stageAnimals.addChild(animal);
 		}
 		
-		private function animalDespawnTimerEvent(e:TimerEvent) {
+		/** Runs when the despawn animal timer expires. **/
+		public function animalDespawnTimerEvent(animal:Animal):Function {
+			//Debug.debugMessage("Event Start | Animal: " + animal);
+			//var animalVar:Animal = animal;
+			return function(e:TimerEvent):void {
+				//Debug.debugMessage("Final Animal: " + animalVar + " | Parameter: " + animal);
+				if(animalIsInParty(animal) == false ) {
+					despawnAnimal(animal);
+				}
+			}
+		}
+		
+		private function animalDespawnTimerEvent2(e:TimerEvent) {
 			Debug.debugMessage("Animal Despawn Timer Event");
 		}
 		
 		/** Despawns an animal from the screen. **/
 		private function despawnAnimal(animal:Animal):void {
 			try {
-				this.stageMain.removeChild(animal);
+				this.stageAnimals.removeChild(animal);
 			} catch(e:Error) {
 				Debug.debugMessage("Error removing animal: does not exist");
 			}
@@ -365,6 +380,17 @@
 			} else {
 				return false;
 			}
+		}
+		
+		/** Checks to see whether or not an animal is in the players
+		 ** party. */
+		public function animalIsInParty(animal:Animal):Boolean {
+			for each(var object in this.party) {
+				if(object == animal) {
+					return true;
+				}
+			}
+			return false;
 		}
 		
 		/** Runs when the player activates one of the Arduino tags. **/
@@ -404,6 +430,7 @@
 			Debug.debugMessage("Cleaning up scene");
 			while(this.stageMain.numChildren > 0) {this.stageMain.removeChildAt(0);}
 			while(this.stageBackground.numChildren > 0) {this.stageBackground.removeChildAt(0);}
+			while(this.stageAnimals.numChildren > 0) {this.stageAnimals.removeChildAt(0);}
 			while(this.stageForeground.numChildren > 0) {this.stageForeground.removeChildAt(0);}
 			this.scenery = null;
 			this.wild = null;
