@@ -204,7 +204,7 @@
 			this.stageBackground.addChild(farm);
 			
 			/* Create Tree(s) */
-			//for(var i:int = 0; i < (Math.floor(Math.random() * 2) + 1); i++) {
+			for(var i:int = 0; i < (Math.floor(Math.random() * 2) + 1); i++) {
 				var x:Number = 0; var tree:Tree = new Tree(); var scale:Number = (Math.random() * 0.5 + 0.750);
 				tree.scaleX = scale;
 				tree.scaleY = scale;
@@ -219,7 +219,7 @@
 				tree.setIsActive(true);
 				this.scenery.push(tree);
 				this.stageBackground.addChild(tree);
-			//}
+			}
 			
 			/* Create Grass */
 			for(var n:int = 0; n < (Math.floor(Math.random() * 4) + 1); n++) {
@@ -288,10 +288,7 @@
 		
 		/** Runs when the despawn animal timer expires. **/
 		public function animalDespawnTimerEvent(animal:Animal):Function {
-			//Debug.debugMessage("Event Start | Animal: " + animal);
-			//var animalVar:Animal = animal;
 			return function(e:TimerEvent):void {
-				//Debug.debugMessage("Final Animal: " + animalVar + " | Parameter: " + animal);
 				if(animalIsInParty(animal) == false ) {
 					despawnAnimal(animal);
 				}
