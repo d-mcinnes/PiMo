@@ -17,10 +17,7 @@
 			stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, detectKeyPress);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, restartGame);
-			//debugText.text = "TEXT";
 			Mouse.hide();
-			//var skeletonBonesDemo:SkeletonBonesDemo = new SkeletonBonesDemo();
-			//new RFIDHandler();
 		}
 		
 		/** Runs when the user presses any key. **/
@@ -38,6 +35,7 @@
 		/** Shortcuts 
 		 ** 	F5 - Restart Game
 		 **		F6 - Toggle Debug Mode
+		 **		F7 - Load Next Scene
 		 **/
 		
 		/** Restarts the game when the user presses the F5 key. **/
@@ -56,6 +54,10 @@
 				} else {
 					trace("Debugging Off...");
 				}
+			}
+			if(e.keyCode == Keyboard.F7) {
+				Debug.debugMessage("Loading next scene");
+				this.gameController.loadScene();
 			}
 		}
 	}

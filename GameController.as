@@ -10,6 +10,8 @@
 	import flash.ui.Keyboard;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
+	import flash.utils.getDefinitionByName;
+	import flash.utils.getQualifiedClassName;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
@@ -30,14 +32,18 @@
 		
 		private var score:int; //cumulative score for this game, nonnegative
 		
-		private var gameDuration = 3*60*1000; //milliseconds
+		//private var gameDuration = 2*60*1000; //milliseconds
+		private var gameTimer:Timer;
+		private var gameIncrement:Number = 2 * 60;
 		
 		private var scenery:Array; //interactable objects in the background
+		private var sceneryPosition:Array;
 		private var wild:Array; //animals in the scene, not following the player
 		private var party:Array; //animals currently following the player
 		private var player:Player;
 		private var scoreTextField:TextField;
 		private var textFormat:TextFormat;
+		private var timerTextField:TextField;
 		
 		public static var SCREEN_SIZE_X:Number = 1024;
 		public static var SCREEN_SIZE_Y:Number = 600;
@@ -71,20 +77,35 @@
 			
 			this.scoreTextField = new TextField();
 			this.scoreTextField.y = 10;
-			this.scoreTextField.x = 825;
+			this.scoreTextField.x = 10;
 			this.scoreTextField.width = 185;
 			this.scoreTextField.textColor = 0x000000;
 			this.scoreTextField.selectable = false;
 			
 			this.textFormat = new TextFormat();
 			this.textFormat.size = 25;
-			this.textFormat.align = TextFormatAlign.RIGHT;
+			this.textFormat.align = TextFormatAlign.LEFT;
 			this.textFormat.bold = true;
 			this.textFormat.font = new ScoreFont().fontName;
 			
 			this.scoreTextField.defaultTextFormat = this.textFormat;
 			this.scoreTextField.text = "Score: " + this.score;
-			this.document.addChild(this.scoreTextField);
+			this.stageOverlay.addChild(this.scoreTextField);
+			
+			this.timerTextField = new TextField();
+			this.timerTextField.x = 10;
+			this.timerTextField.y = 40;
+			this.timerTextField.width = 185;
+			this.timerTextField.textColor = 0x000000;
+			this.timerTextField.selectable = false;
+			this.timerTextField.defaultTextFormat = this.textFormat;
+			this.timerTextField.text = "Time: ";
+			this.stageOverlay.addChild(this.timerTextField);
+			
+			var overlay:BlackOverlay = new BlackOverlay();
+			overlay.x = -300;
+			overlay.y = -110;
+			this.stageOverlay.addChild(overlay);
 			
 			this.document.addEventListener(KeyboardEvent.KEY_DOWN, keySpacePress);
 			
@@ -93,6 +114,13 @@
 			this.document.addChild(this.stagePlayer);
 			this.document.addChild(this.stageForeground);
 			this.document.addChild(this.stageOverlay);
+			
+			this.gameTimer = new Timer(1000, this.gameIncrement);
+			this.gameTimer.addEventListener(TimerEvent.TIMER, gameTimerEvent);
+			this.gameTimer.start();
+			
+			this.timerTextField.text = "Time: " + Debug.padChar(String(Math.floor(((this.gameIncrement - this.gameTimer.currentCount) / 60) % 60)), 2, '0', true) + 
+				":" + Debug.padChar(String((this.gameIncrement - this.gameTimer.currentCount) % 60), 2, '0', true);
 			
 			Debug.debugMessage("Game Controller Started");
 			
@@ -121,20 +149,24 @@
 		}
 		
 		/** Loads a scene. **/
-		private function loadScene():void {
+		public function loadScene():void {
+			this.sceneCleanup();
+			this.wild = new Array();
+			this.party = new Array();
 			loadScenery();
 		}
 		
 		/** Returns an array of all scenery objects on the stage. **/
 		private function getScenery():Array {
-			var scenery:Array = new Array;
+			return this.scenery;
+			/*var scenery:Array = new Array;
 			for(var i:int = 0; i < this.stageBackground.numChildren; i++) {
 				this.scenery.push(this.stageBackground.getChildAt(i));
 			}
 			for(var n:int = 0; n < this.stageForeground.numChildren; n++) {
 				this.scenery.push(this.stageForeground.getChildAt(n));
 			}
-			return scenery;
+			return scenery;*/
 		}
 		
 		/** Takes a x position and checks whether or not it collides with any other
@@ -142,6 +174,19 @@
 		private function sceneryCheckPosition(x:Number):Boolean {
 			for each(var object in this.getScenery()) {
 				if(x > object.x && x < object.x + object.width) {
+					return false;
+				}
+			}
+			return true;
+		}
+		
+		/** Takes a x position and checks whether or not it collides with any other
+		 ** objects. **/
+		private function sceneryCheckPositio2n(x:Number, width:Number):Boolean {
+			for each(var object in this.getScenery()) {
+				if((x > object.x && x < object.x + object.width) || 
+				   (width > object.x && width < object.x + object.width)) {
+					Debug.debugMessage("Bad position: " + x);
 					return false;
 				}
 			}
@@ -158,28 +203,42 @@
 		/** Loads the scenery for the current scene. **/
 		private function loadScenery():void {
 			this.scenery = new Array();
+			this.sceneryPosition = new Array();
 			
 			/* Create Farm */
-			this.stageBackground.addChild(new Farm((Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 550 + 1)) + 100), 
-									   GameController.GROUND_HEIGHT));
+			var farm:Farm = new Farm((Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 550 + 1)) + 100), 
+									   GameController.GROUND_HEIGHT);
+			farm.setIsActive(true);
+			this.scenery.push(farm);
+			this.stageBackground.addChild(farm);
 			
 			/* Create Tree(s) */
-			for(var i:int = 0; i < (Math.floor(Math.random() * 2) + 1); i++) {
-				var x:Number = 0;
+			//for(var i:int = 0; i < (Math.floor(Math.random() * 2) + 1); i++) {
+				var x:Number = 0; var tree:Tree = new Tree(); var scale:Number = (Math.random() * 0.5 + 0.750);
+				tree.scaleX = scale;
+				tree.scaleY = scale;
 				for(var count:int = 0; count < 100; count++ ) {
-					x = (Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 150 + 1)) + 150);
-					if(sceneryCheckPosition(x) == true) {
+					x = (Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 200 + 1)));
+					if(sceneryCheckPositio2n(x, tree.width) == true) {
 						break;
 					}
 				}
-				this.stageBackground.addChild(new Tree(x, GameController.GROUND_HEIGHT, 
-										   (Math.random() * 0.5 + 0.750)));
-			}
+				tree.x = x;
+				tree.y = GameController.GROUND_HEIGHT;
+				tree.setIsActive(true);
+				this.scenery.push(tree);
+				this.stageBackground.addChild(tree);
+				//this.stageBackground.addChild(new Tree(x, GameController.GROUND_HEIGHT, 
+				//						   (Math.random() * 0.5 + 0.750)));
+			//}
 			
 			/* Create Grass */
 			for(var n:int = 0; n < (Math.floor(Math.random() * 4) + 1); n++) {
-				this.stageForeground.addChild(new Grass((Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 150 + 1)) + 150), 
-											GameController.GROUND_HEIGHT + 20));
+				var grass:Grass = new Grass((Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 150 + 1)) + 150), 
+											GameController.GROUND_HEIGHT + 20);
+				grass.setIsActive(true);
+				this.scenery.push(grass);
+				this.stageForeground.addChild(grass);
 			}
 		}
 		
@@ -199,11 +258,12 @@
 		/** Checks for any scenery interaction from the player. Runs every time
 		 ** the Kinect is updated. **/
 		public function checkForSceneryInteraction(leftPosition:Point, rightPosition:Point):void {
-			for each (var object in scenery) {
+			for each (var object in this.getScenery()) {
 				if(object.isActive()) {
 					if(this.player.getLeftPoint() == null || this.player.getRightPoint() == null) {
 						return;
 					}
+					//Debug.debugMessage("Left: " + this.player.getLeftPoint() + " Right: " + this.player.getRightPoint());
 					if(checkObjectBounds(object)) {
 						object.sceneryInteraction();
 						var type:Class = object.getAnimalSpawnType();
@@ -253,7 +313,7 @@
 		/** Spawns an animal at the given point. Takes an animal, and an x and
 		 ** y coordinates. **/
 		private function spawnAnimal(animal:Animal, x:Number, y:Number):void {
-			wild.push(animal);
+			this.wild.push(animal);
 			animal.x = x;
 			animal.y = y;
 			animal.setTimerEvent(animalDespawnTimerEvent);
@@ -328,6 +388,28 @@
 			}
 		}
 		
+		/** Runs when _____ **/
+		private function gameTimerEvent(e:TimerEvent) {
+			//Debug.debugMessage("Game Timer: " + (this.gameIncrement - this.gameTimer.currentCount));
+			//this.timerTextField.text = "Timer: " + String((this.gameIncrement - this.gameTimer.currentCount));
+			this.timerTextField.text = "Time: " + Debug.padChar(String(Math.floor(((this.gameIncrement - this.gameTimer.currentCount) / 60) % 60)), 2, '0', true) + 
+				":" + Debug.padChar(String((this.gameIncrement - this.gameTimer.currentCount) % 60), 2, '0', true);
+			if((this.gameIncrement - this.gameTimer.currentCount) <= 0) {
+				Debug.debugMessage("Game Timer Expired. Reloading Scene");
+			}
+		}
+		
+		/** Removes the current scene from the Game Controllers. **/
+		private function sceneCleanup() {
+			Debug.debugMessage("Cleaning up scene");
+			while(this.stageMain.numChildren > 0) {this.stageMain.removeChildAt(0);}
+			while(this.stageBackground.numChildren > 0) {this.stageBackground.removeChildAt(0);}
+			while(this.stageForeground.numChildren > 0) {this.stageForeground.removeChildAt(0);}
+			this.scenery = null;
+			this.wild = null;
+			this.party = null;
+		}
+		
 		/** Resets this instance of the Game Controller, removing all instances
 		 ** of the KinectInput and Player classes, as well as removing all event
 		 ** listeners and clearing the stage. **/
@@ -339,11 +421,9 @@
 			this.player.playerCleanup();
 			
 			/* Clear Stage */
-			while(this.stageOverlay.numChildren > 0) {this.stageOverlay.removeChildAt(0);}
+			this.sceneCleanup();
 			while(this.stagePlayer.numChildren > 0) {this.stagePlayer.removeChildAt(0);}
-			while(this.stageMain.numChildren > 0) {this.stageMain.removeChildAt(0);}
-			while(this.stageBackground.numChildren > 0) {this.stageBackground.removeChildAt(0);}
-			while(this.stageForeground.numChildren > 0) {this.stageForeground.removeChildAt(0);}
+			while(this.stageOverlay.numChildren > 0) {this.stageOverlay.removeChildAt(0);}
 			this.document.removeChild(this.stageOverlay);
 			this.document.removeChild(this.stageBackground);
 			this.document.removeChild(this.stagePlayer);
@@ -354,10 +434,10 @@
 			this.kinectInput = null;
 			this.rfidReader = null;
 			this.score = 0;
-			this.gameDuration = null;
-			this.scenery = null;
-			this.wild = null;
-			this.party = null;
+			//this.gameDuration = null;
+			//this.scenery = null;
+			//this.wild = null;
+			//this.party = null;
 			this.player = null;
 			this.scoreTextField = null;
 			this.textFormat = null;
