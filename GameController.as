@@ -341,6 +341,7 @@
 			//clear timer for despawnAnimal
 			//TODO check for animal interactions
 			party.push(animal);
+			animal.playWalkAnimation();
 			this.score += animal.getScore();
 			this.scoreTextField.text = "Score: " + this.score;
 			for each (var object in wild) {
@@ -408,13 +409,17 @@
 		/** Removes the current scene from the Game Controllers. **/
 		private function sceneCleanup() {
 			Debug.debugMessage("Cleaning up scene");
-			while(this.stageMain.numChildren > 0) {this.stageMain.removeChildAt(0);}
-			while(this.stageBackground.numChildren > 0) {this.stageBackground.removeChildAt(0);}
-			while(this.stageAnimals.numChildren > 0) {this.stageAnimals.removeChildAt(0);}
-			while(this.stageForeground.numChildren > 0) {this.stageForeground.removeChildAt(0);}
-			this.scenery = null;
-			this.wild = null;
-			this.party = null;
+			try {
+				while(this.stageMain.numChildren > 0) {this.stageMain.removeChildAt(0);}
+				while(this.stageBackground.numChildren > 0) {this.stageBackground.removeChildAt(0);}
+				while(this.stageAnimals.numChildren > 0) {this.stageAnimals.removeChildAt(0);}
+				while(this.stageForeground.numChildren > 0) {this.stageForeground.removeChildAt(0);}
+				this.scenery = null;
+				this.wild = null;
+				this.party = null;
+			} catch(e:Error) {
+				Debug.debugMessage(e.toString());
+			}
 		}
 		
 		/** Resets this instance of the Game Controller, removing all instances
