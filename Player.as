@@ -21,7 +21,7 @@
 		private var SIZE_CHEST:Number = 6;
 
 		//public function Player(kinectSkeleton:KinectSkeleton, document:Stage) {
-		public function Player(gameController:GameController) {
+		public function Player() {
 			//this.gameController = gameController;
 			this.player = new Sprite();
 			

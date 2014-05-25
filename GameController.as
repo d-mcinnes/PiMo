@@ -91,7 +91,7 @@
 			
 			loadScene();
 			
-			this.player = new Player(this);
+			this.player = new Player();
 			this.player.x = 50;
 			this.player.y = 400;
 			this.stagePlayer.addChild(this.player);
@@ -154,6 +154,18 @@
 		public function getScenery():Array {return this.scenery;}
 		public function getParty():Array {return this.party;}
 		public function getWildAnimals():Array {return this.wild;}
+		
+		/** Takes a class type and returns the number of many instances of that 
+		 ** animal which are currently in the party. **/
+		public function getNumberOfAnimals(animal:Class):Number {
+			var count:Number = 0;
+			for each(var object in this.getParty()) {
+				if(Class(getDefinitionByName(getQualifiedClassName(object))) == animal) {
+					count++;
+				}
+			}
+			return count;
+		}
 		
 		/** Renders the player, as well as any animals which are currently following
 		 ** the player. **/
@@ -264,6 +276,17 @@
 			spawnAnimal(animal, positionX, GameController.GROUND_HEIGHT);
 			Debug.debugMessage("Spawning " + animal.getName() + " at [" + positionX  + ", " + GameController.GROUND_HEIGHT + "]");
 			return animal;
+		}
+		
+		/** **/
+		public function removeAnimalType(type:Class):Boolean {
+			for each(var object in this.getParty()) {
+				if(object.getType() == type) {
+					this.removeAnimal(object);
+					return true;
+				}
+			}
+			return false;
 		}
 		
 		/** Checks for any scenery interaction from the player. Runs every time
