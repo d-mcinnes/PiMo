@@ -25,10 +25,10 @@
 		private var kinectSettings:KinectSettings;
 		private var kinectSkeleton:KinectSkeleton;
 		private var depthBitmap:Bitmap;
-		private var gameController:GameController;
+		//private var gameController:GameController;
 		
 		public function KinectInput(gameController:GameController) {
-			this.gameController = gameController;
+			//this.gameController = gameController;
 			if(Kinect.isSupported()) {
 				this.kinect = Kinect.getDevice();
 				
@@ -67,22 +67,11 @@
 				Debug.debugMessage(e.toString());
 			}
 			Debug.debugMessage("Starting game");
-			this.gameController.startGame();
-			this.gameController.getStageMain().addChild(this.kinectSkeleton.getSkeleton());
+			GameController.getInstance().startGame();
+			GameController.getInstance().getStageMain().addChild(this.kinectSkeleton.getSkeleton());
+			//this.gameController.startGame();
+			//this.gameController.getStageMain().addChild(this.kinectSkeleton.getSkeleton());
 		}
-		
-		/*private function on_enter_frame() {
-			trace("Enter Frame");
-			for each(var user:User in this.kinect.usersWithSkeleton) {
-				trace("Hello 1");
-				//this.kinectSkeleton.setPoints(user);
-				trace("Hello 2");
-			}
-		}
-		
-		private function on_exit_frame() {
-			trace("Exit Frame");
-		}*/
 		
 		/** Runs when the Kinect has been successfuly started. **/
 		private function kinectStarted(e:DeviceEvent):void {
@@ -114,9 +103,8 @@
 				this.kinectSkeleton.setTorso(user.torso.position.depth);
 				this.kinectSkeleton.setPositionRelative(user.position.depthRelative);
 				this.kinectSkeleton.setDistance(user.position.worldRelative);
-				//this.kinectSkeleton.setPoints(user);
-				this.gameController.renderPlayer();
-				this.gameController.checkForSceneryInteraction(user.leftHand.position.depthRelative, 
+				GameController.getInstance().renderPlayer();
+				GameController.getInstance().checkForSceneryInteraction(user.leftHand.position.depthRelative, 
 															   user.rightHand.position.depthRelative);
 			}
 		}

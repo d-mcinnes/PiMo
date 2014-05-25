@@ -9,9 +9,9 @@
 	import flash.text.TextField;
 	
 	public class Main extends MovieClip {
-		private var gameController:GameController;
+		//private var gameController:GameController;
 		
-		public static var STAGE:TextField;
+		//public static var STAGE:TextField;
 		
 		public function Main() {
 			stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
@@ -29,7 +29,7 @@
 		
 		/** Starts a new game. **/
 		private function startGame() {
-			this.gameController = new GameController(stage);
+			GameController.createInstance(stage);
 		}
 		
 		/** Shortcuts 
@@ -42,11 +42,9 @@
 		private function restartGame(e:KeyboardEvent) {
 			if(e.keyCode == Keyboard.F5) {
 				trace("================================================================================");
-				this.gameController.gameCleanup();
-				//this.gameController = null;
-				this.gameController.startGame();
+				GameController.getInstance().gameCleanup();
+				GameController.getInstance().startGame();
 				Debug.debugMessage("Restarting game");
-				//startGame();
 			}
 			if(e.keyCode == Keyboard.F6) {
 				GameController.DEBUG_MODE_ON = !GameController.DEBUG_MODE_ON;
@@ -58,7 +56,7 @@
 			}
 			if(e.keyCode == Keyboard.F7) {
 				Debug.debugMessage("Loading next scene");
-				this.gameController.loadScene();
+				GameController.getInstance().loadScene();
 			}
 		}
 	}

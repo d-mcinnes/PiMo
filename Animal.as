@@ -11,7 +11,12 @@
 		private var timer:Timer;
 		
 		public function Animal() {
-			this.timer = new Timer(8000);
+			//this.timer = new Timer(8000);
+			//this.timer.addEventListener(TimerEvent.TIMER, timerEvent);
+		}
+		
+		public function createTimer(time:Number) {
+			this.timer = new Timer(time);
 			this.timer.addEventListener(TimerEvent.TIMER, timerEvent);
 		}
 		
@@ -43,6 +48,9 @@
 		public function setName(animalName:String) {this.animalName = animalName;}
 		public function getName():String {return this.animalName;}
 		
+		public function remove():Boolean {return GameController.getInstance().removeAnimal(this);}
+		public function isInParty():Boolean {return GameController.getInstance().animalIsInParty(this);}
+		
 		/** Checks to see if the tag is associated with the animal. **/
 		public function checkTag(tag:String):Boolean {
 			for each(var object in this.tags) {
@@ -51,6 +59,34 @@
 				}
 			}
 			return false;
+		}
+		
+		public function setTimer(time:Number) {this.timer.delay = time;}
+		
+		/** Animations **/
+		
+		/** Plays the animals idle animation. **/
+		public function playIdleAnimation() {
+			Debug.debugMessage("Playing idle animation for " + this.getName());
+			this.stop();
+		}
+		
+		/** Plays the animals walk animation. **/
+		public function playWalkAnimation() {
+			Debug.debugMessage("Playing walk animation for " + this.getName());
+			this.play();
+		}
+		
+		/** Sets the facing angle of the animal to face left. **/
+		public function setFacingAngleLeft() {
+			Debug.debugMessage("Set facing angle to left for " + this.getName());
+			this.scaleX *= -1;
+		}
+		
+		/** Sets the facing angle of the animal to face right. **/
+		public function setFacingAngleRight() {
+			Debug.debugMessage("Set facing angle to right for " + this.getName());
+			this.scaleX *= 1;
 		}
 	}
 }

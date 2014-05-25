@@ -14,7 +14,8 @@
 		}
 		
 		override public function sceneryInteraction() {
-			
+			GameController.getInstance().createAnimal(this.getAnimalSpawnType(), this.x);
+			return true;
 		}
 	}
 }

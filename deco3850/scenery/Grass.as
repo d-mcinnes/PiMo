@@ -3,19 +3,19 @@
 	import flash.utils.getDefinitionByName;
 	
 	public class Grass extends Scenery {
-		public function Grass(x:Number = 0, y:Number = 0) {
+		public function Grass(x:Number = 0, y:Number = 0, scale:Number = 1) {
 			this.setName("Grass");
 			this.x = x;
 			this.y = y;
-			this.setCooldownPeriod(1000);
+			this.scaleX = scale;
+			this.scaleY = scale;
+			this.setCooldownPeriod(5000);
 			this.setAnimalSpawnType(getDefinitionByName('deco3850.animals.Rabbit') as Class);
 		}
 		
 		override public function sceneryInteraction() {
-			//var animal:Animal = new Owl();
-			//spawnAnimal(animal, this.x, GameController.GROUND_HEIGHT);
-			//object.setIsActive(false);
-			//Debug.debugMessage("Spawning " + animal.getName() + " at [" + this.x  + ", " + this.y + "]");
+			GameController.getInstance().createAnimal(this.getAnimalSpawnType(), this.x);
+			return true;
 		}
 	}
 }

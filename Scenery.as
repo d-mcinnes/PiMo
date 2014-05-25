@@ -9,7 +9,6 @@
 		private var active:Boolean = false;
 		private var timer:Timer;
 		private var sceneryName:String;
-		private var gameController:GameController;
 		private var animalSpawnType:Class;
 		private var cooldownPeriod:Number = 0;
 

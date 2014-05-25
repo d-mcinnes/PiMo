@@ -50,6 +50,8 @@
 		public static var GROUND_HEIGHT:Number = 440;
 		public static var DEBUG_MODE_ON:Boolean = true;
 		public static var DEBUG_DISPLAY_MODE_ON:Boolean = false;
+		
+		private static var gameController:GameController = null;
 
 		/**
 		 * Controls the proceedings for one round of the game.
@@ -60,6 +62,19 @@
 			this.rfidReader = new RFIDReaderSingle(this);
 			
 			Debug.debugMessage("Game Controller Started");
+		}
+		
+		public static function createInstance(document:Stage):GameController {
+			gameController = new GameController(document);
+			return gameController;
+		}
+		
+		public static function getInstance():GameController {
+			if(gameController == null) {
+				Debug.debugMessage("No Game Controller");
+				return null;
+			}
+			return gameController;
 		}
 		
 		public function startGame() {
@@ -132,9 +147,13 @@
 			Debug.debugMessage("Game Started");
 		}
 		
+		public function getStage():Stage {return this.document;}
 		public function getStageMain():Sprite {return this.stageMain;}
 		public function getStageOverlay():Sprite {return this.stageOverlay;}
 		public function getKinectSkeleton():KinectSkeleton {return this.kinectInput.getKinectSkeleton();}
+		public function getScenery():Array {return this.scenery;}
+		public function getParty():Array {return this.party;}
+		public function getWildAnimals():Array {return this.wild;}
 		
 		/** Renders the player, as well as any animals which are currently following
 		 ** the player. **/
@@ -153,11 +172,6 @@
 			this.wild = new Array();
 			this.party = new Array();
 			loadScenery();
-		}
-		
-		/** Returns an array of all scenery objects on the stage. **/
-		private function getScenery():Array {
-			return this.scenery;
 		}
 		
 		/** Takes a x position and checks whether or not it collides with any other
@@ -244,6 +258,14 @@
 			}
 		}
 		
+		/** **/
+		public function createAnimal(type:Class, positionX:Number):Animal {
+			var animal:Animal = new type();
+			spawnAnimal(animal, positionX, GameController.GROUND_HEIGHT);
+			Debug.debugMessage("Spawning " + animal.getName() + " at [" + positionX  + ", " + GameController.GROUND_HEIGHT + "]");
+			return animal;
+		}
+		
 		/** Checks for any scenery interaction from the player. Runs every time
 		 ** the Kinect is updated. **/
 		public function checkForSceneryInteraction(leftPosition:Point, rightPosition:Point):void {
@@ -255,11 +277,11 @@
 					//Debug.debugMessage("Left: " + this.player.getLeftPoint() + " Right: " + this.player.getRightPoint());
 					if(checkObjectBounds(object)) {
 						object.sceneryInteraction();
-						var type:Class = object.getAnimalSpawnType();
-						var animal:Animal = new type();
-						spawnAnimal(animal, object.x, GameController.GROUND_HEIGHT);
+						//var type:Class = object.getAnimalSpawnType();
+						//var animal:Animal = new type();
+						//spawnAnimal(animal, object.x, GameController.GROUND_HEIGHT);
 						object.setIsActive(false);
-						Debug.debugMessage("Spawning " + animal.getName() + " at [" + object.x  + ", " + object.y + "]");
+						//Debug.debugMessage("Spawning " + animal.getName() + " at [" + object.x  + ", " + object.y + "]");*/
 					}
 				}
 			}
@@ -282,6 +304,7 @@
 			animal.x = x;
 			animal.y = y;
 			animal.setTimerEvent(animalDespawnTimerEvent(animal));
+			animal.playIdleAnimation();
 			animal.startTimer();
 			this.stageAnimals.addChild(animal);
 		}
@@ -330,7 +353,7 @@
 		}
 		
 		/** Removes an animal from the players party. **/
-		private function removeAnimal(animal:Animal):Boolean {
+		public function removeAnimal(animal:Animal):Boolean {
 			var index = party.indexOf(animal);
 			if (index >= 0) {
 				party.splice(index, 1);
