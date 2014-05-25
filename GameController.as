@@ -91,7 +91,7 @@
 			
 			loadScene();
 			
-			this.player = new Player(this);
+			this.player = new Player();
 			this.player.x = 50;
 			this.player.y = 400;
 			this.stagePlayer.addChild(this.player);
