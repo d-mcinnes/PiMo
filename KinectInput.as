@@ -48,6 +48,7 @@
 				// Depth Update
 				this.kinect.addEventListener(CameraImageEvent.DEPTH_IMAGE_UPDATE, depthImageUpdateHandler);
 				this.kinect.addEventListener(UserEvent.USERS_ADDED, kinectUserAdded);
+				this.kinect.addEventListener(UserEvent.USERS_REMOVED, kinectUserRemoved);
 				
 				// Start Kinect
 				this.kinect.start(this.kinectSettings);
@@ -61,16 +62,22 @@
 		}
 		
 		private function kinectUserAdded(e:UserEvent) {
-			try {
+			/*try {
 				this.kinect.removeEventListener(UserEvent.USERS_ADDED, kinectUserAdded);
 			} catch(e:Error) {
 				Debug.debugMessage(e.toString());
-			}
-			Debug.debugMessage("Starting game");
-			GameController.getInstance().startGame();
-			GameController.getInstance().getStageMain().addChild(this.kinectSkeleton.getSkeleton());
+			}*/
+			Debug.debugMessage("Resuming game");
+			GameController.getInstance().resumeGame();
+			//GameController.getInstance().startGame();
+			//GameController.getInstance().getStageMain().addChild(this.kinectSkeleton.getSkeleton());
 			//this.gameController.startGame();
 			//this.gameController.getStageMain().addChild(this.kinectSkeleton.getSkeleton());
+		}
+		
+		private function kinectUserRemoved(e:UserEvent) {
+			Debug.debugMessage("Pausing game");
+			GameController.getInstance().pauseGame("Enter the playing area to resume the game.");
 		}
 		
 		/** Runs when the Kinect has been successfuly started. **/
@@ -110,6 +117,7 @@
 		}
 		
 		public function getKinectSkeleton():KinectSkeleton {return this.kinectSkeleton;}
+		public function getNumberOfUsers():Number {return this.kinect.users.length;}
 		
 		/** Cleanup function, cleans up and removes all the event listenrs
 		 ** for the Kinect. **/

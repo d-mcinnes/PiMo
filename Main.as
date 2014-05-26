@@ -18,33 +18,41 @@
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, detectKeyPress);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, restartGame);
 			Mouse.hide();
+			this.screenStartScreen.visible = false;
+			startGame();
 		}
 		
 		/** Runs when the user presses any key. **/
 		private function detectKeyPress(e:KeyboardEvent) {
-			this.screenStartScreen.visible = false;
 			stage.removeEventListener(KeyboardEvent.KEY_DOWN, detectKeyPress);
-			startGame();
+			//startGame();
 		}
 		
 		/** Starts a new game. **/
 		private function startGame() {
 			GameController.createInstance(stage);
+			GameController.getInstance().startGame();
+			GameController.getInstance().pauseGame("Enter the playing area to begin the game.");
 		}
 		
 		/** Shortcuts 
 		 ** 	F5 - Restart Game
 		 **		F6 - Toggle Debug Mode
 		 **		F7 - Load Next Scene
+		 **		F8 - Pause/Resume Game
 		 **/
 		
 		/** Restarts the game when the user presses the F5 key. **/
 		private function restartGame(e:KeyboardEvent) {
 			if(e.keyCode == Keyboard.F5) {
-				trace("================================================================================");
+				GameController.getInstance().endGame();
+				/*trace("================================================================================");
 				GameController.getInstance().gameCleanup();
 				GameController.getInstance().startGame();
-				Debug.debugMessage("Restarting game");
+				if(GameController.getInstance().getNumberOfUsers() <= 0) {
+					GameController.getInstance().pauseGame("Enter the playing area to begin the game.");
+				}
+				Debug.debugMessage("Restarting game");*/
 			}
 			if(e.keyCode == Keyboard.F6) {
 				GameController.DEBUG_MODE_ON = !GameController.DEBUG_MODE_ON;
@@ -57,6 +65,15 @@
 			if(e.keyCode == Keyboard.F7) {
 				Debug.debugMessage("Loading next scene");
 				GameController.getInstance().loadScene();
+			}
+			if(e.keyCode == Keyboard.F8) {
+				if(GameController.getInstance().isGamePaused() == true) {
+					Debug.debugMessage("Game resumed");
+					GameController.getInstance().resumeGame();
+				} else {
+					Debug.debugMessage("Game paused");
+					GameController.getInstance().pauseGame();
+				}
 			}
 		}
 	}

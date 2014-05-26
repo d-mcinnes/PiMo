@@ -61,27 +61,34 @@
 													 GameController.getInstance().getKinectSkeleton().getRightHand().y);
 			
 			/* Check distance from the Kinect. */
-			if(GameController.getInstance().getKinectSkeleton().getDistance().z < 1.0) {
-				this.outOfBounds.messageBox.text = "Too close to the Kinect.";
-				this.outOfBounds.visible = true;
-				return;
-			} else {
-				this.outOfBounds.visible = false;
-			}
+			//if(GameController.getInstance().getKinectSkeleton().getDistance().z < 1.0) {
+			//	GameController.getInstance().pauseGame("Too close to the Kinect.");
+				//this.outOfBounds.messageBox.text = "Too close to the Kinect.";
+				//this.outOfBounds.visible = true;
+			//	return;
+			//} else {
+			//	this.outOfBounds.visible = false;
+			//}
 			
 			/* Check whether the user is out of the bounds of the screen. */
-			var xPosition = 1024 * GameController.getInstance().getKinectSkeleton().getPositionRelative().x;
-			if(xPosition <= 140) {
-				this.outOfBounds.messageBox.text = "Out of Bounds - Left.";
-				this.outOfBounds.visible = true;
-				return;
-			} else if(xPosition >= 900) {
-				this.outOfBounds.messageBox.text = "Out of Bounds - Right.";
-				this.outOfBounds.visible = true;
-				return;
-			} else {
-				this.outOfBounds.visible = false;
-				this.x = xPosition;
+			//var xPosition = 1024 * GameController.getInstance().getKinectSkeleton().getPositionRelative().x;
+			//if(xPosition <= 140) {
+			//	GameController.getInstance().pauseGame("Enter playing area to resume game.");
+				//this.outOfBounds.messageBox.text = "Out of Bounds - Left.";
+				//this.outOfBounds.visible = true;
+			//	return;
+			//} else if(xPosition >= 900) {
+			//	GameController.getInstance().pauseGame("Enter playing area to resume game.");
+				//this.outOfBounds.messageBox.text = "Out of Bounds - Right.";
+				//this.outOfBounds.visible = true;
+			//	return;
+			//} else {
+				//this.outOfBounds.visible = false;
+				//this.x = xPosition;
+			//}
+			
+			if(GameController.getInstance().isGamePaused() == false) {
+				this.x = 1024 * GameController.getInstance().getKinectSkeleton().getPositionRelative().x;
 			}
 			
 			/* Clear current Player and create Neck and Head. */

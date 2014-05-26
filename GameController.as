@@ -21,37 +21,50 @@
 	import deco3850.scenery.*;
 
 	public class GameController {
+		private static var gameController:GameController = null;
+		
+		/* General Variables */
 		private var document:Stage;
+		private var kinectInput:KinectInput;
+		private var rfidReader:RFIDReaderSingle;
+		
+		/* Stage Objects */
 		private var stageOverlay:Sprite;
 		private var stageMain:Sprite;
 		private var stageBackground:Sprite;
 		private var stageAnimals:Sprite;
 		private var stagePlayer:Sprite;
 		private var stageForeground:Sprite;
-		private var kinectInput:KinectInput;
-		private var rfidReader:RFIDReaderSingle;
 		
+		/* Score Variables */
 		private var score:int; //cumulative score for this game, nonnegative
 		
+		/* Game Duration Variables */
 		private var gameTimer:Timer;
 		private var gameIncrement:Number = 2 * 60;
 		
+		/* Gameplay Objects */
 		private var scenery:Array; //interactable objects in the background
 		private var sceneryPosition:Array;
 		private var wild:Array; //animals in the scene, not following the player
 		private var party:Array; //animals currently following the player
 		private var player:Player;
+		private var paused:Boolean = false;
+		
+		/* Interface Elements */
 		private var scoreTextField:TextField;
 		private var textFormat:TextFormat;
 		private var timerTextField:TextField;
+		private var objectiveTextField:TextField;
+		private var objectiveTextFormat:TextFormat;
+		private var gamePausedBackground:GamePausedBackground;
 		
+		/* Static Variables */
 		public static var SCREEN_SIZE_X:Number = 1024;
 		public static var SCREEN_SIZE_Y:Number = 600;
 		public static var GROUND_HEIGHT:Number = 440;
 		public static var DEBUG_MODE_ON:Boolean = true;
 		public static var DEBUG_DISPLAY_MODE_ON:Boolean = false;
-		
-		private static var gameController:GameController = null;
 
 		/**
 		 * Controls the proceedings for one round of the game.
@@ -60,15 +73,17 @@
 			this.document = document;
 			this.kinectInput = new KinectInput(this);
 			this.rfidReader = new RFIDReaderSingle(this);
-			
 			Debug.debugMessage("Game Controller Started");
 		}
 		
+		/** Takes a Stage and creates an instance of the GameController class. **/
 		public static function createInstance(document:Stage):GameController {
 			gameController = new GameController(document);
+			Debug.debugMessage("Game Controlled Initiated");
 			return gameController;
 		}
 		
+		/** If one exists, returns the current instance of the GameController class. **/
 		public static function getInstance():GameController {
 			if(gameController == null) {
 				Debug.debugMessage("No Game Controller");
@@ -77,6 +92,7 @@
 			return gameController;
 		}
 		
+		/** Starts the current game. **/
 		public function startGame() {
 			this.stageMain = new Sprite();
 			this.stageBackground = new Sprite();
@@ -123,6 +139,28 @@
 			this.timerTextField.text = "Time: ";
 			this.stageOverlay.addChild(this.timerTextField);
 			
+			this.objectiveTextFormat = new TextFormat();
+			this.objectiveTextFormat.size = 20;
+			this.objectiveTextFormat.align = TextFormatAlign.RIGHT;
+			this.objectiveTextFormat.bold = true;
+			this.objectiveTextFormat.font = new ScoreFont().fontName;
+			
+			this.objectiveTextField = new TextField();
+			this.objectiveTextField.x = GameController.SCREEN_SIZE_X - 210;
+			this.objectiveTextField.y = 5;
+			this.objectiveTextField.width = 200;
+			this.objectiveTextField.textColor = 0x000000;
+			this.objectiveTextField.selectable = false;
+			this.objectiveTextField.defaultTextFormat = this.objectiveTextFormat;
+			this.objectiveTextField.text = "";
+			this.stageOverlay.addChild(this.objectiveTextField);
+			
+			this.gamePausedBackground = new GamePausedBackground();
+			this.gamePausedBackground.x = 0;
+			this.gamePausedBackground.y = 0;
+			this.gamePausedBackground.visible = false;
+			this.stageOverlay.addChild(this.gamePausedBackground);
+			
 			var overlay:BlackOverlay = new BlackOverlay();
 			overlay.x = -300;
 			overlay.y = -110;
@@ -147,10 +185,15 @@
 			Debug.debugMessage("Game Started");
 		}
 		
+		/** *************************************** **/
+		/**   G E N E R A L   F U N C I T I O N S   **/
+		/** *************************************** **/
+		
 		public function getStage():Stage {return this.document;}
 		public function getStageMain():Sprite {return this.stageMain;}
 		public function getStageOverlay():Sprite {return this.stageOverlay;}
 		public function getKinectSkeleton():KinectSkeleton {return this.kinectInput.getKinectSkeleton();}
+		public function getNumberOfUsers():Number {return this.kinectInput.getNumberOfUsers();}
 		public function getScenery():Array {return this.scenery;}
 		public function getParty():Array {return this.party;}
 		public function getWildAnimals():Array {return this.wild;}
@@ -185,6 +228,10 @@
 			this.party = new Array();
 			loadScenery();
 		}
+		
+		/** ***************** **/
+		/**   S C E N E R Y   **/
+		/** ***************** **/
 		
 		/** Takes a x position and checks whether or not it collides with any other
 		 ** objects. **/
@@ -310,6 +357,10 @@
 			}
 		}
 		
+		/** ***************** **/
+		/**   A N I M A L S   **/
+		/** ***************** **/
+		
 		/** Runs when the despawn animal timer expires. **/
 		public function despawnTimer(animal:Animal, scenery:Object):Function {
 			return function(e:TimerEvent):void {
@@ -420,12 +471,27 @@
 			}
 		}
 		
+		/** *********************** **/
+		/**   O B J E C T I V E S   **/
+		/** *********************** **/
+		
+		public function setObjectiveText(text:String) {
+			this.objectiveTextField.text = text;
+		}
+		
+		public function getObjectiveText():String {return this.objectiveTextField.text;}
+		
+		/** ***************************** **/
+		/**   G A M E   D U R A T I O N   **/
+		/** ***************************** **/
+		
 		/** Runs when _____ **/
 		private function gameTimerEvent(e:TimerEvent) {
 			this.timerTextField.text = "Time: " + Debug.padChar(String(Math.floor(((this.gameIncrement - this.gameTimer.currentCount) / 60) % 60)), 2, '0', true) + 
 				":" + Debug.padChar(String((this.gameIncrement - this.gameTimer.currentCount) % 60), 2, '0', true);
 			if((this.gameIncrement - this.gameTimer.currentCount) <= 0) {
 				Debug.debugMessage("Game Timer Expired. Reloading Scene");
+				this.endGame();
 			}
 		}
 		
@@ -486,9 +552,42 @@
 			}
 		}
 		
+		/** Returns whether or not the game is currently paused. **/
+		public function isGamePaused():Boolean {
+			return this.paused;
+		}
+		
+		/** Pauses the current game. **/
+		public function pauseGame(message:String = "") {
+			if(this.isGamePaused() == false) {
+				this.paused = true;
+				this.gamePausedBackground.visible = true;
+				this.gamePausedBackground.messageBox.text = message;
+				this.gameTimer.stop();
+				Debug.debugMessage("Game paused");
+			}
+		}
+		
+		/** Resumes the current game. **/
+		public function resumeGame() {
+			if(this.paused == true) {
+				this.paused = false;
+				this.gamePausedBackground.visible = false;
+				this.gamePausedBackground.messageBox.text = "";
+				this.gameTimer.start();
+				Debug.debugMessage("Game resumed");
+			}
+		}
+		
 		/** Ends the current game. **/
-		private function endGame():void {
-			
+		public function endGame() {
+			trace("================================================================================");
+			this.gameCleanup();
+			this.startGame();
+			//if(this.getNumberOfUsers() <= 0) {
+				this.pauseGame("Enter the playing area to begin the game.");
+			//}
+			Debug.debugMessage("Restarting game");
 		}
 	}
 }
