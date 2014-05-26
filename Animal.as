@@ -49,7 +49,7 @@
 		
 		public function setName(animalName:String) {this.animalName = animalName;}
 		public function getName():String {return this.animalName;}
-		public function getType():Class {return Class(getDefinitionByName(getQualifiedClassName(this)));}
+		public function getType():Class {return getDefinitionByName(getQualifiedClassName(this)) as Class;}
 		
 		public function remove():Boolean {return GameController.getInstance().removeAnimal(this);}
 		public function isInParty():Boolean {return GameController.getInstance().animalIsInParty(this);}

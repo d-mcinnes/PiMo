@@ -7,12 +7,9 @@
 	import flash.ui.Keyboard;
 	import flash.ui.Mouse;
 	import flash.text.TextField;
+	import flash.utils.getDefinitionByName;
 	
 	public class Main extends MovieClip {
-		//private var gameController:GameController;
-		
-		//public static var STAGE:TextField;
-		
 		public function Main() {
 			stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, detectKeyPress);
@@ -33,6 +30,7 @@
 			GameController.createInstance(stage);
 			GameController.getInstance().startGame();
 			GameController.getInstance().pauseGame("Enter the playing area to begin the game.");
+			GameController.getInstance().getNumberAnimalInParty(getDefinitionByName("deco3850.animals.Rabbit") as Class)
 		}
 		
 		/** Shortcuts 
@@ -47,13 +45,6 @@
 		private function restartGame(e:KeyboardEvent) {
 			if(e.keyCode == Keyboard.F5) {
 				GameController.getInstance().endGame();
-				/*trace("================================================================================");
-				GameController.getInstance().gameCleanup();
-				GameController.getInstance().startGame();
-				if(GameController.getInstance().getNumberOfUsers() <= 0) {
-					GameController.getInstance().pauseGame("Enter the playing area to begin the game.");
-				}
-				Debug.debugMessage("Restarting game");*/
 			}
 			if(e.keyCode == Keyboard.F6) {
 				GameController.DEBUG_MODE_ON = !GameController.DEBUG_MODE_ON;
@@ -69,10 +60,8 @@
 			}
 			if(e.keyCode == Keyboard.F8) {
 				if(GameController.getInstance().isGamePaused() == true) {
-					Debug.debugMessage("Game resumed");
 					GameController.getInstance().resumeGame();
 				} else {
-					Debug.debugMessage("Game paused");
 					GameController.getInstance().pauseGame();
 				}
 			}

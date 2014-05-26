@@ -6,7 +6,7 @@
 		private var description:String = "";
 		
 		public function Objective() {
-			// constructor code
+			
 		}
 		
 		public function getName():String {return this.name;}

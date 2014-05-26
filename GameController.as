@@ -83,7 +83,6 @@
 		/** Takes a Stage and creates an instance of the GameController class. **/
 		public static function createInstance(document:Stage):GameController {
 			gameController = new GameController(document);
-			Debug.debugMessage("Game Controlled Initiated");
 			return gameController;
 		}
 		
@@ -108,8 +107,6 @@
 			this.score = 0;
 			this.party = new Array();
 			this.wild = new Array();
-			
-			loadScene();
 			
 			this.player = new Player();
 			this.player.x = 50;
@@ -172,6 +169,8 @@
 			
 			this.document.addEventListener(KeyboardEvent.KEY_DOWN, keySpacePress);
 			
+			loadScene();
+			
 			this.document.addChild(this.stageMain);
 			this.document.addChild(this.stageBackground);
 			this.document.addChild(this.stageAnimals);
@@ -230,7 +229,8 @@
 			this.sceneCleanup();
 			this.wild = new Array();
 			this.party = new Array();
-			loadScenery();
+			this.loadScenery();
+			this.generateObjective();
 		}
 		
 		/** ***************** **/
@@ -502,11 +502,8 @@
 		public function getCurrentObjective():Objective {return this.currentObjective;}
 		
 		public function generateObjective():Objective {
-			//this.currentObjective = new Objective();
-			var l1_objectives:Array = new Array('deco3850.objectives.L1_ThreeRabbits');
-			var number:Number = Debug.randomNumber(0, l1_objectives.length - 1);
-			Debug.debugMessage("Random Number: " + number + " Class: " + l1_objectives[number]);
-			var reference:Class = getDefinitionByName(l1_objectives[number]) as Class;
+			var number:Number = Debug.randomNumber(0, Assets.OBJECTIVES[0].length - 1);
+			var reference:Class = getDefinitionByName(Assets.OBJECTIVES[0][number]) as Class;
 			this.currentObjective = new reference();
 			Debug.debugMessage("Objective Name: " + this.currentObjective.getName() + " Description: " + this.currentObjective.getDescription());
 			this.objectiveTextField.text = this.currentObjective.getDescription();

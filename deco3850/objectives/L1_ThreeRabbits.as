@@ -12,7 +12,7 @@
 		
 		override public function isComplete():Boolean {
 			this.setDescription("Get three rabbits to follow you (" + 
-								GameController.getInstance().getNumberAnimalInParty(Class(getDefinitionByName("deco3850.animals.Rabbit"))) + 
+								GameController.getInstance().getNumberAnimalInParty(getDefinitionByName("deco3850.animals.Rabbit") as Class) + 
 								"/3).");
 			if(GameController.getInstance().getNumberAnimalInParty(Class(getDefinitionByName(getQualifiedClassName("Rabbit")))) >= 3) {
 				Debug.debugMessage("Objective is complete");

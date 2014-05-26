@@ -1,5 +1,5 @@
 ﻿package {   
 	public class Assets {
-		L1_ThreeRabbits;  
+		public static var OBJECTIVES:Array = [['deco3850.objectives.L1_ThreeRabbits'], ['']];
 	}
 }
