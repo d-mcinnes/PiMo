@@ -36,8 +36,9 @@
 		private var stagePlayer:Sprite;
 		private var stageForeground:Sprite;
 		
-		/* Score Variables */
+		/* Scene Variables */
 		private var score:int; //cumulative score for this game, nonnegative
+		private var currentObjective:Objective = null;
 		
 		/* Game Duration Variables */
 		private var gameTimer:Timer;
@@ -450,6 +451,17 @@
 			return false;
 		}
 		
+		/** **/
+		public function getNumberAnimalInParty(animal:Class):Number {
+			var count:Number = 0;
+			for each(var object in this.party) {
+				if(object.getType() == animal) {
+					count++;
+				}
+			}
+			return count;
+		}
+		
 		/** Runs when the player activates one of the Arduino tags. **/
 		public function activateTag(tag:String) {
 			for each (var animal in wild) {
@@ -479,7 +491,16 @@
 			this.objectiveTextField.text = text;
 		}
 		
-		public function getObjectiveText():String {return this.objectiveTextField.text;}
+		public function getCurrentObjective():Objective {return this.currentObjective;}
+		
+		public function generateObjective():Objective {
+			this.currentObjective = new Objective();
+			return this.currentObjective;
+		}
+		
+		public function completeCurrentObjective() {
+			this.getCurrentObjective().complete();
+		}
 		
 		/** ***************************** **/
 		/**   G A M E   D U R A T I O N   **/
@@ -584,9 +605,7 @@
 			trace("================================================================================");
 			this.gameCleanup();
 			this.startGame();
-			//if(this.getNumberOfUsers() <= 0) {
-				this.pauseGame("Enter the playing area to begin the game.");
-			//}
+			this.pauseGame("Enter the playing area to begin the game.");
 			Debug.debugMessage("Restarting game");
 		}
 	}
