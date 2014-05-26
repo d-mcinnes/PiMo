@@ -1,4 +1,5 @@
-﻿package  {
+﻿package {
+	import flash.debug.Debug;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.display.Stage;
@@ -101,15 +102,19 @@
 			
 			/* Render Left Arm */
 			var leftArmElbow = getPolarPoint(neckPoint, leftArmUpperAngle, SIZE_LIMB);
+			this.createCircle(playerHeadPoint, 5);
 			this.createLine(neckPoint, leftArmElbow);
 			this.createLine(leftArmElbow, getPolarPoint(leftArmElbow, leftArmLowerAngle, SIZE_LIMB));
 			this.leftPoint = getPolarPoint(leftArmElbow, leftArmLowerAngle, SIZE_LIMB);
+			//Debug.debugMessage("Left Point: " + this.leftPoint.x + ", " + this.leftPoint.y);
+			//this.createCircle(this.leftPoint, 5);
 			
 			/* Render Right Arm */
 			var rightArmElbow = getPolarPoint(neckPoint, rightArmUpperAngle, SIZE_LIMB);
 			this.createLine(neckPoint, rightArmElbow);
 			this.createLine(rightArmElbow, getPolarPoint(rightArmElbow, rightArmLowerAngle, SIZE_LIMB));
 			this.rightPoint = getPolarPoint(rightArmElbow, rightArmLowerAngle, SIZE_LIMB);
+			//this.createCircle(this.rightPoint, 5);
 						
 			/* Render Left Leg */
 			var leftKnee:Point = getPolarPoint(new Point(0, 0), 
@@ -155,6 +160,11 @@
 			this.graphics.lineStyle(5, 0, 1);
 			this.graphics.moveTo(point1.x * 10, point1.y * 10);
 			this.graphics.lineTo(point2.x * 10, point2.y * 10);
+		}
+		
+		/** **/
+		private function createCircle(p1:Point, radius:Number):void {
+			this.graphics.drawCircle(p1.x, p1.y, radius);
 		}
 		
 		private function getAngle(x1:Number, y1:Number, x2:Number, y2:Number):Number {

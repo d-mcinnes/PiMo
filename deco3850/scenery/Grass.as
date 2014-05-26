@@ -14,11 +14,11 @@
 		}
 		
 		override public function sceneryInteraction() {
-			var type:Class = this.getAnimalSpawnType().getType();
-			if(GameController.getInstance().getNumberOfAnimals(type) >= 2) {
-				Debug.debugMessage("Hello");
-				GameController.getInstance().removeAnimalType(type);
-			}
+			//var type:Class = this.getAnimalSpawnType().getType();
+			//if(GameController.getInstance().getNumberOfAnimals(type) >= 2) {
+			//	Debug.debugMessage("Hello");
+			//	GameController.getInstance().removeAnimalType(type);
+			//}
 			GameController.getInstance().createAnimal(this.getAnimalSpawnType(), this.x);
 			return true;
 		}
