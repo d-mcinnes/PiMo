@@ -40,6 +40,7 @@
 		 **		F6 - Toggle Debug Mode
 		 **		F7 - Load Next Scene
 		 **		F8 - Pause/Resume Game
+		 **		F9 - Generate New Objective
 		 **/
 		
 		/** Restarts the game when the user presses the F5 key. **/
@@ -74,6 +75,9 @@
 					Debug.debugMessage("Game paused");
 					GameController.getInstance().pauseGame();
 				}
+			}
+			if(e.keyCode == Keyboard.F9) {
+				GameController.getInstance().generateObjective();
 			}
 		}
 	}

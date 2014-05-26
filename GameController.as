@@ -18,10 +18,13 @@
 	import flash.text.Font;
 	
 	import deco3850.animals.*;
+	import deco3850.objectives.*;
 	import deco3850.scenery.*;
 
 	public class GameController {
 		private static var gameController:GameController = null;
+		
+		private var obj1:L1_ThreeRabbits = null;
 		
 		/* General Variables */
 		private var document:Stage;
@@ -147,9 +150,9 @@
 			this.objectiveTextFormat.font = new ScoreFont().fontName;
 			
 			this.objectiveTextField = new TextField();
-			this.objectiveTextField.x = GameController.SCREEN_SIZE_X - 210;
+			this.objectiveTextField.x = GameController.SCREEN_SIZE_X - 410;
 			this.objectiveTextField.y = 5;
-			this.objectiveTextField.width = 200;
+			this.objectiveTextField.width = 400;
 			this.objectiveTextField.textColor = 0x000000;
 			this.objectiveTextField.selectable = false;
 			this.objectiveTextField.defaultTextFormat = this.objectiveTextFormat;
@@ -347,6 +350,11 @@
 					}
 					//Debug.debugMessage("Left: " + this.player.getLeftPoint() + " Right: " + this.player.getRightPoint());
 					if(checkObjectBounds(object)) {
+						if(this.currentObjective != null) {
+							if(this.currentObjective.isComplete() == true) {
+								Debug.debugMessage("!Objective Complete!");
+							}
+						}
 						object.sceneryInteraction();
 						//var type:Class = object.getAnimalSpawnType();
 						//var animal:Animal = new type();
@@ -494,7 +502,14 @@
 		public function getCurrentObjective():Objective {return this.currentObjective;}
 		
 		public function generateObjective():Objective {
-			this.currentObjective = new Objective();
+			//this.currentObjective = new Objective();
+			var l1_objectives:Array = new Array('deco3850.objectives.L1_ThreeRabbits');
+			var number:Number = Debug.randomNumber(0, l1_objectives.length - 1);
+			Debug.debugMessage("Random Number: " + number + " Class: " + l1_objectives[number]);
+			var reference:Class = getDefinitionByName(l1_objectives[number]) as Class;
+			this.currentObjective = new reference();
+			Debug.debugMessage("Objective Name: " + this.currentObjective.getName() + " Description: " + this.currentObjective.getDescription());
+			this.objectiveTextField.text = this.currentObjective.getDescription();
 			return this.currentObjective;
 		}
 		
