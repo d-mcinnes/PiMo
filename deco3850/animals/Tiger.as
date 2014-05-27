@@ -6,7 +6,7 @@
 		public function Tiger() {
 			this.setName("Tiger");
 			this.createTimer(4000);
-			this.setTags(['010232cd72', '010238914a', '0102387557']);
+			this.setTags(['all', 'tiger', '010232cd72', '010238914a', '0102387557']);
 			this.setScore(10);
 		}
 	}

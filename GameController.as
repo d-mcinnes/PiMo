@@ -24,7 +24,7 @@
 	public class GameController {
 		private static var gameController:GameController = null;
 		
-		private var obj1:L1_ThreeRabbits = null;
+		//private var obj1:ThreeRabbits = null;
 		
 		/* General Variables */
 		private var document:Stage;
@@ -114,7 +114,7 @@
 			this.stagePlayer.addChild(this.player);
 			
 			this.scoreTextField = new TextField();
-			this.scoreTextField.y = 10;
+			this.scoreTextField.y = 0;
 			this.scoreTextField.x = 10;
 			this.scoreTextField.width = 185;
 			this.scoreTextField.textColor = 0x000000;
@@ -132,7 +132,7 @@
 			
 			this.timerTextField = new TextField();
 			this.timerTextField.x = 10;
-			this.timerTextField.y = 40;
+			this.timerTextField.y = 30;
 			this.timerTextField.width = 185;
 			this.timerTextField.textColor = 0x000000;
 			this.timerTextField.selectable = false;
@@ -200,6 +200,9 @@
 		public function getScenery():Array {return this.scenery;}
 		public function getParty():Array {return this.party;}
 		public function getWildAnimals():Array {return this.wild;}
+		
+		public function getScore():Number {return this.score;}
+		public function incrementScore(increment:Number) {this.score += increment;}
 		
 		/** Takes a class type and returns the number of many instances of that 
 		 ** animal which are currently in the party. **/
@@ -350,16 +353,18 @@
 					}
 					//Debug.debugMessage("Left: " + this.player.getLeftPoint() + " Right: " + this.player.getRightPoint());
 					if(checkObjectBounds(object)) {
-						if(this.currentObjective != null) {
+						/*if(this.currentObjective != null) {
 							if(this.currentObjective.isComplete() == true) {
 								Debug.debugMessage("!Objective Complete!");
 							}
-						}
+						}*/
 						object.sceneryInteraction();
 						//var type:Class = object.getAnimalSpawnType();
 						//var animal:Animal = new type();
 						//spawnAnimal(animal, object.x, GameController.GROUND_HEIGHT);
 						object.setIsActive(false);
+						
+						this.checkCurrentObjective();
 						//Debug.debugMessage("Spawning " + animal.getName() + " at [" + object.x  + ", " + object.y + "]");*/
 					}
 				}
@@ -425,13 +430,15 @@
 			//TODO check for animal interactions
 			party.push(animal);
 			animal.playWalkAnimation();
-			this.score += animal.getScore();
-			this.scoreTextField.text = "Score: " + this.score;
+			//this.score += animal.getScore();
+			this.incrementScore(animal.getScore());
+			this.scoreTextField.text = "Score: " + this.getScore();
 			for each (var object in wild) {
 				if(object == animal) {
 					wild.splice(wild.indexOf(animal), 1);
 				}
 			}
+			this.checkCurrentObjective();
 			Debug.debugMessage("Attaching " + animal.getName());
 			//score += animal.getScore();
 		}
@@ -486,8 +493,22 @@
 		
 		/** Runs when the user presses the space key **/
 		private function keySpacePress(e:KeyboardEvent) {
+			/* R - Rabbit
+			 * D - Dog
+			 * C - Cat
+			 * O - Owl */
 			if(e.keyCode == Keyboard.SPACE) {
-				this.activateTag('010232cd72');
+				this.activateTag('all');
+			} else if(e.keyCode == Keyboard.R) {
+				this.activateTag('rabbit');
+			} else if(e.keyCode == Keyboard.D) {
+				this.activateTag('dog');
+			} else if(e.keyCode == Keyboard.C) {
+				this.activateTag('cat');
+			} else if(e.keyCode == Keyboard.O) {
+				this.activateTag('owl');
+			} else if(e.keyCode == Keyboard.T) {
+				this.activateTag('tiger');
 			}
 		}
 		
@@ -510,8 +531,18 @@
 			return this.currentObjective;
 		}
 		
-		public function completeCurrentObjective() {
-			this.getCurrentObjective().complete();
+		public function completeCurrentObjective() {this.getCurrentObjective().complete();}
+		public function setCurrentObjectiveText() {this.objectiveTextField.text = this.currentObjective.getDescription();}
+		
+		public function checkCurrentObjective() {
+			if(this.currentObjective != null) {
+				if(this.currentObjective.isComplete() == true) {
+					Debug.debugMessage("!Objective Complete!");
+					this.incrementScore(this.currentObjective.getScore());
+					this.loadScene();
+				}
+				this.setCurrentObjectiveText();
+			}
 		}
 		
 		/** ***************************** **/
