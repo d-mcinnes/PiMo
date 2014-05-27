@@ -30,6 +30,7 @@
 		private var document:Stage;
 		private var kinectInput:KinectInput;
 		private var rfidReader:RFIDReaderSingle;
+		private var gameInterface:GameInterface;
 		
 		/* Stage Objects */
 		private var stageOverlay:Sprite;
@@ -54,14 +55,6 @@
 		private var party:Array; //animals currently following the player
 		private var player:Player;
 		private var paused:Boolean = false;
-		
-		/* Interface Elements */
-		private var scoreTextField:TextField;
-		private var textFormat:TextFormat;
-		private var timerTextField:TextField;
-		private var objectiveTextField:TextField;
-		private var objectiveTextFormat:TextFormat;
-		private var gamePausedBackground:GamePausedBackground;
 		
 		/* Static Variables */
 		public static var SCREEN_SIZE_X:Number = 1024;
@@ -104,6 +97,8 @@
 			this.stageForeground = new Sprite();
 			this.stageOverlay = new Sprite();
 			
+			this.gameInterface = new GameInterface();
+			
 			this.score = 0;
 			this.party = new Array();
 			this.wild = new Array();
@@ -112,60 +107,6 @@
 			this.player.x = 50;
 			this.player.y = 400;
 			this.stagePlayer.addChild(this.player);
-			
-			this.scoreTextField = new TextField();
-			this.scoreTextField.y = 0;
-			this.scoreTextField.x = 10;
-			this.scoreTextField.width = 185;
-			this.scoreTextField.textColor = 0x000000;
-			this.scoreTextField.selectable = false;
-			
-			this.textFormat = new TextFormat();
-			this.textFormat.size = 25;
-			this.textFormat.align = TextFormatAlign.LEFT;
-			this.textFormat.bold = true;
-			this.textFormat.font = new ScoreFont().fontName;
-			
-			this.scoreTextField.defaultTextFormat = this.textFormat;
-			this.scoreTextField.text = "Score: " + this.score;
-			this.stageOverlay.addChild(this.scoreTextField);
-			
-			this.timerTextField = new TextField();
-			this.timerTextField.x = 10;
-			this.timerTextField.y = 30;
-			this.timerTextField.width = 185;
-			this.timerTextField.textColor = 0x000000;
-			this.timerTextField.selectable = false;
-			this.timerTextField.defaultTextFormat = this.textFormat;
-			this.timerTextField.text = "Time: ";
-			this.stageOverlay.addChild(this.timerTextField);
-			
-			this.objectiveTextFormat = new TextFormat();
-			this.objectiveTextFormat.size = 20;
-			this.objectiveTextFormat.align = TextFormatAlign.RIGHT;
-			this.objectiveTextFormat.bold = true;
-			this.objectiveTextFormat.font = new ScoreFont().fontName;
-			
-			this.objectiveTextField = new TextField();
-			this.objectiveTextField.x = GameController.SCREEN_SIZE_X - 410;
-			this.objectiveTextField.y = 5;
-			this.objectiveTextField.width = 400;
-			this.objectiveTextField.textColor = 0x000000;
-			this.objectiveTextField.selectable = false;
-			this.objectiveTextField.defaultTextFormat = this.objectiveTextFormat;
-			this.objectiveTextField.text = "";
-			this.stageOverlay.addChild(this.objectiveTextField);
-			
-			this.gamePausedBackground = new GamePausedBackground();
-			this.gamePausedBackground.x = 0;
-			this.gamePausedBackground.y = 0;
-			this.gamePausedBackground.visible = false;
-			this.stageOverlay.addChild(this.gamePausedBackground);
-			
-			var overlay:BlackOverlay = new BlackOverlay();
-			overlay.x = -300;
-			overlay.y = -110;
-			this.stageOverlay.addChild(overlay);
 			
 			this.document.addEventListener(KeyboardEvent.KEY_DOWN, keySpacePress);
 			
@@ -181,9 +122,7 @@
 			this.gameTimer = new Timer(1000, this.gameIncrement);
 			this.gameTimer.addEventListener(TimerEvent.TIMER, gameTimerEvent);
 			this.gameTimer.start();
-			
-			this.timerTextField.text = "Time: " + Debug.padChar(String(Math.floor(((this.gameIncrement - this.gameTimer.currentCount) / 60) % 60)), 2, '0', true) + 
-				":" + Debug.padChar(String((this.gameIncrement - this.gameTimer.currentCount) % 60), 2, '0', true);
+			this.gameInterface.setTimerText(this.gameIncrement, this.gameTimer.currentCount);
 			
 			Debug.debugMessage("Game Started");
 		}
@@ -202,7 +141,10 @@
 		public function getWildAnimals():Array {return this.wild;}
 		
 		public function getScore():Number {return this.score;}
-		public function incrementScore(increment:Number) {this.score += increment;}
+		public function incrementScore(increment:Number) {
+			this.score += increment;
+			this.gameInterface.setScoreText(this.score);
+		}
 		
 		/** Takes a class type and returns the number of many instances of that 
 		 ** animal which are currently in the party. **/
@@ -257,7 +199,6 @@
 			for each(var object in this.getScenery()) {
 				if((x > object.x && x < object.x + object.width) || 
 				   (width > object.x && width < object.x + object.width)) {
-					//Debug.debugMessage("Bad position: " + x);
 					return false;
 				}
 			}
@@ -351,21 +292,10 @@
 					if(this.player.getLeftPoint() == null || this.player.getRightPoint() == null) {
 						return;
 					}
-					//Debug.debugMessage("Left: " + this.player.getLeftPoint() + " Right: " + this.player.getRightPoint());
 					if(checkObjectBounds(object)) {
-						/*if(this.currentObjective != null) {
-							if(this.currentObjective.isComplete() == true) {
-								Debug.debugMessage("!Objective Complete!");
-							}
-						}*/
 						object.sceneryInteraction();
-						//var type:Class = object.getAnimalSpawnType();
-						//var animal:Animal = new type();
-						//spawnAnimal(animal, object.x, GameController.GROUND_HEIGHT);
 						object.setIsActive(false);
-						
 						this.checkCurrentObjective();
-						//Debug.debugMessage("Spawning " + animal.getName() + " at [" + object.x  + ", " + object.y + "]");*/
 					}
 				}
 			}
@@ -430,9 +360,7 @@
 			//TODO check for animal interactions
 			party.push(animal);
 			animal.playWalkAnimation();
-			//this.score += animal.getScore();
 			this.incrementScore(animal.getScore());
-			this.scoreTextField.text = "Score: " + this.getScore();
 			for each (var object in wild) {
 				if(object == animal) {
 					wild.splice(wild.indexOf(animal), 1);
@@ -440,7 +368,6 @@
 			}
 			this.checkCurrentObjective();
 			Debug.debugMessage("Attaching " + animal.getName());
-			//score += animal.getScore();
 		}
 		
 		/** Removes an animal from the players party. **/
@@ -516,10 +443,6 @@
 		/**   O B J E C T I V E S   **/
 		/** *********************** **/
 		
-		public function setObjectiveText(text:String) {
-			this.objectiveTextField.text = text;
-		}
-		
 		public function getCurrentObjective():Objective {return this.currentObjective;}
 		
 		public function generateObjective():Objective {
@@ -527,12 +450,13 @@
 			var reference:Class = getDefinitionByName(Assets.OBJECTIVES[0][number]) as Class;
 			this.currentObjective = new reference();
 			Debug.debugMessage("Objective Name: " + this.currentObjective.getName() + " Description: " + this.currentObjective.getDescription());
-			this.objectiveTextField.text = this.currentObjective.getDescription();
+			this.gameInterface.setObjectiveText(this.currentObjective);
 			return this.currentObjective;
 		}
 		
 		public function completeCurrentObjective() {this.getCurrentObjective().complete();}
-		public function setCurrentObjectiveText() {this.objectiveTextField.text = this.currentObjective.getDescription();}
+		public function setObjectiveText() {this.gameInterface.setObjectiveText(this.currentObjective);}
+		//public function setCurrentObjectiveText() {this.objectiveTextField.text = this.currentObjective.getDescription();}
 		
 		public function checkCurrentObjective() {
 			if(this.currentObjective != null) {
@@ -541,7 +465,7 @@
 					this.incrementScore(this.currentObjective.getScore());
 					this.loadScene();
 				}
-				this.setCurrentObjectiveText();
+				this.setObjectiveText();
 			}
 		}
 		
@@ -551,8 +475,7 @@
 		
 		/** Runs when _____ **/
 		private function gameTimerEvent(e:TimerEvent) {
-			this.timerTextField.text = "Time: " + Debug.padChar(String(Math.floor(((this.gameIncrement - this.gameTimer.currentCount) / 60) % 60)), 2, '0', true) + 
-				":" + Debug.padChar(String((this.gameIncrement - this.gameTimer.currentCount) % 60), 2, '0', true);
+			this.gameInterface.setTimerText(this.gameIncrement, this.gameTimer.currentCount);
 			if((this.gameIncrement - this.gameTimer.currentCount) <= 0) {
 				Debug.debugMessage("Game Timer Expired. Reloading Scene");
 				this.endGame();
@@ -609,8 +532,7 @@
 				this.rfidReader = null;
 				this.score = 0;
 				this.player = null;
-				this.scoreTextField = null;
-				this.textFormat = null;
+				this.gameInterface = null;
 			} catch(e:Error) {
 				Debug.debugMessage(e.toString());
 			}
@@ -625,8 +547,8 @@
 		public function pauseGame(message:String = "") {
 			if(this.isGamePaused() == false) {
 				this.paused = true;
-				this.gamePausedBackground.visible = true;
-				this.gamePausedBackground.messageBox.text = message;
+				this.gameInterface.setPausedVisible(true);
+				this.gameInterface.setPausedText(message);
 				this.gameTimer.stop();
 				Debug.debugMessage("Game paused");
 			}
@@ -636,8 +558,8 @@
 		public function resumeGame() {
 			if(this.paused == true) {
 				this.paused = false;
-				this.gamePausedBackground.visible = false;
-				this.gamePausedBackground.messageBox.text = "";
+				this.gameInterface.setPausedVisible(false);
+				this.gameInterface.setPausedText("");
 				this.gameTimer.start();
 				Debug.debugMessage("Game resumed");
 			}
