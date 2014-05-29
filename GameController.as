@@ -73,7 +73,7 @@
 			this.document = document;
 			this.kinectInput = new KinectInput(this);
 			this.rfidReader = new RFIDReaderSingle(this);
-			//this.socket = new SocketController();
+			this.socket = new SocketController();
 			Debug.debugMessage("Game Controller Started");
 		}
 		
@@ -144,6 +144,7 @@
 		public function getScenery():Array {return this.scenery;}
 		public function getParty():Array {return this.party;}
 		public function getWildAnimals():Array {return this.wild;}
+		public function getSocket():SocketController {return this.socket;}
 		
 		public function displayGameMessage(text:String) {this.gameInterface.displayGameMessage(text);}
 		

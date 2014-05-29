@@ -39,6 +39,7 @@
 		 **		F7 - Load Next Scene
 		 **		F8 - Pause/Resume Game
 		 **		F9 - Generate New Objective
+		 **		F10 - Reconnect to Socket
 		 **/
 		
 		/** Restarts the game when the user presses the F5 key. **/
@@ -67,6 +68,9 @@
 			}
 			if(e.keyCode == Keyboard.F9) {
 				GameController.getInstance().generateObjective();
+			}
+			if(e.keyCode == Keyboard.F10) {
+				GameController.getInstance().getSocket().reconnect();
 			}
 		}
 	}
