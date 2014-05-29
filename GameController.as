@@ -424,7 +424,8 @@
 			return false;
 		}
 		
-		/** **/
+		/** Takes an animal type and returns the number of animals of that type in the
+		 ** party. **/
 		public function getNumberAnimalInParty(animal:Class):Number {
 			var count:Number = 0;
 			for each(var object in this.party) {
@@ -435,15 +436,17 @@
 			return count;
 		}
 		
-		/** **/
+		/** Returns the number of animals which are currently in the players party. **/
 		public function getNumberOfAnimalsInParty():Number {return this.getParty().length;}
 		
+		/** Makes all animals in the players party face left. **/
 		public function setPartyFacingLeft() {
 			for each(var obj in this.getParty()) {
 				obj.setFacingAngleLeft();
 			}
 		}
 		
+		/** Makes all animals in the players party face right. **/
 		public function setPartyFacingRight() {
 			for each(var obj in this.getParty()) {
 				obj.setFacingAngleRight();
@@ -515,7 +518,7 @@
 					if(this.objectivesLevel >= 3) {
 						Debug.debugMessage("| Complete Game? |");
 					}
-					this.loadScene();
+					this.loadNextScene();
 				}
 				this.setObjectiveText();
 			}
@@ -532,6 +535,19 @@
 				Debug.debugMessage("Game Timer Expired. Reloading Scene");
 				this.endGame();
 			}
+		}
+		
+		public function loadNextScene() {
+			var timer:Timer = new Timer(1000);
+			var startLoadingScene:Function = function(e:TimerEvent):void {
+				timer.removeEventListener(TimerEvent.TIMER, startLoadingScene);
+				timer = null;
+				loadScene();
+				gameInterface.hideTransitionBackground(1);
+			}
+			this.gameInterface.displayTransitionBackground(1);
+			timer.addEventListener(TimerEvent.TIMER, startLoadingScene);
+			timer.start();
 		}
 		
 		/** Removes the current scene from the Game Controllers. **/

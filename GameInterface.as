@@ -14,6 +14,7 @@
 		private var gameMessageField:TextField;
 		private var gameMessageFormat:TextFormat;
 		private var gamePausedBackground:GamePausedBackground;
+		private var gameTransitionBackground:GameTransitionBackground;
 		
 		public function GameInterface() {
 			this.scoreTextField = new TextField();
@@ -61,13 +62,13 @@
 			
 			this.gameMessageFormat = new TextFormat();
 			this.gameMessageFormat.size = 25;
-			this.gameMessageFormat.align = TextFormatAlign.CENTER;
+			this.gameMessageFormat.align = TextFormatAlign.LEFT;
 			this.gameMessageFormat.bold = true;
 			this.gameMessageFormat.font = new ScoreFont().fontName;
 			
 			this.gameMessageField = new TextField();
-			this.gameMessageField.x = GameController.SCREEN_SIZE_X / 4;
-			this.gameMessageField.y = 5;
+			this.gameMessageField.x = 20;
+			this.gameMessageField.y = GameController.SCREEN_SIZE_Y / 3;
 			this.gameMessageField.width = GameController.SCREEN_SIZE_X / 2;
 			this.gameMessageField.textColor = 0x000000;
 			this.gameMessageField.selectable = false;
@@ -81,6 +82,12 @@
 			this.gamePausedBackground.y = 0;
 			this.gamePausedBackground.visible = false;
 			GameController.getInstance().getStageOverlay().addChild(this.gamePausedBackground);
+			
+			this.gameTransitionBackground = new GameTransitionBackground();
+			this.gameTransitionBackground.x = 0;
+			this.gameTransitionBackground.y = 0;
+			TweenLite.to(this.gameTransitionBackground, 0, {alpha:0});
+			GameController.getInstance().getStageOverlay().addChild(this.gameTransitionBackground);
 			
 			var overlay:BlackOverlay = new BlackOverlay();
 			overlay.x = -300;
@@ -107,8 +114,15 @@
 		public function displayGameMessage(text:String) {
 			TweenLite.to(this.gameMessageField, 0, {alpha:1});
 			this.gameMessageField.text = text;
-			this.gameMessageField.y = 150;
-			TweenLite.to(this.gameMessageField, 4, {y:120, delay:1.5, alpha:0});
+			TweenLite.to(this.gameMessageField, 4, {delay:1.5, alpha:0});
+		}
+		
+		public function displayTransitionBackground(time:Number) {
+			TweenLite.to(this.gameTransitionBackground, time, {alpha:1});
+		}
+		
+		public function hideTransitionBackground(time:Number) {
+			TweenLite.to(this.gameTransitionBackground, time, {alpha:0});
 		}
 	}
 }

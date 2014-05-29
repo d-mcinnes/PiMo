@@ -9,7 +9,7 @@
 			this.y = y;
 			this.scaleX = scale;
 			this.scaleY = scale;
-			this.setCooldownPeriod(10000);
+			this.setCooldownPeriod(15000);
 			this.setAnimalSpawnType(getDefinitionByName('deco3850.animals.Owl') as Class);
 		}
 		

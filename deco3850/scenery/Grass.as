@@ -9,7 +9,7 @@
 			this.y = y;
 			this.scaleX = scale;
 			this.scaleY = scale;
-			this.setCooldownPeriod(5000);
+			this.setCooldownPeriod(10000);
 			this.setAnimalSpawnType(getDefinitionByName('deco3850.animals.Rabbit') as Class);
 		}
 		
@@ -21,7 +21,7 @@
 			//}
 			//GameController.getInstance().createAnimal(this.getAnimalSpawnType(), this.x);
 			if(Debug.randomNumber(0, 1) == 0) {
-				GameController.getInstance().createAnimal(getDefinitionByName("deco3850.animals.Rat") as Class, this.x);
+				GameController.getInstance().createAnimal(getDefinitionByName("deco3850.animals.Rabbit") as Class, this.x);
 			} else {
 				GameController.getInstance().createAnimal(getDefinitionByName("deco3850.animals.Rat") as Class, this.x);
 			}
