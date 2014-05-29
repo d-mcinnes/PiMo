@@ -30,6 +30,7 @@
 		private var document:Stage;
 		private var kinectInput:KinectInput;
 		private var rfidReader:RFIDReaderSingle;
+		private var socket:SocketController;
 		private var gameInterface:GameInterface;
 		
 		/* Stage Objects */
@@ -47,6 +48,7 @@
 		/* Game Duration Variables */
 		private var gameTimer:Timer;
 		private var gameIncrement:Number = 2 * 60;
+		private var objectivesLevel:Number = 0;
 		
 		/* Gameplay Objects */
 		private var scenery:Array; //interactable objects in the background
@@ -70,6 +72,7 @@
 			this.document = document;
 			this.kinectInput = new KinectInput(this);
 			this.rfidReader = new RFIDReaderSingle(this);
+			//this.socket = new SocketController();
 			Debug.debugMessage("Game Controller Started");
 		}
 		
@@ -100,6 +103,7 @@
 			this.gameInterface = new GameInterface();
 			
 			this.score = 0;
+			this.objectivesLevel = 0;
 			this.party = new Array();
 			this.wild = new Array();
 			
@@ -446,8 +450,8 @@
 		public function getCurrentObjective():Objective {return this.currentObjective;}
 		
 		public function generateObjective():Objective {
-			var number:Number = Debug.randomNumber(0, Assets.OBJECTIVES[0].length - 1);
-			var reference:Class = getDefinitionByName(Assets.OBJECTIVES[0][number]) as Class;
+			var number:Number = Debug.randomNumber(0, Assets.OBJECTIVES[this.objectivesLevel].length - 1);
+			var reference:Class = getDefinitionByName(Assets.OBJECTIVES[this.objectivesLevel][number]) as Class;
 			this.currentObjective = new reference();
 			Debug.debugMessage("Objective Name: " + this.currentObjective.getName() + " Description: " + this.currentObjective.getDescription());
 			this.gameInterface.setObjectiveText(this.currentObjective);
@@ -463,6 +467,10 @@
 				if(this.currentObjective.isComplete() == true) {
 					Debug.debugMessage("!Objective Complete!");
 					this.incrementScore(this.currentObjective.getScore());
+					this.objectivesLevel++;
+					if(this.objectivesLevel >= 3) {
+						Debug.debugMessage("| Complete Game? |");
+					}
 					this.loadScene();
 				}
 				this.setObjectiveText();

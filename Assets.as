@@ -3,8 +3,10 @@
 	
 	public class Assets {
 		public static var OBJECTIVES:Array = [['deco3850.objectives.ThreeRabbits'], 
-											  ['deco3850.objectives.L2'], 
-											  ['deco3850.objectives.L3']];
+											  ['deco3850.objectives.ThreeRabbits'], 
+											  ['deco3850.objectives.GetTiger']];
+		/* Objectives */
 		ThreeRabbits;
+		GetTiger;
 	}
 }
