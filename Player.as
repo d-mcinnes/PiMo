@@ -88,7 +88,13 @@
 			//}
 			
 			if(GameController.getInstance().isGamePaused() == false) {
-				this.x = 1024 * GameController.getInstance().getKinectSkeleton().getPositionRelative().x;
+				var xPos:Number = GameController.SCREEN_SIZE_X * GameController.getInstance().getKinectSkeleton().getPositionRelative().x;
+				if(xPos < this.x) {
+					GameController.getInstance().setPartyFacingLeft();
+				} else if(xPos > this.x) {
+					GameController.getInstance().setPartyFacingRight();
+				}
+				this.x = xPos;
 			}
 			
 			/* Clear current Player and create Neck and Head. */

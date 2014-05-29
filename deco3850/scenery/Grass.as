@@ -19,7 +19,12 @@
 			//	Debug.debugMessage("Hello");
 			//	GameController.getInstance().removeAnimalType(type);
 			//}
-			GameController.getInstance().createAnimal(this.getAnimalSpawnType(), this.x);
+			//GameController.getInstance().createAnimal(this.getAnimalSpawnType(), this.x);
+			if(Debug.randomNumber(0, 1) == 0) {
+				GameController.getInstance().createAnimal(getDefinitionByName("deco3850.animals.Rat") as Class, this.x);
+			} else {
+				GameController.getInstance().createAnimal(getDefinitionByName("deco3850.animals.Rat") as Class, this.x);
+			}
 			return true;
 		}
 	}

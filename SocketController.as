@@ -1,7 +1,11 @@
 ﻿package {
 	import flash.debug.Debug;
+	import flash.events.Event;
+	import flash.events.IOErrorEvent;
+	import flash.events.SecurityErrorEvent;
+	import flash.events.ProgressEvent;
 	import flash.net.Socket;
-	import flash.events.*;
+	import flash.system.Security;
 	
 	public class SocketController {
 		private var socket:Socket;
@@ -42,7 +46,7 @@
 		private function onResponse(e:ProgressEvent) {
 			if(socket.bytesAvailable > 0) {
 				Debug.debugMessage("	Socket Output: " + socket.readUTFBytes(socket.bytesAvailable));
-				//GameController.getInstance().activateTag(this.processInput(socket.readUTFBytes(socket.bytesAvailable))s);
+				//GameController.getInstance().activateTag(this.processInput(socket.readUTFBytes(socket.bytesAvailable)));
 			}
 		}
 		

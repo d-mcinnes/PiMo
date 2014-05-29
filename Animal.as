@@ -27,6 +27,15 @@
 			return false;
 		}
 		
+		/** Runs everytime the game attempts to attach an animal to the player. **/
+		public function interactionAttachGlobal():Boolean {
+			GameController.getInstance().displayGameMessage(this.getName() + " has joined your party.");
+			if(GameController.getInstance().getNumberOfAnimalsInParty() >= GameController.MAX_ANIMALS) {
+				// TODO: MAX ANIMALS
+			}
+			return true;
+		}
+		
 		public function startTimer() {
 			this.timer.start();
 		}
@@ -70,26 +79,34 @@
 		
 		/** Plays the animals idle animation. **/
 		public function playIdleAnimation() {
-			Debug.debugMessage("Playing idle animation for " + this.getName());
+			//Debug.debugMessage("Playing idle animation for " + this.getName());
 			this.stop();
 		}
 		
 		/** Plays the animals walk animation. **/
 		public function playWalkAnimation() {
-			Debug.debugMessage("Playing walk animation for " + this.getName());
+			//Debug.debugMessage("Playing walk animation for " + this.getName());
 			this.play();
 		}
 		
 		/** Sets the facing angle of the animal to face left. **/
 		public function setFacingAngleLeft() {
-			Debug.debugMessage("Set facing angle to left for " + this.getName());
-			this.scaleX *= -1;
+			//Debug.debugMessage("Set facing angle to left for " + this.getName());
+			if(this.scaleX > 0) {
+				this.scaleX *= -1;
+			} else {
+				this.scaleX *= 1;
+			}
 		}
 		
 		/** Sets the facing angle of the animal to face right. **/
 		public function setFacingAngleRight() {
-			Debug.debugMessage("Set facing angle to right for " + this.getName());
-			this.scaleX *= 1;
+			//Debug.debugMessage("Set facing angle to right for " + this.getName());
+			if(this.scaleX < 0) {
+				this.scaleX *= -1;
+			} else {
+				this.scaleX *= 1;
+			}
 		}
 	}
 }

@@ -3,7 +3,6 @@
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
-	
 	import com.greensock.TweenLite;
 	
 	public class GameInterface {
@@ -12,6 +11,8 @@
 		private var timerTextField:TextField;
 		private var objectiveTextField:TextField;
 		private var objectiveTextFormat:TextFormat;
+		private var gameMessageField:TextField;
+		private var gameMessageFormat:TextFormat;
 		private var gamePausedBackground:GamePausedBackground;
 		
 		public function GameInterface() {
@@ -58,6 +59,23 @@
 			this.objectiveTextField.text = "";
 			GameController.getInstance().getStageOverlay().addChild(this.objectiveTextField);
 			
+			this.gameMessageFormat = new TextFormat();
+			this.gameMessageFormat.size = 25;
+			this.gameMessageFormat.align = TextFormatAlign.CENTER;
+			this.gameMessageFormat.bold = true;
+			this.gameMessageFormat.font = new ScoreFont().fontName;
+			
+			this.gameMessageField = new TextField();
+			this.gameMessageField.x = GameController.SCREEN_SIZE_X / 4;
+			this.gameMessageField.y = 5;
+			this.gameMessageField.width = GameController.SCREEN_SIZE_X / 2;
+			this.gameMessageField.textColor = 0x000000;
+			this.gameMessageField.selectable = false;
+			this.gameMessageField.defaultTextFormat = this.gameMessageFormat;
+			this.gameMessageField.text = "";
+			TweenLite.to(this.gameMessageField, 0, {alpha:0});
+			GameController.getInstance().getStageOverlay().addChild(this.gameMessageField);
+			
 			this.gamePausedBackground = new GamePausedBackground();
 			this.gamePausedBackground.x = 0;
 			this.gamePausedBackground.y = 0;
@@ -85,5 +103,12 @@
 		
 		public function setPausedVisible(visible:Boolean) {this.gamePausedBackground.visible = visible;}
 		public function setPausedText(text:String) {this.gamePausedBackground.messageBox.text = text;}
+		
+		public function displayGameMessage(text:String) {
+			TweenLite.to(this.gameMessageField, 0, {alpha:1});
+			this.gameMessageField.text = text;
+			this.gameMessageField.y = 150;
+			TweenLite.to(this.gameMessageField, 4, {y:120, delay:1.5, alpha:0});
+		}
 	}
 }

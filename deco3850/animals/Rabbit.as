@@ -1,6 +1,7 @@
 ﻿package deco3850.animals {
 	import flash.debug.Debug;
 	import flash.display.MovieClip;
+	import flash.utils.getDefinitionByName;
 	
 	public class Rabbit extends Animal {
 		
@@ -13,6 +14,9 @@
 		
 		override public function interactionAttach():Boolean {
 			Debug.debugMessage("Aniaml " + this.getName() + " attached");
+			if(GameController.getInstance().getNumberAnimalInParty(getDefinitionByName("deco3850.animals.Rabbit") as Class) == 2) {
+				GameController.getInstance().attachAnimal(new Rabbit());
+			}
 			return true;
 		}
 	}

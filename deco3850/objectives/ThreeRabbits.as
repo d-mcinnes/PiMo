@@ -14,10 +14,9 @@
 								GameController.getInstance().getNumberAnimalInParty(getDefinitionByName("deco3850.animals.Rabbit") as Class) + 
 								"/3).");
 			if(GameController.getInstance().getNumberAnimalInParty(Class(getDefinitionByName("deco3850.animals.Rabbit"))) >= 3) {
-				Debug.debugMessage("Objective is complete");
+				Debug.debugMessage("Objective [" + this.getName() + "] is complete");
 				return true;
 			} else {
-				Debug.debugMessage("Objective is not complete");
 				return false;
 			}
 		}

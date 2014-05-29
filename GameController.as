@@ -62,6 +62,7 @@
 		public static var SCREEN_SIZE_X:Number = 1024;
 		public static var SCREEN_SIZE_Y:Number = 600;
 		public static var GROUND_HEIGHT:Number = 440;
+		public static var MAX_ANIMALS:Number = 6;
 		public static var DEBUG_MODE_ON:Boolean = true;
 		public static var DEBUG_DISPLAY_MODE_ON:Boolean = false;
 
@@ -143,6 +144,8 @@
 		public function getScenery():Array {return this.scenery;}
 		public function getParty():Array {return this.party;}
 		public function getWildAnimals():Array {return this.wild;}
+		
+		public function displayGameMessage(text:String) {this.gameInterface.displayGameMessage(text);}
 		
 		public function getScore():Number {return this.score;}
 		public function incrementScore(increment:Number) {
@@ -321,7 +324,7 @@
 		
 		/** Spawns an animal at the given point. Takes an animal, and an x and
 		 ** y coordinates. **/
-		private function spawnAnimal(animal:Animal, x:Number, y:Number):void {
+		public function spawnAnimal(animal:Animal, x:Number, y:Number):void {
 			this.wild.push(animal);
 			animal.x = x;
 			animal.y = y;
@@ -359,11 +362,13 @@
 		}
 		
 		/** Adds an animal to the players party. **/
-		private function attachAnimal(animal:Animal):void {
+		public function attachAnimal(animal:Animal):void {
 			//clear timer for despawnAnimal
 			//TODO check for animal interactions
 			party.push(animal);
 			animal.playWalkAnimation();
+			animal.interactionAttachGlobal();
+			animal.interactionAttach();
 			this.incrementScore(animal.getScore());
 			for each (var object in wild) {
 				if(object == animal) {
@@ -397,6 +402,28 @@
 			return false;
 		}
 		
+		/** Takes an animal type and checks to see whether or not that
+		 ** animal has already spawned in the wild. **/
+		public function getIsAnimalInWild(animal:Class):Boolean {
+			for each(var object in this.getWildAnimals()) {
+				if(object.getType() == animal) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		/** Takes an animal type and checks to see whether or not that
+		 ** animal is already in the players party. **/
+		public function getIsAnimalInParty(animal:Class):Boolean {
+			for each(var object in this.getParty()) {
+				if(object.getType() == animal) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
 		/** **/
 		public function getNumberAnimalInParty(animal:Class):Number {
 			var count:Number = 0;
@@ -406,6 +433,21 @@
 				}
 			}
 			return count;
+		}
+		
+		/** **/
+		public function getNumberOfAnimalsInParty():Number {return this.getParty().length;}
+		
+		public function setPartyFacingLeft() {
+			for each(var obj in this.getParty()) {
+				obj.setFacingAngleLeft();
+			}
+		}
+		
+		public function setPartyFacingRight() {
+			for each(var obj in this.getParty()) {
+				obj.setFacingAngleRight();
+			}
 		}
 		
 		/** Runs when the player activates one of the Arduino tags. **/
@@ -432,6 +474,8 @@
 				this.activateTag('all');
 			} else if(e.keyCode == Keyboard.R) {
 				this.activateTag('rabbit');
+			} else if(e.keyCode == Keyboard.T) {
+				this.activateTag('rat');
 			} else if(e.keyCode == Keyboard.D) {
 				this.activateTag('dog');
 			} else if(e.keyCode == Keyboard.C) {
