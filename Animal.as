@@ -13,8 +13,7 @@
 		private var timer:Timer;
 		
 		public function Animal() {
-			//this.timer = new Timer(8000);
-			//this.timer.addEventListener(TimerEvent.TIMER, timerEvent);
+			
 		}
 		
 		public function createTimer(time:Number) {
@@ -79,10 +78,8 @@
 		
 		/** Plays the animals idle animation. **/
 		public function playIdleAnimation() {
-			//if(this.isPlaying == true) {
-				this.stop();
-				this.gotoAndStop(40);
-			//}
+			this.stop();
+			this.gotoAndStop(40);
 		}
 		
 		/** Plays the animals walk animation. **/
@@ -94,7 +91,6 @@
 		
 		/** Sets the facing angle of the animal to face left. **/
 		public function setFacingAngleLeft() {
-			//Debug.debugMessage("Set facing angle to left for " + this.getName());
 			if(this.scaleX > 0) {
 				this.scaleX *= -1;
 			} else {
@@ -104,7 +100,6 @@
 		
 		/** Sets the facing angle of the animal to face right. **/
 		public function setFacingAngleRight() {
-			//Debug.debugMessage("Set facing angle to right for " + this.getName());
 			if(this.scaleX < 0) {
 				this.scaleX *= -1;
 			} else {

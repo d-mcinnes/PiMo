@@ -7,8 +7,9 @@
 		public function Dog() {
 			this.setName("Dog");
 			this.createTimer(4000);
-			this.setTags(['all', 'dog', '010232cd72', '010238914a', '0102387557']);
-			this.setScore(10);
+			this.setTags(['all', 'dog', '2B005B8401F5', '2B005B7FFCF3', '2B005B763731', '2B005BDCFD51', 
+						  '2B005BB1D617', '2B005BA5895C', '2B005BCD4DF0', '2B005B783830']);
+			this.setScore(40);
 		}
 		
 		override public function interactionAttach():Boolean {

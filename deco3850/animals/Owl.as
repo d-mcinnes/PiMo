@@ -6,8 +6,9 @@
 		public function Owl() {
 			this.setName("Owl");
 			this.createTimer(4000);
-			this.setTags(['all', 'owl', '010232cd72', '010238914a', '0102387557']);
-			this.setScore(10);
+			this.setTags(['all', 'owl', '2B005BC78037', '2B005B77ECEB', '2B005BD01FBF', '2B005B76B7B1', 
+						  '2B005BB69650', '2B005BC51FAA', '2B005BAD29F4', '2B005BBC0AC6']);
+			this.setScore(20);
 		}
 		
 		override public function interactionAttach():Boolean {

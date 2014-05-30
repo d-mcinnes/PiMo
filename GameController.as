@@ -309,6 +309,14 @@
 			}
 		}
 		
+		/** *********************** **/
+		/**   B A C K G R O U N D   **/
+		/** *********************** **/
+		
+		private function generateBackground() {
+			// TODO: Generate Random Background
+		}
+		
 		/** ***************** **/
 		/**   A N I M A L S   **/
 		/** ***************** **/

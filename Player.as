@@ -11,36 +11,17 @@
 	import flash.utils.Timer;
 	
 	public class Player extends MovieClip {
-		//private var gameController:GameController;
 		private var kinectSkeleton:KinectSkeleton;
-		//private var player:Sprite;
-		//private var document:Stage;
 		private var timer:Timer;
 		private var xPosPast:Number;
 		
 		private var leftPoint:Point;
 		private var rightPoint:Point;
-		private var outOfBounds:OutOfBoundsBackground;
 		
 		private var SIZE_LIMB:Number = 3;
 		private var SIZE_CHEST:Number = 6;
-
-		//public function Player(kinectSkeleton:KinectSkeleton, document:Stage) {
+		
 		public function Player() {
-			//this.gameController = gameController;
-			//this.player = new Sprite();
-			
-			this.outOfBounds = new OutOfBoundsBackground();
-			this.outOfBounds.x = 0;
-			this.outOfBounds.y = 0;
-			this.outOfBounds.visible = false;
-			GameController.getInstance().getStageOverlay().addChild(this.outOfBounds);
-			
-			//this.player.graphics.lineStyle(3,0x00ff00);
-			//this.player.graphics.beginFill(0x000000);
-			//this.player.graphics.drawRect(0,0,100,100);
-			//this.player.graphics.endFill();
-			
 			this.timer = new Timer(500, 0);
 			this.timer.addEventListener(TimerEvent.TIMER, timerEventListener);
 			this.timer.start();
@@ -53,8 +34,6 @@
 				this.xPosPast = 0;
 			}
 		}
-		
-		//public function getPlayerAvatar():Sprite {return this.player;}
 		
 		/** Renders the player on the screen. **/
 		public function renderPlayer() {
@@ -75,33 +54,6 @@
 													 GameController.getInstance().getKinectSkeleton().getRightElbow().y, 
 													 GameController.getInstance().getKinectSkeleton().getRightHand().x,
 													 GameController.getInstance().getKinectSkeleton().getRightHand().y);
-			
-			/* Check distance from the Kinect. */
-			//if(GameController.getInstance().getKinectSkeleton().getDistance().z < 1.0) {
-			//	GameController.getInstance().pauseGame("Too close to the Kinect.");
-				//this.outOfBounds.messageBox.text = "Too close to the Kinect.";
-				//this.outOfBounds.visible = true;
-			//	return;
-			//} else {
-			//	this.outOfBounds.visible = false;
-			//}
-			
-			/* Check whether the user is out of the bounds of the screen. */
-			//var xPosition = 1024 * GameController.getInstance().getKinectSkeleton().getPositionRelative().x;
-			//if(xPosition <= 140) {
-			//	GameController.getInstance().pauseGame("Enter playing area to resume game.");
-				//this.outOfBounds.messageBox.text = "Out of Bounds - Left.";
-				//this.outOfBounds.visible = true;
-			//	return;
-			//} else if(xPosition >= 900) {
-			//	GameController.getInstance().pauseGame("Enter playing area to resume game.");
-				//this.outOfBounds.messageBox.text = "Out of Bounds - Right.";
-				//this.outOfBounds.visible = true;
-			//	return;
-			//} else {
-				//this.outOfBounds.visible = false;
-				//this.x = xPosition;
-			//}
 			
 			if(GameController.getInstance().isGamePaused() == false) {
 				var xPos:Number = GameController.SCREEN_SIZE_X * GameController.getInstance().getKinectSkeleton().getPositionRelative().x;
@@ -139,8 +91,6 @@
 			this.createLine(neckPoint, leftArmElbow);
 			this.createLine(leftArmElbow, getPolarPoint(leftArmElbow, leftArmLowerAngle, SIZE_LIMB));
 			this.leftPoint = getPolarPoint(leftArmElbow, leftArmLowerAngle, SIZE_LIMB);
-			//Debug.debugMessage("Left Point: " + this.leftPoint.x + ", " + this.leftPoint.y);
-			//this.createCircle(this.leftPoint, 5);
 			
 			/* Render Right Arm */
 			var rightArmElbow = getPolarPoint(neckPoint, rightArmUpperAngle, SIZE_LIMB);
