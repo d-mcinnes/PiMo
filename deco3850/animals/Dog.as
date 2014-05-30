@@ -14,7 +14,7 @@
 		
 		override public function interactionAttach():Boolean {
 			if(GameController.getInstance().getNumberAnimalInParty(Cat.getClass()) >= 1) {
-				GameController.getInstance().removeAnimalType(Cat.getClass()) as Class);
+				GameController.getInstance().removeAnimalType(Cat.getClass());
 			}
 			return true;
 		}

@@ -18,6 +18,14 @@
 			return true;
 		}
 		
+		override public function playIdleAnimation() {
+			
+		}
+		
+		override public function playWalkAnimation() {
+			
+		}
+		
 		public static function getClass():Class {return getDefinitionByName("deco3850.animals.Owl") as Class;}
 	}
 }
