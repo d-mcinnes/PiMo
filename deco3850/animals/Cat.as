@@ -12,10 +12,15 @@
 		}
 		
 		override public function interactionAttach():Boolean {
-			if(GameController.getInstance().getNumberAnimalInParty(getDefinitionByName("deco3850.animals.Rat") as Class) >= 1) {
+			/*if(GameController.getInstance().getNumberAnimalInParty(getDefinitionByName("deco3850.animals.Rat") as Class) >= 1) {
 				GameController.getInstance().removeAnimalType(getDefinitionByName("deco3850.animals.Rat") as Class);
+			}*/
+			if(GameController.getInstance().getNumberAnimalInParty(Rat.getClass()) >= 1) {
+				GameController.getInstance().removeAnimalType(Rat.getClass());
 			}
 			return true;
 		}
+		
+		public static function getClass():Class {return getDefinitionByName("deco3850.animals.Cat") as Class;}
 	}
 }

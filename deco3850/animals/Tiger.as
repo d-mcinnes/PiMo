@@ -1,5 +1,6 @@
 ﻿package deco3850.animals {
 	import flash.display.MovieClip;
+	import flash.utils.getDefinitionByName;
 	
 	public class Tiger extends Animal {
 		
@@ -10,5 +11,11 @@
 						  '2B005BB84B83', '2B005BDD0DA0', '2B005B8DCD30', '2B005B809C6C']);
 			this.setScore(10);
 		}
+		
+		override public function interactionAttach():Boolean {
+			return true;
+		}
+		
+		public static function getClass():Class {return getDefinitionByName("deco3850.animals.Tiger") as Class;}
 	}
 }

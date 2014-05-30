@@ -18,5 +18,7 @@
 			}
 			return true;
 		}
+		
+		public static function getClass():Class {return getDefinitionByName("deco3850.animals.Dog") as Class;}
 	}
 }
