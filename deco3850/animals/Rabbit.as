@@ -16,7 +16,7 @@
 		}
 		
 		override public function interactionAttach():Boolean {
-			if(GameController.getInstance().getNumberAnimalInParty(getDefinitionByName("deco3850.animals.Rabbit") as Class) == 2) {
+			if(GameController.getInstance().getNumberAnimalInParty(Rabbit.getClass()) == 2) {
 				GameController.getInstance().attachAnimal(new Rabbit());
 				GameController.getInstance().displayGameMessage("Three Rabbits Thing.");
 			}

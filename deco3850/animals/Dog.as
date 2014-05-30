@@ -13,8 +13,8 @@
 		}
 		
 		override public function interactionAttach():Boolean {
-			if(GameController.getInstance().getNumberAnimalInParty(getDefinitionByName("deco3850.animals.Cat") as Class) >= 1) {
-				GameController.getInstance().removeAnimalType(getDefinitionByName("deco3850.animals.Cat") as Class);
+			if(GameController.getInstance().getNumberAnimalInParty(Cat.getClass()) >= 1) {
+				GameController.getInstance().removeAnimalType(Cat.getClass()) as Class);
 			}
 			return true;
 		}
