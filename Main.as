@@ -12,17 +12,9 @@
 	public class Main extends MovieClip {
 		public function Main() {
 			stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, detectKeyPress);
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, restartGame);
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyPressEvent);
 			Mouse.hide();
-			this.screenStartScreen.visible = false;
 			startGame();
-		}
-		
-		/** Runs when the user presses any key. **/
-		private function detectKeyPress(e:KeyboardEvent) {
-			stage.removeEventListener(KeyboardEvent.KEY_DOWN, detectKeyPress);
-			//startGame();
 		}
 		
 		/** Starts a new game. **/
@@ -43,7 +35,7 @@
 		 **/
 		
 		/** Restarts the game when the user presses the F5 key. **/
-		private function restartGame(e:KeyboardEvent) {
+		private function keyPressEvent(e:KeyboardEvent) {
 			if(e.keyCode == Keyboard.F5) {
 				GameController.getInstance().endGame();
 			}

@@ -3,7 +3,6 @@
 	import flash.utils.getDefinitionByName;
 	
 	public class Owl extends Animal {
-		
 		public function Owl() {
 			this.setName("Owl");
 			this.createTimer(4000);
@@ -14,7 +13,6 @@
 		override public function interactionAttach():Boolean {
 			if(GameController.getInstance().getNumberAnimalInParty(getDefinitionByName("deco3850.animals.Rat") as Class) >= 1) {
 				GameController.getInstance().removeAnimalType(getDefinitionByName("deco3850.animals.Rat") as Class);
-				Debug.debugMessage("Owl: Removing Rat");
 			}
 			return true;
 		}

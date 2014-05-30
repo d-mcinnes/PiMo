@@ -41,7 +41,7 @@
 			//this.player.graphics.drawRect(0,0,100,100);
 			//this.player.graphics.endFill();
 			
-			this.timer = new Timer(1000, 0);
+			this.timer = new Timer(500, 0);
 			this.timer.addEventListener(TimerEvent.TIMER, timerEventListener);
 			this.timer.start();
 		}
@@ -105,7 +105,7 @@
 			
 			if(GameController.getInstance().isGamePaused() == false) {
 				var xPos:Number = GameController.SCREEN_SIZE_X * GameController.getInstance().getKinectSkeleton().getPositionRelative().x;
-				if(Math.abs(xPos - this.xPosPast) < 20) {
+				if(Math.abs(xPos - this.xPosPast) < 10) {
 					GameController.getInstance().setPartyIdleAnimation();
 				} else if(xPos < this.xPosPast) {
 					GameController.getInstance().setPartyFacingLeft();

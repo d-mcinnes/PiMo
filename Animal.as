@@ -81,13 +81,14 @@
 		public function playIdleAnimation() {
 			//if(this.isPlaying == true) {
 				this.stop();
+				this.gotoAndStop(40);
 			//}
 		}
 		
 		/** Plays the animals walk animation. **/
 		public function playWalkAnimation() {
 			if(this.isPlaying == false) {
-				this.play();
+				this.gotoAndPlay(1);
 			}
 		}
 		
