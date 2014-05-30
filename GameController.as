@@ -71,7 +71,7 @@
 		 */
 		public function GameController(document:Stage) {
 			this.document = document;
-			this.kinectInput = new KinectInput(this);
+			this.kinectInput = new KinectInput();
 			this.rfidReader = new RFIDReaderSingle(this);
 			this.socket = new SocketController();
 			Debug.debugMessage("Game Controller Started");
@@ -147,6 +147,7 @@
 		public function getSocket():SocketController {return this.socket;}
 		
 		public function displayGameMessage(text:String) {this.gameInterface.displayGameMessage(text);}
+		public function initialisePlayerSkeleton() {this.player.initialisePlayer();}
 		
 		public function getScore():Number {return this.score;}
 		public function incrementScore(increment:Number) {
@@ -501,7 +502,6 @@
 			var number:Number = Debug.randomNumber(0, Assets.OBJECTIVES[this.objectivesLevel].length - 1);
 			var reference:Class = getDefinitionByName(Assets.OBJECTIVES[this.objectivesLevel][number]) as Class;
 			this.currentObjective = new reference();
-			Debug.debugMessage("Objective Name: " + this.currentObjective.getName() + " Description: " + this.currentObjective.getDescription());
 			this.gameInterface.setObjectiveText(this.currentObjective);
 			return this.currentObjective;
 		}

@@ -9,39 +9,49 @@
 	import flash.text.Font;
 	
 	public class Player extends MovieClip {
-		//private var gameController:GameController;
-		private var kinectSkeleton:KinectSkeleton;
-		private var player:Sprite;
-		private var document:Stage;
+		private var skeleton:KinectSkeleton;
+		//private var player:Sprite;
+		//private var document:Stage;
 		
 		private var leftPoint:Point;
 		private var rightPoint:Point;
 		private var outOfBounds:OutOfBoundsBackground;
 		
+		private var head:Point;
+		private var neck:Point;
+		private var leftElbow:Point;
+		private var leftHand:Point;
+		private var rightElbow:Point;
+		private var rightHand:Point;
+		private var leftKnee:Point;
+		private var leftFoot:Point;
+		private var rightKnee:Point;
+		private var rightFoot:Point;
+		
 		private var SIZE_LIMB:Number = 3;
 		private var SIZE_CHEST:Number = 6;
-
-		//public function Player(kinectSkeleton:KinectSkeleton, document:Stage) {
+		
 		public function Player() {
-			//this.gameController = gameController;
-			this.player = new Sprite();
 			
-			this.outOfBounds = new OutOfBoundsBackground();
-			this.outOfBounds.x = 0;
-			this.outOfBounds.y = 0;
-			this.outOfBounds.visible = false;
-			GameController.getInstance().getStageOverlay().addChild(this.outOfBounds);
-			
-			this.player.graphics.lineStyle(3,0x00ff00);
-			this.player.graphics.beginFill(0x000000);
-			this.player.graphics.drawRect(0,0,100,100);
-			this.player.graphics.endFill();
 		}
 		
-		public function getPlayerAvatar():Sprite {return this.player;}
+		public function initialisePlayer() {
+			/* Set Points */
+			/*this.neck = this.getPolarPoint(new Point(0, 0), 
+										   getAnglePoint(new Point(0, 0), 
+														 GameController.getInstance().getKinectSkeleton().getNeck()), 
+										   SIZE_CHEST);
+			this.createLine(new Point(0, 0), this.neck);*/
+		}
+		
+		public function renderPlayer() {
+			
+		}
+		
+		//public function getPlayerAvatar():Sprite {return this.player;}
 		
 		/** Renders the player on the screen. **/
-		public function renderPlayer() {
+		public function renderPlayer2() {
 			/* Calculate Angles. */
 			var leftArmUpperAngle:Number = getAngle(GameController.getInstance().getKinectSkeleton().getLeftShoulder().x, 
 													GameController.getInstance().getKinectSkeleton().getLeftShoulder().y, 
@@ -59,33 +69,6 @@
 													 GameController.getInstance().getKinectSkeleton().getRightElbow().y, 
 													 GameController.getInstance().getKinectSkeleton().getRightHand().x,
 													 GameController.getInstance().getKinectSkeleton().getRightHand().y);
-			
-			/* Check distance from the Kinect. */
-			//if(GameController.getInstance().getKinectSkeleton().getDistance().z < 1.0) {
-			//	GameController.getInstance().pauseGame("Too close to the Kinect.");
-				//this.outOfBounds.messageBox.text = "Too close to the Kinect.";
-				//this.outOfBounds.visible = true;
-			//	return;
-			//} else {
-			//	this.outOfBounds.visible = false;
-			//}
-			
-			/* Check whether the user is out of the bounds of the screen. */
-			//var xPosition = 1024 * GameController.getInstance().getKinectSkeleton().getPositionRelative().x;
-			//if(xPosition <= 140) {
-			//	GameController.getInstance().pauseGame("Enter playing area to resume game.");
-				//this.outOfBounds.messageBox.text = "Out of Bounds - Left.";
-				//this.outOfBounds.visible = true;
-			//	return;
-			//} else if(xPosition >= 900) {
-			//	GameController.getInstance().pauseGame("Enter playing area to resume game.");
-				//this.outOfBounds.messageBox.text = "Out of Bounds - Right.";
-				//this.outOfBounds.visible = true;
-			//	return;
-			//} else {
-				//this.outOfBounds.visible = false;
-				//this.x = xPosition;
-			//}
 			
 			if(GameController.getInstance().isGamePaused() == false) {
 				var xPos:Number = GameController.SCREEN_SIZE_X * GameController.getInstance().getKinectSkeleton().getPositionRelative().x;
@@ -119,15 +102,12 @@
 			this.createLine(neckPoint, leftArmElbow);
 			this.createLine(leftArmElbow, getPolarPoint(leftArmElbow, leftArmLowerAngle, SIZE_LIMB));
 			this.leftPoint = getPolarPoint(leftArmElbow, leftArmLowerAngle, SIZE_LIMB);
-			//Debug.debugMessage("Left Point: " + this.leftPoint.x + ", " + this.leftPoint.y);
-			//this.createCircle(this.leftPoint, 5);
 			
 			/* Render Right Arm */
 			var rightArmElbow = getPolarPoint(neckPoint, rightArmUpperAngle, SIZE_LIMB);
 			this.createLine(neckPoint, rightArmElbow);
 			this.createLine(rightArmElbow, getPolarPoint(rightArmElbow, rightArmLowerAngle, SIZE_LIMB));
 			this.rightPoint = getPolarPoint(rightArmElbow, rightArmLowerAngle, SIZE_LIMB);
-			//this.createCircle(this.rightPoint, 5);
 						
 			/* Render Left Leg */
 			var leftKnee:Point = getPolarPoint(new Point(0, 0), 
@@ -182,6 +162,10 @@
 		
 		private function getAngle(x1:Number, y1:Number, x2:Number, y2:Number):Number {
 			return Math.atan2(y2 - y1, x2 - x1);
+		}
+		
+		private function getAnglePoint(p1:Point, p2:Point) {
+			return Math.atan2(p2.y - p1.y, p2.x - p1.x);
 		}
 		
 		private function getPolarPoint(startPoint:Point, degrees:Number, distance:Number):Point {
