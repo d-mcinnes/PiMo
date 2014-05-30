@@ -4,6 +4,7 @@
 	import flash.display.Graphics;
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
@@ -20,7 +21,10 @@
 	import deco3850.animals.*;
 	import deco3850.objectives.*;
 	import deco3850.scenery.*;
-
+	
+	import com.greensock.TweenLite;
+	import com.greensock.events.TweenEvent;
+	
 	public class GameController {
 		private static var gameController:GameController = null;
 		
@@ -358,16 +362,19 @@
 		
 		/** Despawns an animal from the screen. **/
 		private function despawnAnimal(animal:Animal):void {
-			try {
-				this.stageAnimals.removeChild(animal);
-			} catch(e:Error) {
-				Debug.debugMessage(e.toString());
+			var animalRemoveFunction:Function = function():void {
+				try {
+					stageAnimals.removeChild(animal);
+				} catch(e:Error) {
+					Debug.debugMessage(e.toString());
+				}
 			}
 			for each (var object in wild) {
 				if(object == animal) {
 					wild.splice(wild.indexOf(object), 1);
 				}
 			}
+			TweenLite.to(animal, 1, {alpha:0, onComplete:animalRemoveFunction});
 		}
 		
 		/** Adds an animal to the players party. **/

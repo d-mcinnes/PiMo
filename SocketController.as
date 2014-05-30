@@ -46,17 +46,20 @@
 		
 		private function onResponse(e:ProgressEvent) {
 			if(socket.bytesAvailable > 0) {
-				Debug.debugMessage("Socket Output: " + this.processInput(socket.readUTFBytes(socket.bytesAvailable)));
-				//GameController.getInstance().activateTag(this.processInput(socket.readUTFBytes(socket.bytesAvailable)));
+				//Debug.debugMessage("Process Test: " + processInput("asds32 rwrfwearq4tR *QW*(#RU* jsadfSDF"));
+				//Debug.debugMessage("Socket Output: " + this.processInput(socket.readUTFBytes(socket.bytesAvailable)));
+				GameController.getInstance().activateTag(this.processInput(socket.readUTFBytes(socket.bytesAvailable)));
 			}
 		}
 		
 		private function processInput(input:String):String {
-			var reg:RegExp = new RegExp(/[^0-9)]+/);
-			//var s:String = "dsfa34 t34te rger gweaf ewaf weafrw4f4";
-			//s.replace(reg, "");
-			//Debug.debugMessage("ADASD: " + s);
-			return input.replace(reg, "");
+			var reg:RegExp = new RegExp(/^[a-zA-Z0-9]+/);
+			var match = reg.exec(input);
+			if (match != null) {
+				return match[0];
+			} else {
+				return "";
+			}
 		}
 		
 		public function reconnect() {
