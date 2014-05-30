@@ -14,7 +14,11 @@
 		}
 		
 		override public function sceneryInteraction() {
-			GameController.getInstance().createAnimal(this.getAnimalSpawnType(), this.x);
+			if(GameController.getInstance().getNumberAnimalInParty(getDefinitionByName("deco3850.animals.Cat") as Class) >= 1) {
+				GameController.getInstance().createAnimal(getDefinitionByName('deco3850.animals.Dog') as Class, this.x);
+			} else {
+				GameController.getInstance().createAnimal(getDefinitionByName('deco3850.animals.Cat') as Class, this.x);
+			}
 			return true;
 		}
 	}

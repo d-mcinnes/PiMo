@@ -147,7 +147,6 @@
 		public function getSocket():SocketController {return this.socket;}
 		
 		public function displayGameMessage(text:String) {this.gameInterface.displayGameMessage(text);}
-		//public function initialisePlayerSkeleton() {this.player.initialisePlayer();}
 		
 		public function getScore():Number {return this.score;}
 		public function incrementScore(increment:Number) {
@@ -452,6 +451,18 @@
 		public function setPartyFacingRight() {
 			for each(var obj in this.getParty()) {
 				obj.setFacingAngleRight();
+			}
+		}
+		
+		public function setPartyMoveAnimation() {
+			for each(var obj in this.getParty()) {
+				obj.playWalkAnimation();
+			}
+		}
+		
+		public function setPartyIdleAnimation() {
+			for each(var obj in this.getParty()) {
+				obj.playIdleAnimation();
 			}
 		}
 		

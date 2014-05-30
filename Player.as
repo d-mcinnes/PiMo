@@ -3,16 +3,20 @@
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.display.Stage;
+	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.Font;
+	import flash.utils.Timer;
 	
 	public class Player extends MovieClip {
 		//private var gameController:GameController;
 		private var kinectSkeleton:KinectSkeleton;
-		private var player:Sprite;
-		private var document:Stage;
+		//private var player:Sprite;
+		//private var document:Stage;
+		private var timer:Timer;
+		private var xPosPast:Number;
 		
 		private var leftPoint:Point;
 		private var rightPoint:Point;
@@ -24,7 +28,7 @@
 		//public function Player(kinectSkeleton:KinectSkeleton, document:Stage) {
 		public function Player() {
 			//this.gameController = gameController;
-			this.player = new Sprite();
+			//this.player = new Sprite();
 			
 			this.outOfBounds = new OutOfBoundsBackground();
 			this.outOfBounds.x = 0;
@@ -32,13 +36,25 @@
 			this.outOfBounds.visible = false;
 			GameController.getInstance().getStageOverlay().addChild(this.outOfBounds);
 			
-			this.player.graphics.lineStyle(3,0x00ff00);
-			this.player.graphics.beginFill(0x000000);
-			this.player.graphics.drawRect(0,0,100,100);
-			this.player.graphics.endFill();
+			//this.player.graphics.lineStyle(3,0x00ff00);
+			//this.player.graphics.beginFill(0x000000);
+			//this.player.graphics.drawRect(0,0,100,100);
+			//this.player.graphics.endFill();
+			
+			this.timer = new Timer(1000, 0);
+			this.timer.addEventListener(TimerEvent.TIMER, timerEventListener);
+			this.timer.start();
 		}
 		
-		public function getPlayerAvatar():Sprite {return this.player;}
+		private function timerEventListener(e:TimerEvent) {
+			try {
+				this.xPosPast = GameController.SCREEN_SIZE_X * GameController.getInstance().getKinectSkeleton().getPositionRelative().x;
+			} catch(e:Error) {
+				this.xPosPast = 0;
+			}
+		}
+		
+		//public function getPlayerAvatar():Sprite {return this.player;}
 		
 		/** Renders the player on the screen. **/
 		public function renderPlayer() {
@@ -89,10 +105,14 @@
 			
 			if(GameController.getInstance().isGamePaused() == false) {
 				var xPos:Number = GameController.SCREEN_SIZE_X * GameController.getInstance().getKinectSkeleton().getPositionRelative().x;
-				if(xPos < this.x) {
+				if(Math.abs(xPos - this.xPosPast) < 20) {
+					GameController.getInstance().setPartyIdleAnimation();
+				} else if(xPos < this.xPosPast) {
 					GameController.getInstance().setPartyFacingLeft();
-				} else if(xPos > this.x) {
+					GameController.getInstance().setPartyMoveAnimation();
+				} else if(xPos > this.xPosPast) {
 					GameController.getInstance().setPartyFacingRight();
+					GameController.getInstance().setPartyMoveAnimation();
 				}
 				this.x = xPos;
 			}

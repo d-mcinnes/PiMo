@@ -79,14 +79,16 @@
 		
 		/** Plays the animals idle animation. **/
 		public function playIdleAnimation() {
-			//Debug.debugMessage("Playing idle animation for " + this.getName());
-			this.stop();
+			//if(this.isPlaying == true) {
+				this.stop();
+			//}
 		}
 		
 		/** Plays the animals walk animation. **/
 		public function playWalkAnimation() {
-			//Debug.debugMessage("Playing walk animation for " + this.getName());
-			this.play();
+			if(this.isPlaying == false) {
+				this.play();
+			}
 		}
 		
 		/** Sets the facing angle of the animal to face left. **/
