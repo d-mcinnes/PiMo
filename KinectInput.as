@@ -3,9 +3,9 @@
 	import flash.display.Bitmap;
 	import flash.display.Stage;
 	import flash.events.Event;
+	import flash.events.TimerEvent;
 	import flash.sampler.StackFrame;
 	import flash.utils.Timer;
-	import flash.events.TimerEvent;
 	
 	import com.as3nui.nativeExtensions.air.kinect.Kinect;
 	import com.as3nui.nativeExtensions.air.kinect.KinectSettings;
@@ -27,6 +27,7 @@
 		private var kinectSettings:KinectSettings;
 		private var kinectSkeleton:KinectSkeleton;
 		private var depthBitmap:Bitmap;
+		private var user:User;
 		
 		public function KinectInput() {
 			if(Kinect.isSupported()) {
@@ -42,6 +43,8 @@
 				this.kinectSkeleton.getSkeleton().x = 20;
 				this.kinectSkeleton.getSkeleton().y = 400;
 				
+				this.user = null;
+				
 				// Listen to when the kinect is ready
 				this.kinect.addEventListener(DeviceEvent.STARTED, kinectStarted);
 				
@@ -49,6 +52,7 @@
 				this.kinect.addEventListener(UserEvent.USERS_ADDED, kinectUserAdded);
 				this.kinect.addEventListener(UserEvent.USERS_REMOVED, kinectUserRemoved);
 				this.kinect.addEventListener(UserEvent.USERS_WITH_SKELETON_ADDED, kinectSkeletonAdded);
+				this.kinect.addEventListener(CameraImageEvent.DEPTH_IMAGE_UPDATE, depthImageUpdateHandler);
 				
 				// Start Kinect
 				this.kinect.start(this.kinectSettings);
@@ -59,6 +63,8 @@
 		
 		private function kinectUserAdded(e:UserEvent) {
 			Debug.debugMessage("Resuming game");
+			this.user = e.target as User;
+			Debug.debugMessage("User ID: " + this.user);
 			GameController.getInstance().resumeGame();
 		}
 		
@@ -68,20 +74,7 @@
 		}
 		
 		protected function kinectSkeletonAdded(e:UserEvent) {
-			Debug.debugMessage("!TIMER STUFF!");
-			var timer:Timer = new Timer(100);
-			var loadSkeleton:Function = function(e:TimerEvent):void {
-				timer.removeEventListener(TimerEvent.TIMER, loadSkeleton);
-				timer = null;
-				for each(var user:User in kinect.usersWithSkeleton) {
-					setKinectSkeletonPoints(user);
-				}
-				Debug.debugMessage("User Skeleton Added");
-				GameController.getInstance().initialisePlayerSkeleton();
-				kinect.addEventListener(CameraImageEvent.DEPTH_IMAGE_UPDATE, depthImageUpdateHandler);
-			}
-			timer.addEventListener(TimerEvent.TIMER, loadSkeleton);
-			timer.start();
+			
 		}
 		
 		/** Runs when the Kinect has been successfuly started. **/
@@ -92,18 +85,6 @@
 		/** Runs when the RGB Image is updated. **/
 		protected function rgbImageUpdateHandler(event:CameraImageEvent):void {
 			depthBitmap.bitmapData = event.imageData;
-		}
-		
-		/** Runs the first time the Depth Image is updated, then destroys
-		 ** the events hanlder. **/
-		protected function depthImageUpdateHandlerInitial(e:CameraImageEvent):void {
-			for each(var user:User in this.kinect.usersWithSkeleton) {
-				this.setKinectSkeletonPoints(user);
-				GameController.getInstance().initialisePlayerSkeleton();
-				this.kinect.removeEventListener(CameraImageEvent.DEPTH_IMAGE_UPDATE, depthImageUpdateHandlerInitial);
-				this.kinect.addEventListener(CameraImageEvent.DEPTH_IMAGE_UPDATE, depthImageUpdateHandler);
-				return;
-			}
 		}
 		
 		/** Runs when the Depth Image is updated. **/

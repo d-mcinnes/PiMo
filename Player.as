@@ -9,178 +9,39 @@
 	import flash.text.Font;
 	
 	public class Player extends MovieClip {
-		private var skeleton:KinectSkeleton;
+		//private var gameController:GameController;
+		private var kinectSkeleton:KinectSkeleton;
+		private var player:Sprite;
+		private var document:Stage;
 		
 		private var leftPoint:Point;
 		private var rightPoint:Point;
-		
-		private var head:Point;
-		private var neck:Point;
-		private var torso:Point;
-		private var leftElbow:Point;
-		private var leftHand:Point;
-		private var rightElbow:Point;
-		private var rightHand:Point;
-		private var leftKnee:Point;
-		private var leftFoot:Point;
-		private var rightKnee:Point;
-		private var rightFoot:Point;
+		private var outOfBounds:OutOfBoundsBackground;
 		
 		private var SIZE_LIMB:Number = 3;
 		private var SIZE_CHEST:Number = 6;
-		private var SIZE_INCREMENT:Number = 1;
-		
+
+		//public function Player(kinectSkeleton:KinectSkeleton, document:Stage) {
 		public function Player() {
+			//this.gameController = gameController;
+			this.player = new Sprite();
 			
+			this.outOfBounds = new OutOfBoundsBackground();
+			this.outOfBounds.x = 0;
+			this.outOfBounds.y = 0;
+			this.outOfBounds.visible = false;
+			GameController.getInstance().getStageOverlay().addChild(this.outOfBounds);
+			
+			this.player.graphics.lineStyle(3,0x00ff00);
+			this.player.graphics.beginFill(0x000000);
+			this.player.graphics.drawRect(0,0,100,100);
+			this.player.graphics.endFill();
 		}
 		
-		public function initialisePlayer() {
-			Debug.debugMessage("NECK POSITION: " + GameController.getInstance().getKinectSkeleton().getNeck());
-			/* Set Points */
-			this.torso = new Point(0, 0);
-			this.neck = this.interpolatePoint(this.torso, 
-										   getAnglePoint(this.torso, 
-														 GameController.getInstance().getKinectSkeleton().getNeck()), 
-										   SIZE_CHEST);
-			this.head = this.interpolatePoint(this.neck, 
-										   getAnglePoint(this.neck, 
-														 GameController.getInstance().getKinectSkeleton().getHead()), 
-										   SIZE_LIMB);
-			this.leftElbow = this.interpolatePoint(this.neck,
-												getAnglePoint(this.neck, 
-															  GameController.getInstance().getKinectSkeleton().getLeftElbow()), 
-												SIZE_LIMB);
-			this.leftHand = this.interpolatePoint(this.leftElbow, 
-											   getAnglePoint(this.leftElbow, 
-															 GameController.getInstance().getKinectSkeleton().getLeftHand()), 
-											   SIZE_LIMB);
-			this.rightElbow = this.interpolatePoint(this.neck, 
-												 getAnglePoint(this.neck, 
-															   GameController.getInstance().getKinectSkeleton().getRightElbow()), 
-												 SIZE_LIMB);
-			this.rightHand = this.interpolatePoint(this.rightElbow, 
-												getAnglePoint(this.rightElbow, 
-															  GameController.getInstance().getKinectSkeleton().getRightHand()), 
-												SIZE_LIMB);
-			this.leftKnee = this.interpolatePoint(this.torso, 
-											   getAnglePoint(this.torso, 
-															 GameController.getInstance().getKinectSkeleton().getLeftKnee()),
-											   SIZE_LIMB);
-			this.leftFoot = this.interpolatePoint(this.leftKnee, 
-											   getAnglePoint(this.leftKnee, 
-															 GameController.getInstance().getKinectSkeleton().getLeftFoot()), 
-											   SIZE_LIMB);
-			this.rightKnee = this.interpolatePoint(this.torso, 
-												getAnglePoint(this.torso, 
-															  GameController.getInstance().getKinectSkeleton().getRightKnee()), 
-												SIZE_LIMB);
-			this.rightFoot = this.interpolatePoint(this.rightKnee, 
-												getAnglePoint(this.rightKnee, 
-															  GameController.getInstance().getKinectSkeleton().getRightFoot()), 
-												SIZE_LIMB);
-			
-			/* Create Lines */
-			this.createLine(this.torso, this.neck);
-			this.createLine(this.neck, this.head);
-			this.createLine(this.neck, this.leftElbow);
-			this.createLine(this.leftElbow, this.leftHand);
-			this.createLine(this.neck, this.rightElbow);
-			this.createLine(this.rightElbow, this.rightHand);
-			this.createLine(this.torso, this.leftKnee);
-			this.createLine(this.leftKnee, this.leftFoot);
-			this.createLine(this.torso, this.rightKnee);
-			this.createLine(this.rightKnee, this.rightFoot);
-			
-			/* Create Head */
-			var playerHead:Head = new Head();
-			playerHead.x = this.head.x;
-			playerHead.y = this.head.y;
-			playerHead.rotation = getAngle(0, 0, this.head.x, this.head.y);
-			this.addChild(playerHead);
-		}
-		
-		public function renderPlayer() {
-			/* Clear Player */
-			this.clearPlayer();
-			
-			/* Set Player Position */
-			if(GameController.getInstance().isGamePaused() == false) {
-				var xPos:Number = GameController.SCREEN_SIZE_X * GameController.getInstance().getKinectSkeleton().getPositionRelative().x;
-				if(xPos < this.x) {
-					//GameController.getInstance().setPartyFacingLeft();
-				} else if(xPos > this.x) {
-					//GameController.getInstance().setPartyFacingRight();
-				}
-				this.x = xPos;
-			}
-			
-			/* Calculate Points */
-			this.neck = this.interpolatePoint(this.neck, 
-										   getAnglePoint(this.neck, 
-														 GameController.getInstance().getKinectSkeleton().getNeck()), 
-										   SIZE_INCREMENT);
-			this.head = this.interpolatePoint(this.head, 
-										   getAnglePoint(this.head, 
-														 GameController.getInstance().getKinectSkeleton().getHead()), 
-										   SIZE_INCREMENT);
-			this.leftElbow = this.interpolatePoint(this.leftElbow, 
-												getAnglePoint(this.leftElbow, 
-															  GameController.getInstance().getKinectSkeleton().getLeftElbow()), 
-												SIZE_INCREMENT);
-			this.leftHand = this.interpolatePoint(this.leftHand, 
-											   getAnglePoint(this.leftHand, 
-															 GameController.getInstance().getKinectSkeleton().getLeftHand()), 
-											   SIZE_INCREMENT);
-			this.rightElbow = this.interpolatePoint(this.rightElbow, 
-												 getAnglePoint(this.rightElbow, 
-															   GameController.getInstance().getKinectSkeleton().getRightElbow()), 
-												 SIZE_INCREMENT);
-			this.rightHand = this.interpolatePoint(this.rightHand, 
-												getAnglePoint(this.rightHand, 
-															  GameController.getInstance().getKinectSkeleton().getRightHand()), 
-												SIZE_INCREMENT);
-			/*this.leftKnee = this.interpolatePoint(this.leftKnee, 
-											   getAnglePoint(this.leftKnee, 
-															 GameController.getInstance().getKinectSkeleton().getLeftKnee()), 
-											   SIZE_INCREMENT);
-			this.leftFoot = this.interpolatePoint(this.leftFoot, 
-											   getAnglePoint(this.leftFoot, 
-															 GameController.getInstance().getKinectSkeleton().getLeftFoot()), 
-											   SIZE_INCREMENT);
-			this.rightKnee = this.interpolatePoint(this.rightKnee, 
-												getAnglePoint(this.rightKnee, 
-															  GameController.getInstance().getKinectSkeleton().getRightKnee()), 
-												SIZE_INCREMENT);
-			this.rightFoot = this.interpolatePoint(this.rightFoot, 
-												getAnglePoint(this.rightFoot, 
-															  GameController.getInstance().getKinectSkeleton().getRightFoot()), 
-												SIZE_INCREMENT);*/
-			
-			/* Create Lines */
-			this.createLine(new Point(0, 0), this.neck);
-			this.createLine(this.neck, this.head);
-			this.createLine(this.neck, this.leftElbow);
-			this.createLine(this.leftElbow, this.leftHand);
-			this.createLine(this.neck, this.rightElbow);
-			this.createLine(this.rightElbow, this.rightHand);
-			
-			/* Create Head */
-			var playerHead:Head = new Head();
-			playerHead.x = this.head.x;
-			playerHead.y = this.head.y;
-			playerHead.rotation = getAngle(0, 0, this.head.x, this.head.y);
-			this.addChild(playerHead);
-		}
-		
-		private renderBodyPart(limbCurrent:Point, limbNew:Point) {
-			limbCurrent = this.interpolatePoint(limbCurrent, 
-										   getAnglePoint(this.neck, 
-														 limbNew), 
-										   SIZE_INCREMENT);
-		}
+		public function getPlayerAvatar():Sprite {return this.player;}
 		
 		/** Renders the player on the screen. **/
-		public function renderPlayer2() {
+		public function renderPlayer() {
 			/* Calculate Angles. */
 			var leftArmUpperAngle:Number = getAngle(GameController.getInstance().getKinectSkeleton().getLeftShoulder().x, 
 													GameController.getInstance().getKinectSkeleton().getLeftShoulder().y, 
@@ -199,6 +60,33 @@
 													 GameController.getInstance().getKinectSkeleton().getRightHand().x,
 													 GameController.getInstance().getKinectSkeleton().getRightHand().y);
 			
+			/* Check distance from the Kinect. */
+			//if(GameController.getInstance().getKinectSkeleton().getDistance().z < 1.0) {
+			//	GameController.getInstance().pauseGame("Too close to the Kinect.");
+				//this.outOfBounds.messageBox.text = "Too close to the Kinect.";
+				//this.outOfBounds.visible = true;
+			//	return;
+			//} else {
+			//	this.outOfBounds.visible = false;
+			//}
+			
+			/* Check whether the user is out of the bounds of the screen. */
+			//var xPosition = 1024 * GameController.getInstance().getKinectSkeleton().getPositionRelative().x;
+			//if(xPosition <= 140) {
+			//	GameController.getInstance().pauseGame("Enter playing area to resume game.");
+				//this.outOfBounds.messageBox.text = "Out of Bounds - Left.";
+				//this.outOfBounds.visible = true;
+			//	return;
+			//} else if(xPosition >= 900) {
+			//	GameController.getInstance().pauseGame("Enter playing area to resume game.");
+				//this.outOfBounds.messageBox.text = "Out of Bounds - Right.";
+				//this.outOfBounds.visible = true;
+			//	return;
+			//} else {
+				//this.outOfBounds.visible = false;
+				//this.x = xPosition;
+			//}
+			
 			if(GameController.getInstance().isGamePaused() == false) {
 				var xPos:Number = GameController.SCREEN_SIZE_X * GameController.getInstance().getKinectSkeleton().getPositionRelative().x;
 				if(xPos < this.x) {
@@ -211,7 +99,7 @@
 			
 			/* Clear current Player and create Neck and Head. */
 			this.clearPlayer();
-			var neckPoint:Point = interpolatePoint(new Point(0, 0), 
+			var neckPoint:Point = getPolarPoint(new Point(0, 0), 
 												 getAngle(GameController.getInstance().getKinectSkeleton().getTorso().x, 
 														  GameController.getInstance().getKinectSkeleton().getTorso().y, 
 														  GameController.getInstance().getKinectSkeleton().getNeck().x, 
@@ -219,34 +107,37 @@
 												 SIZE_CHEST);
 			this.createLine(new Point(0, 0), neckPoint);
 			var playerHead:Head = new Head();
-			var playerHeadPoint:Point = interpolatePoint(neckPoint, getAngle(0, 0, neckPoint.x, neckPoint.y), 50);
+			var playerHeadPoint:Point = getPolarPoint(neckPoint, getAngle(0, 0, neckPoint.x, neckPoint.y), 50);
 			playerHead.x = playerHeadPoint.x;
 			playerHead.y = playerHeadPoint.y;
 			playerHead.rotation = getAngle(0, 0, neckPoint.x, neckPoint.y);
 			this.addChild(playerHead);
 			
 			/* Render Left Arm */
-			var leftArmElbow = interpolatePoint(neckPoint, leftArmUpperAngle, SIZE_LIMB);
+			var leftArmElbow = getPolarPoint(neckPoint, leftArmUpperAngle, SIZE_LIMB);
 			this.createCircle(playerHeadPoint, 5);
 			this.createLine(neckPoint, leftArmElbow);
-			this.createLine(leftArmElbow, interpolatePoint(leftArmElbow, leftArmLowerAngle, SIZE_LIMB));
-			this.leftPoint = interpolatePoint(leftArmElbow, leftArmLowerAngle, SIZE_LIMB);
+			this.createLine(leftArmElbow, getPolarPoint(leftArmElbow, leftArmLowerAngle, SIZE_LIMB));
+			this.leftPoint = getPolarPoint(leftArmElbow, leftArmLowerAngle, SIZE_LIMB);
+			//Debug.debugMessage("Left Point: " + this.leftPoint.x + ", " + this.leftPoint.y);
+			//this.createCircle(this.leftPoint, 5);
 			
 			/* Render Right Arm */
-			var rightArmElbow = interpolatePoint(neckPoint, rightArmUpperAngle, SIZE_LIMB);
+			var rightArmElbow = getPolarPoint(neckPoint, rightArmUpperAngle, SIZE_LIMB);
 			this.createLine(neckPoint, rightArmElbow);
-			this.createLine(rightArmElbow, interpolatePoint(rightArmElbow, rightArmLowerAngle, SIZE_LIMB));
-			this.rightPoint = interpolatePoint(rightArmElbow, rightArmLowerAngle, SIZE_LIMB);
+			this.createLine(rightArmElbow, getPolarPoint(rightArmElbow, rightArmLowerAngle, SIZE_LIMB));
+			this.rightPoint = getPolarPoint(rightArmElbow, rightArmLowerAngle, SIZE_LIMB);
+			//this.createCircle(this.rightPoint, 5);
 						
 			/* Render Left Leg */
-			var leftKnee:Point = interpolatePoint(new Point(0, 0), 
+			var leftKnee:Point = getPolarPoint(new Point(0, 0), 
 											   getAngle(GameController.getInstance().getKinectSkeleton().getTorso().x, 
 														GameController.getInstance().getKinectSkeleton().getTorso().y, 
 														GameController.getInstance().getKinectSkeleton().getLeftKnee().x, 
 														GameController.getInstance().getKinectSkeleton().getLeftKnee().y), 
 											   SIZE_LIMB);
 			this.createLine(new Point(0, 0), leftKnee);
-			this.createLine(leftKnee, interpolatePoint(leftKnee, 
+			this.createLine(leftKnee, getPolarPoint(leftKnee, 
 													getAngle(GameController.getInstance().getKinectSkeleton().getLeftKnee().x, 
 															 GameController.getInstance().getKinectSkeleton().getLeftKnee().y, 
 															 GameController.getInstance().getKinectSkeleton().getLeftFoot().x, 
@@ -254,14 +145,14 @@
 													SIZE_LIMB));
 			
 			/* Render Right Leg */
-			var rightKnee:Point = interpolatePoint(new Point(0, 0),
+			var rightKnee:Point = getPolarPoint(new Point(0, 0),
 												getAngle(GameController.getInstance().getKinectSkeleton().getTorso().x, 
 														 GameController.getInstance().getKinectSkeleton().getTorso().y, 
 														 GameController.getInstance().getKinectSkeleton().getRightKnee().x, 
 														 GameController.getInstance().getKinectSkeleton().getRightKnee().y), 
 												SIZE_LIMB);
 			this.createLine(new Point(0, 0), rightKnee);
-			this.createLine(rightKnee, interpolatePoint(rightKnee,
+			this.createLine(rightKnee, getPolarPoint(rightKnee,
 													 getAngle(GameController.getInstance().getKinectSkeleton().getRightKnee().x, 
 															  GameController.getInstance().getKinectSkeleton().getRightKnee().y, 
 															  GameController.getInstance().getKinectSkeleton().getRightFoot().x,
@@ -293,36 +184,10 @@
 			return Math.atan2(y2 - y1, x2 - x1);
 		}
 		
-		private function getAnglePoint(p1:Point, p2:Point) {
-			return Math.atan2(p2.y - p1.y, p2.x - p1.x);
-		}
-		
-		private function interpolatePoint(startPoint:Point, degrees:Number, distance:Number):Point {
+		private function getPolarPoint(startPoint:Point, degrees:Number, distance:Number):Point {
 			return new Point(startPoint.x + Math.round(distance * Math.cos( degrees /* * Math.PI / 180 */)), 
 							 startPoint.y + Math.round(distance * Math.sin( degrees /* * Math.PI / 180 */)));
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		private functio ntest() {
-			Point.interpolate();
-		}
-		
-		
-		
 		
 		/** Cleanup function, removes all objects added to the stage in
 		 ** this class. **/
