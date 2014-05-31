@@ -9,6 +9,8 @@
 	import flash.text.TextField;
 	import flash.utils.getDefinitionByName;
 	
+	import deco3850.animals.Tiger;
+	
 	public class Main extends MovieClip {
 		public function Main() {
 			stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
@@ -33,6 +35,7 @@
 		 **		F9 - Generate New Objective
 		 **		F10 - Complete Current Objective
 		 **		F11 - Reconnect to Socket
+		 **		F12 - Spawn Tiger
 		 **/
 		
 		/** Restarts the game when the user presses the F5 key. **/
@@ -61,6 +64,8 @@
 				GameController.getInstance().completeCurrentObjective();
 			} else if(e.keyCode == Keyboard.F11) {
 				GameController.getInstance().getSocket().reconnect();
+			} else if(e.keyCode == Keyboard.F12) {
+				GameController.getInstance().attachAnimal(new Tiger());
 			}
 		}
 	}

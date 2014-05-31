@@ -13,6 +13,12 @@
 		}
 		
 		override public function interactionAttach():Boolean {
+			for each(var object in GameController.getInstance().getParty()) {
+				if(object.getType() == Rat.getClass() || object.getType() == Cat.getClass() || 
+				   object.getType() == Dog.getClass() || object.getType() == Rabbit.getClass()) {
+					object.remove();
+				}
+			}
 			return true;
 		}
 		

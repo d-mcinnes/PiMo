@@ -167,6 +167,7 @@
 			}
 		}
 		
+		/** Returns the players current X position on the screen. **/
 		public function getPlayerX():Number {
 			try {
 				return GameController.SCREEN_SIZE_X * GameController.getInstance().getKinectSkeleton().getPositionRelative().x;
@@ -178,6 +179,5 @@
 		
 		public function getLeftPoint():Point {return this.leftPoint;}
 		public function getRightPoint():Point {return this.rightPoint;}
-		
 	}
 }
