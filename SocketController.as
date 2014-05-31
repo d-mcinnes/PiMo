@@ -12,7 +12,6 @@
 		
 		public function SocketController() {
 			this.socket = new Socket();
-			//Security.allowDomain("*");
 
 			socket.addEventListener(Event.CONNECT, onConnect);
 			socket.addEventListener(Event.CLOSE, onClose);
@@ -46,8 +45,6 @@
 		
 		private function onResponse(e:ProgressEvent) {
 			if(socket.bytesAvailable > 0) {
-				//Debug.debugMessage("Process Test: " + processInput("asds32 rwrfwearq4tR *QW*(#RU* jsadfSDF"));
-				//Debug.debugMessage("Socket Output: " + this.processInput(socket.readUTFBytes(socket.bytesAvailable)));
 				GameController.getInstance().activateTag(this.processInput(socket.readUTFBytes(socket.bytesAvailable)));
 			}
 		}
@@ -64,6 +61,7 @@
 		
 		public function reconnect() {
 			Debug.debugMessage("Reconnecting to socket");
+			socket.connect("192.168.0.3", 5331);
 		}
 	}
 }

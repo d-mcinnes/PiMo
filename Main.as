@@ -31,37 +31,35 @@
 		 **		F7 - Load Next Scene
 		 **		F8 - Pause/Resume Game
 		 **		F9 - Generate New Objective
-		 **		F10 - Reconnect to Socket
+		 **		F10 - Complete Current Objective
+		 **		F11 - Reconnect to Socket
 		 **/
 		
 		/** Restarts the game when the user presses the F5 key. **/
 		private function keyPressEvent(e:KeyboardEvent) {
 			if(e.keyCode == Keyboard.F5) {
 				GameController.getInstance().endGame();
-			}
-			if(e.keyCode == Keyboard.F6) {
+			} else if(e.keyCode == Keyboard.F6) {
 				GameController.DEBUG_MODE_ON = !GameController.DEBUG_MODE_ON;
 				if(GameController.DEBUG_MODE_ON == true) {
 					trace("Debugging On...");
 				} else {
 					trace("Debugging Off...");
 				}
-			}
-			if(e.keyCode == Keyboard.F7) {
+			} else if(e.keyCode == Keyboard.F7) {
 				Debug.debugMessage("Loading next scene");
 				GameController.getInstance().loadScene();
-			}
-			if(e.keyCode == Keyboard.F8) {
+			} else if(e.keyCode == Keyboard.F8) {
 				if(GameController.getInstance().isGamePaused() == true) {
 					GameController.getInstance().resumeGame();
 				} else {
 					GameController.getInstance().pauseGame();
 				}
-			}
-			if(e.keyCode == Keyboard.F9) {
+			} else if(e.keyCode == Keyboard.F9) {
 				GameController.getInstance().generateObjective();
-			}
-			if(e.keyCode == Keyboard.F10) {
+			} else if(e.keyCode == Keyboard.F10) {
+				GameController.getInstance().completeCurrentObjective();
+			} else if(e.keyCode == Keyboard.F11) {
 				GameController.getInstance().getSocket().reconnect();
 			}
 		}

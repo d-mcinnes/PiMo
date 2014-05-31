@@ -149,6 +149,7 @@
 		public function getParty():Array {return this.party;}
 		public function getWildAnimals():Array {return this.wild;}
 		public function getSocket():SocketController {return this.socket;}
+		public function getPlayerX():Number {return this.player.getPlayerX();}
 		
 		public function displayGameMessage(text:String) {this.gameInterface.displayGameMessage(text);}
 		
@@ -156,6 +157,7 @@
 		public function incrementScore(increment:Number) {
 			this.score += increment;
 			this.gameInterface.setScoreText(this.score);
+			this.gameInterface.displayScoreUpdate(increment);
 		}
 		
 		/** Takes a class type and returns the number of many instances of that 
@@ -532,22 +534,28 @@
 			return this.currentObjective;
 		}
 		
-		public function completeCurrentObjective() {this.getCurrentObjective().complete();}
+		//public function completeCurrentObjective() {this.getCurrentObjective().complete();}
 		public function setObjectiveText() {this.gameInterface.setObjectiveText(this.currentObjective);}
 		//public function setCurrentObjectiveText() {this.objectiveTextField.text = this.currentObjective.getDescription();}
 		
 		public function checkCurrentObjective() {
 			if(this.currentObjective != null) {
 				if(this.currentObjective.isComplete() == true) {
-					Debug.debugMessage("!Objective Complete!");
-					this.incrementScore(this.currentObjective.getScore());
-					this.objectivesLevel++;
-					if(this.objectivesLevel >= 3) {
-						Debug.debugMessage("| Complete Game? |");
-					}
-					this.loadNextScene();
+					this.completeCurrentObjective();
 				}
 				this.setObjectiveText();
+			}
+		}
+		
+		public function completeCurrentObjective() {
+			if(this.currentObjective != null) {
+				Debug.debugMessage("!Objective Complete!");
+				this.incrementScore(this.currentObjective.getScore());
+				this.objectivesLevel++;
+				if(this.objectivesLevel >= 3) {
+					Debug.debugMessage("| Complete Game? |");
+				}
+				this.loadNextScene();
 			}
 		}
 		

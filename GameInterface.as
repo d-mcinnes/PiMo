@@ -13,6 +13,8 @@
 		private var objectiveTextFormat:TextFormat;
 		private var gameMessageField:TextField;
 		private var gameMessageFormat:TextFormat;
+		private var scoreUpdateField:TextField;
+		private var scoreUpdateFormat:TextFormat;
 		private var gamePausedBackground:GamePausedBackground;
 		private var gameTransitionBackground:GameTransitionBackground;
 		
@@ -77,6 +79,23 @@
 			TweenLite.to(this.gameMessageField, 0, {alpha:0});
 			GameController.getInstance().getStageOverlay().addChild(this.gameMessageField);
 			
+			this.scoreUpdateFormat = new TextFormat();
+			this.scoreUpdateFormat.size = 40;
+			this.scoreUpdateFormat.align = TextFormatAlign.CENTER;
+			this.scoreUpdateFormat.bold = true;
+			this.scoreUpdateFormat.font = new ScoreFont().fontName;
+			
+			this.scoreUpdateField = new TextField();
+			this.scoreUpdateField.x = 0;
+			this.scoreUpdateField.y = GameController.SCREEN_SIZE_Y / 3;
+			this.scoreUpdateField.width = 100;
+			this.scoreUpdateField.textColor = 0x000000;
+			this.scoreUpdateField.selectable = false;
+			this.scoreUpdateField.defaultTextFormat = this.scoreUpdateFormat;
+			this.scoreUpdateField.text = "";
+			TweenLite.to(this.gameMessageField, 0, {alpha:0});
+			GameController.getInstance().getStageOverlay().addChild(this.scoreUpdateField);
+			
 			this.gamePausedBackground = new GamePausedBackground();
 			this.gamePausedBackground.x = 0;
 			this.gamePausedBackground.y = 0;
@@ -115,6 +134,13 @@
 			TweenLite.to(this.gameMessageField, 0, {alpha:1});
 			this.gameMessageField.text = text;
 			TweenLite.to(this.gameMessageField, 4, {delay:1.5, alpha:0});
+		}
+		
+		public function displayScoreUpdate(score:Number) {
+			this.scoreUpdateField.x = GameController.getInstance().getPlayerX();
+			this.scoreUpdateField.text = "+ " + score;
+			TweenLite.to(this.scoreUpdateField, 0, {alpha:1});
+			TweenLite.to(this.scoreUpdateField, 4, {y:(GameController.SCREEN_SIZE_Y / 3 - 20), alpha:0});
 		}
 		
 		public function displayTransitionBackground(time:Number) {

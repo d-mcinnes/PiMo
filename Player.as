@@ -167,7 +167,17 @@
 			}
 		}
 		
+		public function getPlayerX():Number {
+			try {
+				return GameController.SCREEN_SIZE_X * GameController.getInstance().getKinectSkeleton().getPositionRelative().x;
+			} catch(e:Error) {
+				Debug.debugMessage("Error getting Player position.");
+			}
+			return 0;
+		}
+		
 		public function getLeftPoint():Point {return this.leftPoint;}
 		public function getRightPoint():Point {return this.rightPoint;}
+		
 	}
 }
