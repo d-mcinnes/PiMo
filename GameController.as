@@ -61,6 +61,7 @@
 		private var party:Array; //animals currently following the player
 		private var player:Player;
 		private var paused:Boolean = false;
+		private var foodItems:FoodItems;
 		
 		/* Static Variables */
 		public static var SCREEN_SIZE_X:Number = 1024;
@@ -111,6 +112,7 @@
 			this.objectivesLevel = 0;
 			this.party = new Array();
 			this.wild = new Array();
+			this.foodItems = new FoodItems();
 			
 			this.player = new Player();
 			this.player.x = 50;
@@ -400,9 +402,17 @@
 		/** Removes an animal from the players party. **/
 		public function removeAnimal(animal:Animal):Boolean {
 			var index = party.indexOf(animal);
+			var animalRemoveFunction:Function = function():void {
+				try {
+					stageAnimals.removeChild(animal);
+				} catch(e:Error) {
+					Debug.debugMessage(e.toString());
+				}
+			}
 			if (index >= 0) {
 				party.splice(index, 1);
-				score -= animal.getScore();
+				//score -= animal.getScore();
+				TweenLite.to(animal, 1, {alpha:0, onComplete:animalRemoveFunction});
 				return true;
 			} else {
 				return false;
@@ -527,7 +537,12 @@
 		public function getCurrentObjective():Objective {return this.currentObjective;}
 		
 		public function generateObjective():Objective {
-			var number:Number = Debug.randomNumber(0, Assets.OBJECTIVES[this.objectivesLevel].length - 1);
+			Debug.debugMessage("Generating objective for level " + this.objectivesLevel);
+			try {
+				var number:Number = Debug.randomNumber(0, Assets.OBJECTIVES[this.objectivesLevel].length - 1);
+			} catch(e:Error) {
+				Debug.debugMessage("Unable to get objectives.");
+			}
 			var reference:Class = getDefinitionByName(Assets.OBJECTIVES[this.objectivesLevel][number]) as Class;
 			this.currentObjective = new reference();
 			this.gameInterface.setObjectiveText(this.currentObjective);

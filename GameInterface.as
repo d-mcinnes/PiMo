@@ -1,11 +1,15 @@
 ﻿package  {
 	import flash.debug.Debug;
+	import flash.display.MovieClip;
+	import flash.display.Shape;
+	import flash.display.Sprite;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
 	import com.greensock.TweenLite;
 	
 	public class GameInterface {
+		/* Text */
 		private var scoreTextField:TextField;
 		private var textFormat:TextFormat;
 		private var timerTextField:TextField;
@@ -15,10 +19,17 @@
 		private var gameMessageFormat:TextFormat;
 		private var scoreUpdateField:TextField;
 		private var scoreUpdateFormat:TextFormat;
+		
+		/* Food Items */
+		private var foodItems:GameInterfaceFood;
+		private var foodItemsObjects:MovieClip;
+		
+		/* Backgrounds */
 		private var gamePausedBackground:GamePausedBackground;
 		private var gameTransitionBackground:GameTransitionBackground;
 		
 		public function GameInterface() {
+			/* Text */
 			this.scoreTextField = new TextField();
 			this.scoreTextField.y = 0;
 			this.scoreTextField.x = 10;
@@ -96,6 +107,28 @@
 			TweenLite.to(this.gameMessageField, 0, {alpha:0});
 			GameController.getInstance().getStageOverlay().addChild(this.scoreUpdateField);
 			
+			/* Food Items */
+			//this.foodItems = new Sprite();
+			//this.foodItems.width = 400;
+			//this.foodItems.height = 500;
+			//this.foodItems.x = GameController.SCREEN_SIZE_X - this.foodItems.width - 10;
+			//this.foodItems.y = 30;
+			//this.foodItems.x = 50;
+			
+			//this.foodItems.addChild(new Icon_Bone());
+			//var i:Icon_Bone = new Icon_Bone();
+			//i.x = 0;
+			//i.y = 0;
+			//this.foodItems.addChild(i);
+			//GameController.getInstance().getStageOverlay().addChild(i);
+			//GameController.getInstance().getStageOverlay().addChild(this.foodItems);
+			this.foodItems = new GameInterfaceFood();
+			GameController.getInstance().getStageOverlay().addChild(this.foodItems);
+			
+			
+			Debug.debugMessage("Added Stuff");
+			
+			/* Backgrounds */
 			this.gamePausedBackground = new GamePausedBackground();
 			this.gamePausedBackground.x = 0;
 			this.gamePausedBackground.y = 0;
