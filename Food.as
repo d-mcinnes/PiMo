@@ -8,10 +8,6 @@
 		private var icon:MovieClip;
 		private var active:Boolean = false;
 		
-		public function Food() {
-			
-		}
-		
 		public function setName(name:String) {this.name = name;}
 		public function setTags(tags:Array) {this.tags = tags;}
 		public function setIcon(icon:MovieClip) {this.icon = icon;}

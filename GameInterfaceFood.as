@@ -11,9 +11,6 @@
 			this.y = 40;
 			this.foodItems = new Array();
 			this.renderIcons();
-			//this.foodItems.push(new IconBone());
-			//this.addChild(this.foodItems[0]);
-			//this.foodItems[0].x = -10;
 		}
 		
 		public function renderIcons() {
