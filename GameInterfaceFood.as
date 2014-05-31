@@ -36,8 +36,11 @@
 				if(food.carrot2.getActive() == true) {
 					this.foodItems.push(food.carrot2.getIcon());
 				}
-				if(food.cheese.getActive() == true) {
-					this.foodItems.push(food.cheese.getIcon());
+				if(food.cheese1.getActive() == true) {
+					this.foodItems.push(food.cheese1.getIcon());
+				}
+				if(food.cheese2.getActive() == true) {
+					this.foodItems.push(food.cheese2.getIcon());
 				}
 				if(food.fish.getActive() == true) {
 					this.foodItems.push(food.fish.getIcon());
