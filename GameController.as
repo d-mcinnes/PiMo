@@ -152,8 +152,10 @@
 		public function getWildAnimals():Array {return this.wild;}
 		public function getSocket():SocketController {return this.socket;}
 		public function getPlayerX():Number {return this.player.getPlayerX();}
+		public function getFoodItems():FoodItems {return this.foodItems;}
 		
 		public function displayGameMessage(text:String) {this.gameInterface.displayGameMessage(text);}
+		public function renderFoodIcons() {this.gameInterface.renderFoodIcons();}
 		
 		public function getScore():Number {return this.score;}
 		public function incrementScore(increment:Number) {

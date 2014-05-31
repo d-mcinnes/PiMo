@@ -26,18 +26,22 @@
 			this.bone.setName("Bone");
 			this.bone.setTags([]);
 			this.bone.setIcon(new IconBone());
+			this.bone.setActive(true);
 			
 			this.carrot1.setName("Carrot");
 			this.carrot1.setTags([]);
 			this.carrot1.setIcon(new Icon_Carrot());
+			this.carrot1.setActive(true);
 			
 			this.carrot2.setName("Carrot");
 			this.carrot2.setTags([]);
 			this.carrot2.setIcon(new Icon_Carrot());
+			this.carrot2.setActive(true);
 			
 			this.cheese.setName("Cheese");
 			this.cheese.setTags([]);
 			this.cheese.setIcon(new Icon_Cheese());
+			this.cheese.setActive(true);
 			
 			this.fish.setName("Fish");
 			this.fish.setTags([]);

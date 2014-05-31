@@ -28,6 +28,7 @@
 		}
 		
 		/** Shortcuts 
+		 ** 	F4 - Render Food Icons
 		 ** 	F5 - Restart Game
 		 **		F6 - Toggle Debug Mode
 		 **		F7 - Load Next Scene
@@ -40,7 +41,9 @@
 		
 		/** Restarts the game when the user presses the F5 key. **/
 		private function keyPressEvent(e:KeyboardEvent) {
-			if(e.keyCode == Keyboard.F5) {
+			if(e.keyCode == Keyboard.F4) {
+				GameController.getInstance().renderFoodIcons();
+			} else if(e.keyCode == Keyboard.F5) {
 				GameController.getInstance().endGame();
 			} else if(e.keyCode == Keyboard.F6) {
 				GameController.DEBUG_MODE_ON = !GameController.DEBUG_MODE_ON;

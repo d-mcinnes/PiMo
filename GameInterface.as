@@ -176,6 +176,10 @@
 			TweenLite.to(this.scoreUpdateField, 4, {y:(GameController.SCREEN_SIZE_Y / 3 - 20), alpha:0});
 		}
 		
+		public function renderFoodIcons() {
+			this.foodItems.renderIcons();
+		}
+		
 		public function displayTransitionBackground(time:Number) {
 			TweenLite.to(this.gameTransitionBackground, time, {alpha:1});
 		}
