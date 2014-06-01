@@ -8,6 +8,9 @@
 	import flash.text.TextFormatAlign;
 	import com.greensock.TweenLite;
 	
+	import deco3850.scenery.Farm;
+	import deco3850.scenery.Tree;
+	
 	public class GameInterface {
 		/* Text */
 		private var scoreTextField:TextField;
@@ -186,6 +189,38 @@
 		
 		public function hideTransitionBackground(time:Number) {
 			TweenLite.to(this.gameTransitionBackground, time, {alpha:0});
+		}
+		
+		public function generateFinalScreen():Sprite {
+			var screen:Sprite = new Sprite();
+			screen.addChild(new Background_Dynamic());
+			
+			/* Create Scenery Objects */
+			var farm:Farm = new Farm();
+			farm.x = 400;
+			farm.y = 500;
+			screen.addChild(farm);
+			
+			var tree:Tree = new Tree();
+			tree.x = 200;
+			tree.y = 450;
+			screen.addChild(tree);
+			
+			/* Render Animals */
+			var x:Number = 600;
+			var y:Number = 450;
+			for each(var i in GameController.getInstance().getAnimalHistory()) {
+				var animal:Animal = new i();
+				animal.x = x;
+				animal.y = Debug.randomNumber(y - 20, y + 20);
+				animal.playIdleAnimation();
+				screen.addChild(animal);
+				x -= 65;
+			}
+			
+			/* Add to Screen (For Testing) */
+			//GameController.getInstance().getStageOverlay().addChild(screen);
+			return screen;
 		}
 	}
 }

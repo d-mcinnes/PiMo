@@ -15,6 +15,8 @@
 	import flash.net.URLRequest;
 	import flash.net.URLRequestHeader;
 	import flash.net.URLRequestMethod;
+	import flash.printing.PrintJob;
+	import flash.printing.PrintJobOptions;
 	import flash.ui.Keyboard;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
@@ -70,6 +72,7 @@
 		private var player:Player;
 		private var paused:Boolean = false;
 		private var foodItems:FoodItems;
+		private var animalHistory:Array = [Rabbit.getClass(), Dog.getClass()];
 		
 		/* Static Variables */
 		public static var SCREEN_SIZE_X:Number = 1024;
@@ -161,6 +164,7 @@
 		public function getSocket():SocketController {return this.socket;}
 		public function getPlayerX():Number {return this.player.getPlayerX();}
 		public function getFoodItems():FoodItems {return this.foodItems;}
+		public function getAnimalHistory():Array {return this.animalHistory;}
 		
 		public function displayGameMessage(text:String) {this.gameInterface.displayGameMessage(text);}
 		public function renderFoodIcons() {this.gameInterface.renderFoodIcons();}
@@ -230,6 +234,25 @@
 			
 			//var file:FileReference = new FileReference();
 			//file.save(img, "filename.jpg");
+		}
+		
+		public function printScreenshot() {
+			//this.gameInterface.generateFinalScreen()
+			
+			var printJob:PrintJob = new PrintJob();
+			var printOptions:PrintJobOptions = new PrintJobOptions();
+			printOptions.printAsBitmap = true;
+			printJob.start();
+			try {
+				printJob.addPage(this.gameInterface.generateFinalScreen(), null, printOptions);
+			} catch(e:Error) {
+				trace ("Had problem adding the page to print job: " + e);
+			}
+			try {
+				printJob.send();
+			} catch(e:Error) {
+				trace ("Had problem printing: " + e); 
+			}
 		}
 		
 		/** ***************** **/
@@ -424,6 +447,7 @@
 		/** Adds an animal to the players party. **/
 		public function attachAnimal(animal:Animal):void {
 			party.push(animal);
+			this.animalHistory.push(animal.getType());
 			animal.playWalkAnimation();
 			animal.interactionAttachGlobal();
 			animal.interactionAttach();
