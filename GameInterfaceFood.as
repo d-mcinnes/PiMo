@@ -18,10 +18,18 @@
 				this.removeChild(object);
 			}
 			this.foodItems = new Array();
-			var food:FoodItems = GameController.getInstance().getFoodItems();
+			var food:Array = []; 
+			
+			try {
+				food = GameController.getInstance().getFoodItems().getFoodItems();
+			} catch(e:Error) {
+				Debug.debugMessage("Unable to get Food.");
+			}
+			
+			Debug.debugMessage("FOOD IS NULL? : " + food);
 			
 			if(food != null) {
-				if(food.birdSeed.getActive() == true) {
+				/*if(food.birdSeed.getActive() == true) {
 					this.foodItems.push(food.birdSeed.getIcon());
 				}
 				if(food.bone.getActive() == true) {
@@ -50,13 +58,22 @@
 				}
 				if(food.meat.getActive() == true) {
 					this.foodItems.push(food.meat.getIcon());
+				}*/
+				
+				Debug.debugMessage("BEGINNING LOOP");
+				for each(var i in food) {
+					Debug.debugMessage("LOOP");
+					if(i.getActive() == true) {
+						Debug.debugMessage("FOOD IS ACTIVE");
+						this.foodItems.push(i.getIcon());
+					}
 				}
 				
 				var x:Number = -10;
 				for each(var foodObject in this.foodItems) {
 					foodObject.x = x;
 					foodObject.y = 0;
-					x -= 35;
+					x -= 45;
 					this.addChild(foodObject);
 				}
 			}

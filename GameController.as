@@ -1,5 +1,6 @@
 ﻿package  {
 	import flash.debug.Debug;
+	import flash.display.BitmapData;
 	import flash.display.Stage;
 	import flash.display.Graphics;
 	import flash.display.Shape;
@@ -24,6 +25,7 @@
 	
 	import com.greensock.TweenLite;
 	import com.greensock.events.TweenEvent;
+	import com.adobe.images.JPGEncoder;
 	
 	public class GameController {
 		private static var gameController:GameController = null;
@@ -201,7 +203,7 @@
 		}
 		
 		public function saveScreenshot() {
-			
+			var jpgEncoder:JPGEncoder = new JPGEncoder(90);
 		}
 		
 		/** ***************** **/
@@ -505,6 +507,30 @@
 		
 		/** Runs when the player activates one of the Arduino tags. **/
 		public function activateTag(tag:String) {
+			var food:Food = null;
+			for each(var f in this.getFoodItems().getFoodItems()) {
+				//Debug.debugMessage("Checking for " + f.getName() + " with " + tag);
+				if(f.getIsTag(tag) == true) {
+					Debug.debugMessage("Tag Activated: " + f.getName());
+					food = f;
+					if(this.getFoodItems().getNumberActiveItems() >= 3) {
+						this.getFoodItems().removeFoodItem();
+					}
+					food.setActive(true);
+					this.renderFoodIcons();
+					break;
+				}
+			}
+			for each(var animal in wild) {
+				Debug.debugMessage("Check that " + animal.getName() + " is equal");
+				if(food.checkAnimal(animal.getType()) == true) {
+					this.attachAnimal(animal);
+				}
+			}
+		}
+		
+		/** Runs when the player activates one of the Arduino tags. **/
+		public function activateTagOld(tag:String) {
 			for each (var animal in wild) {
 				if(animal.checkTag(tag)) {
 					attachAnimal(animal);
@@ -531,23 +557,23 @@
 			if(e.keyCode == Keyboard.SPACE) {
 				this.activateTag('all');
 			} else if(e.keyCode == Keyboard.R) {
-				this.activateTag('rabbit');
+				this.activateTag('0103C80917D4');
 			} else if(e.keyCode == Keyboard.T) {
-				this.activateTag('rat');
+				this.activateTag('2B005BC67DCB');
 			} else if(e.keyCode == Keyboard.D) {
-				this.activateTag('dog');
+				this.activateTag('2B005B763731');
 			} else if(e.keyCode == Keyboard.C) {
-				this.activateTag('cat');
+				this.activateTag('2B005B8401F5');
 			} else if(e.keyCode == Keyboard.O) {
-				this.activateTag('owl');
+				this.activateTag('2B005BC78037');
 			} else if(e.keyCode == Keyboard.G) {
-				this.activateTag('tiger');
+				this.activateTag('2B005BB79651');
 			} else if(e.keyCode == Keyboard.A) {
-				this.activateTag('alphca');
+				this.activateTag('2B005BB79651');
 			} else if(e.keyCode == Keyboard.W) {
-				this.activateTag('cow');
+				this.activateTag('2B005BDF71DE');
 			} else if(e.keyCode == Keyboard.S) {
-				this.activateTag('sheep');
+				this.activateTag('2B005BDF71DE');
 			}
 		}
 		
