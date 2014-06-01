@@ -80,7 +80,7 @@
 			this.gameMessageFormat.font = new ScoreFont().fontName;
 			
 			this.gameMessageField = new TextField();
-			this.gameMessageField.x = 20;
+			this.gameMessageField.x = 60;
 			this.gameMessageField.y = GameController.SCREEN_SIZE_Y / 3;
 			this.gameMessageField.width = GameController.SCREEN_SIZE_X / 2;
 			this.gameMessageField.textColor = 0x000000;

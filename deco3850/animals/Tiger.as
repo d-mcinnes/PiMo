@@ -1,9 +1,9 @@
 ﻿package deco3850.animals {
+	import flash.debug.Debug;
 	import flash.display.MovieClip;
 	import flash.utils.getDefinitionByName;
 	
 	public class Tiger extends Animal {
-		
 		public function Tiger() {
 			this.setName("Tiger");
 			this.createTimer(4000);

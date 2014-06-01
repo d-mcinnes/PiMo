@@ -12,6 +12,7 @@
 						  '2B005BA4DC08', '2B005BA84F97', '2B005BAEA27C', '2B005B9AD03A', '2B005B7FACA3', 
 						  '2B005B934FAC', '2B005B8D42BF']);
 			this.setScore(10);
+			this.scaleX *= -1;
 		}
 		
 		override public function interactionAttach():Boolean {

@@ -182,8 +182,12 @@
 			var index:Number = 0;
 			this.player.renderPlayer();
 			for each (var animal in party) {
+				var x:Number = GameController.SCREEN_SIZE_X * this.kinectInput.getKinectSkeleton().getPositionRelative().x - 200 - (index * 30);
+				if(x < 80) {
+					x = 80;
+				}
+				animal.x = x;
 				index++;
-				animal.x = GameController.SCREEN_SIZE_X * this.kinectInput.getKinectSkeleton().getPositionRelative().x - 200 - (index * 30);
 			}
 		}
 		
@@ -542,13 +546,15 @@
 			Debug.debugMessage("Generating objective for level " + this.objectivesLevel);
 			try {
 				var number:Number = Debug.randomNumber(0, Assets.OBJECTIVES[this.objectivesLevel].length - 1);
+				var reference:Class = getDefinitionByName(Assets.OBJECTIVES[this.objectivesLevel][number]) as Class;
+				this.currentObjective = new reference();
+				this.gameInterface.setObjectiveText(this.currentObjective);
+				return this.currentObjective;
 			} catch(e:Error) {
 				Debug.debugMessage("Unable to get objectives.");
 			}
-			var reference:Class = getDefinitionByName(Assets.OBJECTIVES[this.objectivesLevel][number]) as Class;
-			this.currentObjective = new reference();
-			this.gameInterface.setObjectiveText(this.currentObjective);
-			return this.currentObjective;
+			return null;
+			
 		}
 		
 		//public function completeCurrentObjective() {this.getCurrentObjective().complete();}
