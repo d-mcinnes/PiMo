@@ -200,6 +200,10 @@
 			this.generateObjective();
 		}
 		
+		public function saveScreenshot() {
+			
+		}
+		
 		/** ***************** **/
 		/**   S C E N E R Y   **/
 		/** ***************** **/
@@ -520,7 +524,10 @@
 			 * C - Cat
 			 * O - Owl
 			 * T - Rat
-			 * G - Tiger */
+			 * G - Tiger
+			 * A - Alphca
+			 * W - Cow
+			 * S - Sheep */
 			if(e.keyCode == Keyboard.SPACE) {
 				this.activateTag('all');
 			} else if(e.keyCode == Keyboard.R) {
@@ -535,6 +542,12 @@
 				this.activateTag('owl');
 			} else if(e.keyCode == Keyboard.G) {
 				this.activateTag('tiger');
+			} else if(e.keyCode == Keyboard.A) {
+				this.activateTag('alphca');
+			} else if(e.keyCode == Keyboard.W) {
+				this.activateTag('cow');
+			} else if(e.keyCode == Keyboard.S) {
+				this.activateTag('sheep');
 			}
 		}
 		

@@ -12,7 +12,7 @@
 		}
 		
 		override public function interactionAttach():Boolean {
-			
+			return true;
 		}
 		
 		public static function getClass():Class {return getDefinitionByName("deco3850.animals.Alphca") as Class;}
