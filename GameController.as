@@ -518,7 +518,9 @@
 			/* R - Rabbit
 			 * D - Dog
 			 * C - Cat
-			 * O - Owl */
+			 * O - Owl
+			 * T - Rat
+			 * G - Tiger */
 			if(e.keyCode == Keyboard.SPACE) {
 				this.activateTag('all');
 			} else if(e.keyCode == Keyboard.R) {
@@ -531,7 +533,7 @@
 				this.activateTag('cat');
 			} else if(e.keyCode == Keyboard.O) {
 				this.activateTag('owl');
-			} else if(e.keyCode == Keyboard.T) {
+			} else if(e.keyCode == Keyboard.G) {
 				this.activateTag('tiger');
 			}
 		}
