@@ -541,8 +541,12 @@
 			}
 			for each(var animal in wild) {
 				Debug.debugMessage("Check that " + animal.getName() + " is equal");
-				if(food.checkAnimal(animal.getType()) == true) {
-					this.attachAnimal(animal);
+				try {
+					if(food.checkAnimal(animal.getType()) == true) {
+						this.attachAnimal(animal);
+					}
+				} catch(e:Error) {
+					Debug.debugMessage("Error: " + e.toString());
 				}
 			}
 		}
