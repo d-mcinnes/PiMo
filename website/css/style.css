@@ -62,6 +62,10 @@ body {
 	text-shadow:1px 1px 0px #287ace;
 }
 
+input {
+ outline:none;
+}
+
 /* This button was generated using CSSButtonGenerator.com */
 #picture_id_submit {
 
