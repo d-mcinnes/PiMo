@@ -226,7 +226,7 @@
 			
 			var scoreText:TextField = new TextField();
 			scoreText.x = 60;
-			scoreText.y = 0;
+			scoreText.y = -40;
 			scoreText.width = 200;
 			scoreText.textColor = 0x000000;
 			scoreText.selectable = false;
