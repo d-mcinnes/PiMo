@@ -11,6 +11,10 @@
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.net.FileReference;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
+	import flash.net.URLRequestHeader;
+	import flash.net.URLRequestMethod;
 	import flash.ui.Keyboard;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
@@ -27,13 +31,12 @@
 	
 	import com.greensock.TweenLite;
 	import com.greensock.events.TweenEvent;
+	import com.greensock.easing.Bounce;
 	import com.adobe.images.JPGEncoder;
 	import flash.utils.ByteArray;
 	
 	public class GameController {
 		private static var gameController:GameController = null;
-		
-		//private var obj1:ThreeRabbits = null;
 		
 		/* General Variables */
 		private var document:Stage;
@@ -206,21 +209,27 @@
 		}
 		
 		public function saveScreenshot() {
-			Debug.debugMessage("Saving Screenshot: Start");
 			var jpgEncoder:JPGEncoder = new JPGEncoder(90);
-			var bitmapData:BitmapData = new BitmapData(this.document.width, this.document.height);
-			Debug.debugMessage("Saving Screenshot: Created Bitmap");
+			var bitmapData:BitmapData = new BitmapData(1024, 600);
 			var img:ByteArray;
 			
-			Debug.debugMessage("Saving Screenshot: Drawing Bitmap");
 			bitmapData.draw(this.document);
-			Debug.debugMessage("Saving Screenshot: Encoding Bitmap");
 			img = jpgEncoder.encode(bitmapData);
 			
-			Debug.debugMessage("Saving Screenshot: File Reference");
-			var file:FileReference = new FileReference();
-			Debug.debugMessage("Saving Screenshot: Saving File");
-			file.save(img, "filename.jpg");
+			var sendHeader:URLRequestHeader = new URLRequestHeader("Content-type","application/octet-stream");
+			var sendReq:URLRequest = new URLRequest("pimo.uqcloud.net/savepicture.php");
+			
+			sendReq.requestHeaders.push(sendHeader);
+			sendReq.method = URLRequestMethod.POST;
+			sendReq.data = img;
+			
+			var sendLoader:URLLoader;
+			sendLoader = new URLLoader();
+			//sendLoader.addEventListener(Event.COMPLETE, imageSentHandler);
+			sendLoader.load(sendReq);
+			
+			//var file:FileReference = new FileReference();
+			//file.save(img, "filename.jpg");
 		}
 		
 		/** ***************** **/
@@ -377,7 +386,9 @@
 			animal.setTimerEvent(animalDespawnTimerEvent(animal));
 			animal.playIdleAnimation();
 			animal.startTimer();
+			TweenLite.to(animal, 0, {y:(animal.y - 30), alpha:0});
 			this.stageAnimals.addChild(animal);
+			TweenLite.to(animal, 0.5, {y:(animal.y + 30), alpha:1, ease:Bounce.easeOut});
 		}
 		
 		/** Runs when the despawn animal timer expires. **/
@@ -412,8 +423,6 @@
 		
 		/** Adds an animal to the players party. **/
 		public function attachAnimal(animal:Animal):void {
-			//clear timer for despawnAnimal
-			//TODO check for animal interactions
 			party.push(animal);
 			animal.playWalkAnimation();
 			animal.interactionAttachGlobal();
@@ -440,7 +449,6 @@
 			}
 			if (index >= 0) {
 				party.splice(index, 1);
-				//score -= animal.getScore();
 				TweenLite.to(animal, 1, {alpha:0, onComplete:animalRemoveFunction});
 				return true;
 			} else {
@@ -525,13 +533,15 @@
 		/** Runs when the player activates one of the Arduino tags. **/
 		public function activateTag(tag:String) {
 			var food:Food = null;
-			Debug.debugMessage("Tag Is Activated");
 			for each(var f in this.getFoodItems().getFoodItems()) {
-				//Debug.debugMessage("Checking for " + f.getName() + " with " + tag);
 				if(f.getIsTag(tag) == true) {
 					Debug.debugMessage("Tag Activated: " + f.getName());
 					food = f;
-					if(this.getFoodItems().getNumberActiveItems() >= 3) {
+					if(food.getActive() == true) {
+						this.renderFoodIcons();
+						break;
+					}
+					if(this.getFoodItems().getNumberActiveItems() >= 4) {
 						this.getFoodItems().removeFoodItem();
 					}
 					food.setActive(true);
@@ -540,7 +550,6 @@
 				}
 			}
 			for each(var animal in wild) {
-				Debug.debugMessage("Check that " + animal.getName() + " is equal");
 				try {
 					if(food.checkAnimal(animal.getType()) == true) {
 						this.attachAnimal(animal);
@@ -567,35 +576,27 @@
 		
 		/** Runs when the user presses the space key **/
 		private function keySpacePress(e:KeyboardEvent) {
-			/* R - Rabbit
-			 * D - Dog
-			 * C - Cat
-			 * O - Owl
-			 * T - Rat
-			 * G - Tiger
-			 * A - Alphca
-			 * W - Cow
-			 * S - Sheep */
-			if(e.keyCode == Keyboard.SPACE) {
-				this.activateTag('all');
-			} else if(e.keyCode == Keyboard.R) {
-				this.activateTag('0103C80917D4');
-			} else if(e.keyCode == Keyboard.T) {
-				this.activateTag('2B005BC67DCB');
-			} else if(e.keyCode == Keyboard.D) {
-				this.activateTag('2B005B763731');
-			} else if(e.keyCode == Keyboard.C) {
-				this.activateTag('2B005B8401F5');
-			} else if(e.keyCode == Keyboard.O) {
+			if(e.keyCode == Keyboard.NUMBER_1) {
+				/* 1 - Bird Seed */
 				this.activateTag('2B005BC78037');
-			} else if(e.keyCode == Keyboard.G) {
-				this.activateTag('2B005BB79651');
-			} else if(e.keyCode == Keyboard.A) {
-				this.activateTag('2B005BB79651');
-			} else if(e.keyCode == Keyboard.W) {
+			} else if(e.keyCode == Keyboard.NUMBER_2) {
+				/* 2 - Bone */
+				this.activateTag('2B005B763731');
+			} else if(e.keyCode == Keyboard.NUMBER_3) {
+				/* 3 - Carrot */
+				this.activateTag('0103C80917D4');
+			} else if(e.keyCode == Keyboard.NUMBER_4) {
+				/* 4 - Cheese */
+				this.activateTag('2B005BC67DCB');
+			} else if(e.keyCode == Keyboard.NUMBER_5) {
+				/* 5 - Fish */
+				this.activateTag('2B005B8401F5');
+			} else if(e.keyCode == Keyboard.NUMBER_6) {
+				/* 6 - Grass */
 				this.activateTag('2B005BDF71DE');
-			} else if(e.keyCode == Keyboard.S) {
-				this.activateTag('2B005BDF71DE');
+			} else if(e.keyCode == Keyboard.NUMBER_7) {
+				/* 7 - Meat */
+				this.activateTag('2B005BB79651');
 			}
 		}
 		
@@ -620,9 +621,7 @@
 			
 		}
 		
-		//public function completeCurrentObjective() {this.getCurrentObjective().complete();}
 		public function setObjectiveText() {this.gameInterface.setObjectiveText(this.currentObjective);}
-		//public function setCurrentObjectiveText() {this.objectiveTextField.text = this.currentObjective.getDescription();}
 		
 		public function checkCurrentObjective() {
 			if(this.currentObjective != null) {
