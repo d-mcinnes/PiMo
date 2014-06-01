@@ -44,6 +44,7 @@
 		}
 		
 		private function onResponse(e:ProgressEvent) {
+			Debug.debugMessage("ASDASD SADINPUT AFDSF SINPUT INPUT INPUT");
 			if(socket.bytesAvailable > 0) {
 				GameController.getInstance().activateTag(this.processInput(socket.readUTFBytes(socket.bytesAvailable)));
 			}

@@ -41,7 +41,9 @@
 		
 		/** Restarts the game when the user presses the F5 key. **/
 		private function keyPressEvent(e:KeyboardEvent) {
-			if(e.keyCode == Keyboard.F3) {
+			if(e.keyCode == Keyboard.F2) {
+				GameController.getInstance().saveScreenshot();
+			} else if(e.keyCode == Keyboard.F3) {
 				GameController.getInstance().activateTag('2B005B763731');
 			} else if(e.keyCode == Keyboard.F4) {
 				GameController.getInstance().renderFoodIcons();

@@ -8,7 +8,9 @@
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.TimerEvent;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
+	import flash.net.FileReference;
 	import flash.ui.Keyboard;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
@@ -26,6 +28,7 @@
 	import com.greensock.TweenLite;
 	import com.greensock.events.TweenEvent;
 	import com.adobe.images.JPGEncoder;
+	import flash.utils.ByteArray;
 	
 	public class GameController {
 		private static var gameController:GameController = null;
@@ -203,7 +206,21 @@
 		}
 		
 		public function saveScreenshot() {
+			Debug.debugMessage("Saving Screenshot: Start");
 			var jpgEncoder:JPGEncoder = new JPGEncoder(90);
+			var bitmapData:BitmapData = new BitmapData(this.document.width, this.document.height);
+			Debug.debugMessage("Saving Screenshot: Created Bitmap");
+			var img:ByteArray;
+			
+			Debug.debugMessage("Saving Screenshot: Drawing Bitmap");
+			bitmapData.draw(this.document);
+			Debug.debugMessage("Saving Screenshot: Encoding Bitmap");
+			img = jpgEncoder.encode(bitmapData);
+			
+			Debug.debugMessage("Saving Screenshot: File Reference");
+			var file:FileReference = new FileReference();
+			Debug.debugMessage("Saving Screenshot: Saving File");
+			file.save(img, "filename.jpg");
 		}
 		
 		/** ***************** **/
@@ -508,6 +525,7 @@
 		/** Runs when the player activates one of the Arduino tags. **/
 		public function activateTag(tag:String) {
 			var food:Food = null;
+			Debug.debugMessage("Tag Is Activated");
 			for each(var f in this.getFoodItems().getFoodItems()) {
 				//Debug.debugMessage("Checking for " + f.getName() + " with " + tag);
 				if(f.getIsTag(tag) == true) {

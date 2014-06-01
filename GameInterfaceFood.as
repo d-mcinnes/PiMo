@@ -26,8 +26,6 @@
 				Debug.debugMessage("Unable to get Food.");
 			}
 			
-			Debug.debugMessage("FOOD IS NULL? : " + food);
-			
 			if(food != null) {
 				/*if(food.birdSeed.getActive() == true) {
 					this.foodItems.push(food.birdSeed.getIcon());
@@ -60,11 +58,8 @@
 					this.foodItems.push(food.meat.getIcon());
 				}*/
 				
-				Debug.debugMessage("BEGINNING LOOP");
 				for each(var i in food) {
-					Debug.debugMessage("LOOP");
 					if(i.getActive() == true) {
-						Debug.debugMessage("FOOD IS ACTIVE");
 						this.foodItems.push(i.getIcon());
 					}
 				}
