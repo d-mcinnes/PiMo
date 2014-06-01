@@ -218,7 +218,25 @@
 				x -= 65;
 			}
 			
+			var scoreFormat:TextFormat = new TextFormat();
+			scoreFormat.size = 40;
+			scoreFormat.align = TextFormatAlign.LEFT;
+			scoreFormat.bold = true;
+			scoreFormat.font = new ScoreFont().fontName;
+			
+			var scoreText:TextField = new TextField();
+			scoreText.x = 40;
+			scoreText.y = 0;
+			scoreText.width = 200;
+			scoreText.textColor = 0x000000;
+			scoreText.selectable = false;
+			scoreText.defaultTextFormat = scoreFormat;
+			scoreText.text = "Score: 23";	
+			screen.addChild(scoreText);
+			
 			/* Add to Screen (For Testing) */
+			screen.scaleX = 0.4;
+			screen.scaleY = 0.4;
 			//GameController.getInstance().getStageOverlay().addChild(screen);
 			return screen;
 		}

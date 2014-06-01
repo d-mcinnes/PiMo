@@ -17,6 +17,8 @@
 	import flash.net.URLRequestMethod;
 	import flash.printing.PrintJob;
 	import flash.printing.PrintJobOptions;
+	import flash.printing.PrintJobOrientation;
+	import flash.printing.PaperSize;
 	import flash.ui.Keyboard;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
@@ -237,11 +239,12 @@
 		}
 		
 		public function printScreenshot() {
-			//this.gameInterface.generateFinalScreen()
-			
+			//this.gameInterface.generateFinalScreen();
 			var printJob:PrintJob = new PrintJob();
 			var printOptions:PrintJobOptions = new PrintJobOptions();
 			printOptions.printAsBitmap = true;
+			printJob.orientation = PrintJobOrientation.LANDSCAPE;
+			printJob.selectPaperSize(PaperSize.A6);
 			printJob.start();
 			try {
 				printJob.addPage(this.gameInterface.generateFinalScreen(), null, printOptions);
