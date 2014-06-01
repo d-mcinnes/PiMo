@@ -26,8 +26,8 @@
 			this.birdSeed.setIcon(new Icon_BirdSeed());
 			
 			this.bone.setName("Bone");
-			this.bone.setTags(['2B005B8401F5', '2B005B7FFCF3', '2B005B763731', '2B005BDCFD51', 
-							   '2B005BB1D617', '2B005BA5895C', '2B005BCD4DF0', '2B005B783830']);
+			this.bone.setTags(['2B005B763731', '2B005BDCFD51', '2B005BB1D617', 
+							   '2B005BA5895C', '2B005BCD4DF0', '2B005B783830']);
 			this.bone.setIcon(new IconBone());
 			this.bone.setActive(true);
 			
@@ -55,8 +55,8 @@
 			this.cheese2.setActive(true);
 			
 			this.fish.setName("Fish");
-			this.fish.setTags(['2B005BCA58E2', '2B005B7E6967', '2B005BAC8955', '2B005B95BE5B', 
-							   '2B005BBE4789', '2B005B83C231', '2B005BA5D104', '2B005B8C23DF']);
+			this.fish.setTags(['2B005B8401F5', '2B005B7FFCF3', '2B005BCA58E2', '2B005B7E6967', '2B005BAC8955', 
+							   '2B005B95BE5B', '2B005BBE4789', '2B005B83C231', '2B005BA5D104', '2B005B8C23DF']);
 			this.fish.setIcon(new Icon_Fish());
 			
 			this.grass1.setName("Grass");
