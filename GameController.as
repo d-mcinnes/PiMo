@@ -74,7 +74,7 @@
 		private var player:Player;
 		private var paused:Boolean = false;
 		private var foodItems:FoodItems;
-		private var animalHistory:Array = [Rabbit.getClass(), Dog.getClass()];
+		private var animalHistory:Array = [Rabbit.getClass(), Dog.getClass(), Owl.getClass(), Tiger.getClass()];
 		
 		/* Static Variables */
 		public static var SCREEN_SIZE_X:Number = 1024;
@@ -245,7 +245,8 @@
 			printOptions.printAsBitmap = true;
 			printJob.orientation = PrintJobOrientation.LANDSCAPE;
 			printJob.selectPaperSize(PaperSize.A6);
-			printJob.start();
+			//printJob.start();
+			printJob.start2(null, false);
 			try {
 				printJob.addPage(this.gameInterface.generateFinalScreen(), null, printOptions);
 			} catch(e:Error) {
@@ -449,11 +450,13 @@
 		
 		/** Adds an animal to the players party. **/
 		public function attachAnimal(animal:Animal):void {
+			var sound:Glockenspiel = new Glockenspiel();
 			party.push(animal);
 			this.animalHistory.push(animal.getType());
 			animal.playWalkAnimation();
 			animal.interactionAttachGlobal();
 			animal.interactionAttach();
+			sound.play();
 			this.incrementScore(animal.getScore());
 			for each (var object in wild) {
 				if(object == animal) {
@@ -783,6 +786,7 @@
 		/** Ends the current game. **/
 		public function endGame() {
 			trace("================================================================================");
+			this.printScreenshot();
 			this.gameCleanup();
 			this.startGame();
 			this.pauseGame("Enter the playing area to begin the game.");

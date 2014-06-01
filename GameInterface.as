@@ -225,19 +225,21 @@
 			scoreFormat.font = new ScoreFont().fontName;
 			
 			var scoreText:TextField = new TextField();
-			scoreText.x = 40;
+			scoreText.x = 60;
 			scoreText.y = 0;
 			scoreText.width = 200;
 			scoreText.textColor = 0x000000;
 			scoreText.selectable = false;
 			scoreText.defaultTextFormat = scoreFormat;
-			scoreText.text = "Score: 23";	
+			scoreText.text = "Score: " + GameController.getInstance().getScore();	
 			screen.addChild(scoreText);
 			
-			/* Add to Screen (For Testing) */
+			/* Set Screen Settings */
 			screen.scaleX = 0.4;
 			screen.scaleY = 0.4;
-			//GameController.getInstance().getStageOverlay().addChild(screen);
+			screen.x = 0;
+			screen.y = 0;
+			GameController.getInstance().getStageOverlay().addChild(screen);
 			return screen;
 		}
 	}
