@@ -10,6 +10,7 @@
 	import flash.utils.getDefinitionByName;
 	
 	import deco3850.animals.Tiger;
+	import deco3850.animals.Alphca;
 	
 	public class Main extends MovieClip {
 		public function Main() {
@@ -47,7 +48,7 @@
 			} else if(e.keyCode == Keyboard.F2) {
 				GameController.getInstance().saveScreenshot();
 			} else if(e.keyCode == Keyboard.F3) {
-				GameController.getInstance().createAnimal(Tiger.getClass(), 100);
+				GameController.getInstance().createAnimal(Alphca.getClass(), 100);
 			} else if(e.keyCode == Keyboard.F4) {
 				GameController.getInstance().renderFoodIcons();
 			} else if(e.keyCode == Keyboard.F5) {

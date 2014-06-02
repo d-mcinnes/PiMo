@@ -13,6 +13,7 @@
 		}
 		
 		override public function sceneryInteraction() {
+			GameController.getInstance().createAnimal(getDefinitionByName("deco3850.animals.Rabbit") as Class, this.x);
 			return true;
 		}
 	}

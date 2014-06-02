@@ -10,7 +10,7 @@
 		}
 		
 		override public function checkAnimal(type:Class):Boolean {
-			if(type == Cow.getClass() || type == Sheep.getClass()) {
+			if(type == Cow.getClass() || type == Sheep.getClass() || type == Alphca.getClass()) {
 				return true;
 			} else {
 				return false;
