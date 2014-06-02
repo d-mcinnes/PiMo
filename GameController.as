@@ -38,6 +38,7 @@
 	import com.greensock.easing.Bounce;
 	import com.adobe.images.JPGEncoder;
 	import flash.utils.ByteArray;
+	import deco3850.food.Grass;
 	
 	public class GameController {
 		private static var gameController:GameController = null;
@@ -239,8 +240,8 @@
 		}
 		
 		public function printScreenshot() {
-			//this.gameInterface.generateFinalScreen();
-			var printJob:PrintJob = new PrintJob();
+			this.gameInterface.generateFinalScreen();
+			/*var printJob:PrintJob = new PrintJob();
 			var printOptions:PrintJobOptions = new PrintJobOptions();
 			printOptions.printAsBitmap = true;
 			printJob.orientation = PrintJobOrientation.LANDSCAPE;
@@ -256,7 +257,7 @@
 				printJob.send();
 			} catch(e:Error) {
 				trace ("Had problem printing: " + e); 
-			}
+			}*/
 		}
 		
 		/** ***************** **/
@@ -299,14 +300,36 @@
 			this.sceneryPosition = new Array();
 			
 			/* Create Farm */
-			var farm:Farm = new Farm((Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 550 + 1)) + 100), 
-									   GameController.GROUND_HEIGHT);
+			//var farm:Farm = new Farm((Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 550 + 1)) + 100), 
+			//						   GameController.GROUND_HEIGHT);
+			
+			var fence:Fence = new Fence(280, GameController.GROUND_HEIGHT + 45);
+			fence.setIsActive(true);
+			this.scenery.push(fence);
+			this.stageBackground.addChild(fence);
+			
+			var farm:Farm = new Farm(400, GameController.GROUND_HEIGHT + 50);
 			farm.setIsActive(true);
 			this.scenery.push(farm);
 			this.stageBackground.addChild(farm);
 			
+			var burrow:Burrow = new Burrow(50, GameController.GROUND_HEIGHT + 80);
+			burrow.setIsActive(true);
+			this.scenery.push(burrow);
+			this.stageBackground.addChild(burrow);
+			
 			/* Create Tree(s) */
-			for(var i:int = 0; i < (Math.floor(Math.random() * 2) + 1); i++) {
+			var tree:Tree = new Tree(100, GameController.GROUND_HEIGHT, 1.2);
+			tree.setIsActive(true);
+			this.scenery.push(tree);
+			this.stageBackground.addChild(tree);
+			
+			var tree2:Tree = new Tree(900, GameController.GROUND_HEIGHT + 40, 1);
+			tree2.setIsActive(true);
+			this.scenery.push(tree2);
+			this.stageBackground.addChild(tree2);
+			
+			/*for(var i:int = 0; i < (Math.floor(Math.random() * 2) + 1); i++) {
 				var x:Number = 0; var tree:Tree = new Tree(); var scale:Number = (Math.random() * 0.5 + 0.750);
 				tree.scaleX = scale;
 				tree.scaleY = scale;
@@ -321,16 +344,26 @@
 				tree.setIsActive(true);
 				this.scenery.push(tree);
 				this.stageBackground.addChild(tree);
-			}
+			}*/
 			
 			/* Create Grass */
-			for(var n:int = 0; n < (Math.floor(Math.random() * 4) + 1); n++) {
+			var grass:Grass = new Grass(180, GameController.GROUND_HEIGHT + 100, 1.1);
+			grass.setIsActive(true);
+			this.scenery.push(grass);
+			this.stageForeground.addChild(grass);
+			
+			var grass2:Grass = new Grass(700, GameController.GROUND_HEIGHT + 80, 0.9);
+			grass2.setIsActive(true);
+			this.scenery.push(grass2);
+			this.stageForeground.addChild(grass2);
+			
+			/*for(var n:int = 0; n < (Math.floor(Math.random() * 4) + 1); n++) {
 				var grass:Grass = new Grass((Math.floor(Math.random() * (GameController.SCREEN_SIZE_X - 150 + 1)) + 150), 
 											GameController.GROUND_HEIGHT + 20);
 				grass.setIsActive(true);
 				this.scenery.push(grass);
 				this.stageForeground.addChild(grass);
-			}
+			}*/
 		}
 		
 		/** Checks to see whether or not the user is in the current bounds of the

@@ -42,6 +42,7 @@
 		/** Restarts the game when the user presses the F5 key. **/
 		private function keyPressEvent(e:KeyboardEvent) {
 			if(e.keyCode == Keyboard.F1) {
+				//GameController.getInstance().saveScreenshot();
 				GameController.getInstance().printScreenshot();
 			} else if(e.keyCode == Keyboard.F2) {
 				GameController.getInstance().saveScreenshot();
