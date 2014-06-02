@@ -16,7 +16,7 @@
 			if(Debug.randomNumber(0, 1) == 0) {
 				GameController.getInstance().createAnimal(getDefinitionByName("deco3850.animals.Cow") as Class, this.x);
 			} else {
-				GameController.getInstance().createAnimal(getDefinitionByName("deco3850.animals.Sheep") as Class, this.x);
+				GameController.getInstance().createAnimal(getDefinitionByName("deco3850.animals.Alphca") as Class, this.x);
 			}
 			return true;
 		}

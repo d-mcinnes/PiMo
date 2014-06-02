@@ -10,11 +10,6 @@
 	import flash.events.TimerEvent;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
-	import flash.net.FileReference;
-	import flash.net.URLLoader;
-	import flash.net.URLRequest;
-	import flash.net.URLRequestHeader;
-	import flash.net.URLRequestMethod;
 	import flash.printing.PrintJob;
 	import flash.printing.PrintJobOptions;
 	import flash.printing.PrintJobOrientation;
@@ -32,14 +27,14 @@
 	import deco3850.animals.*;
 	import deco3850.objectives.*;
 	import deco3850.scenery.*;
+	import deco3850.food.*;
 	
 	import com.greensock.TweenLite;
 	import com.greensock.events.TweenEvent;
 	import com.greensock.easing.Bounce;
 	import com.adobe.images.JPGEncoder;
-	import flash.utils.ByteArray;
-	import deco3850.food.Grass;
-	
+	//import flash.utils.ByteArray;
+		
 	public class GameController {
 		private static var gameController:GameController = null;
 		
@@ -64,7 +59,7 @@
 		
 		/* Game Duration Variables */
 		private var gameTimer:Timer;
-		private var gameIncrement:Number = 2 * 60;
+		private var gameIncrement:Number = 1.5 * 60;
 		private var objectivesLevel:Number = 0;
 		
 		/* Gameplay Objects */
@@ -216,7 +211,7 @@
 		}
 		
 		public function saveScreenshot() {
-			var jpgEncoder:JPGEncoder = new JPGEncoder(90);
+			/*var jpgEncoder:JPGEncoder = new JPGEncoder(90);
 			var bitmapData:BitmapData = new BitmapData(1024, 600);
 			var img:ByteArray;
 			
@@ -233,7 +228,7 @@
 			var sendLoader:URLLoader;
 			sendLoader = new URLLoader();
 			//sendLoader.addEventListener(Event.COMPLETE, imageSentHandler);
-			sendLoader.load(sendReq);
+			sendLoader.load(sendReq);*/
 			
 			//var file:FileReference = new FileReference();
 			//file.save(img, "filename.jpg");
@@ -314,16 +309,21 @@
 			this.scenery.push(burrow);
 			this.stageBackground.addChild(burrow);
 			
+			var burrow2:Burrow = new Burrow(780, GameController.GROUND_HEIGHT + 110, 1);
+			burrow2.setIsActive(true);
+			this.scenery.push(burrow2);
+			this.stageBackground.addChild(burrow2);
+			
 			/* Create Tree(s) */
 			var tree:Tree = new Tree(70, GameController.GROUND_HEIGHT, 1.2);
 			tree.setIsActive(true);
 			this.scenery.push(tree);
 			this.stageBackground.addChild(tree);
 			
-			var tree2:Tree = new Tree(860, GameController.GROUND_HEIGHT + 40, 1);
-			tree2.setIsActive(true);
-			this.scenery.push(tree2);
-			this.stageBackground.addChild(tree2);
+			//var tree2:Tree = new Tree(860, GameController.GROUND_HEIGHT + 40, 1);
+			//tree2.setIsActive(true);
+			//this.scenery.push(tree2);
+			//this.stageBackground.addChild(tree2);
 			
 			/* Create Grass */
 			var grass:Grass = new Grass(150, GameController.GROUND_HEIGHT + 100, 1.1);
@@ -770,6 +770,7 @@
 			if(this.isGamePaused() == false) {
 				this.paused = true;
 				this.gameInterface.setPausedVisible(true);
+				this.gameInterface.setPausedTitle("Game Paused");
 				this.gameInterface.setPausedText(message);
 				this.gameTimer.stop();
 				Debug.debugMessage("Game paused");
@@ -793,7 +794,8 @@
 			this.printScreenshot();
 			this.gameCleanup();
 			this.startGame();
-			this.pauseGame("Enter the playing area to begin the game.");
+			this.pauseGame("Enter the playing area to begin a new game.");
+			this.gameInterface.setPausedTitle("Game Over - Score: " + this.getScore());
 			Debug.debugMessage("Restarting game");
 		}
 	}

@@ -25,6 +25,7 @@
 			this.timer = new Timer(500, 0);
 			this.timer.addEventListener(TimerEvent.TIMER, timerEventListener);
 			this.timer.start();
+			this.y = GameController.GROUND_HEIGHT + 200;
 		}
 		
 		private function timerEventListener(e:TimerEvent) {
@@ -67,6 +68,7 @@
 					GameController.getInstance().setPartyMoveAnimation();
 				}
 				this.x = xPos;
+				this.y = GameController.GROUND_HEIGHT + 50;
 			}
 			
 			/* Clear current Player and create Neck and Head. */

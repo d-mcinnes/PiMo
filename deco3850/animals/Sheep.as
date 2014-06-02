@@ -6,7 +6,7 @@
 	public class Sheep extends Animal {
 		public function Sheep() {
 			this.setName("Sheep");
-			this.createTimer(4000);
+			this.createTimer(7000);
 			this.setTags([]);
 			this.setScore(10);
 		}

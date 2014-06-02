@@ -7,7 +7,7 @@
 		
 		public function Rabbit() {
 			this.setName("Rabbit");
-			this.createTimer(4000);
+			this.createTimer(7000);
 			this.setTags(['all', 'rabbit', '0103C80917D4', '01023880D46F', '010238776E22', '0B00E74BF354', 
 						  '0102389F15B1', '0103F49EB8D0', '190065293B6E', '0103D778973A', '01056DF553CF', 
 						  '0103D7E13703', '2B005BADC71A', '010445B541B4', '2B005BA24E9C', '0102BC08FF48', 

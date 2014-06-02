@@ -6,7 +6,7 @@
 	public class Alphca extends Animal {
 		public function Alphca() {
 			this.setName("Alphca");
-			this.createTimer(4000);
+			this.createTimer(7000);
 			this.setTags([]);
 			this.setScore(10);
 		}

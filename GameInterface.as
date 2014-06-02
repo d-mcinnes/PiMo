@@ -103,7 +103,7 @@
 			this.scoreUpdateField.x = 0;
 			this.scoreUpdateField.y = GameController.SCREEN_SIZE_Y / 3;
 			this.scoreUpdateField.width = 100;
-			this.scoreUpdateField.textColor = 0x000000;
+			this.scoreUpdateField.textColor = 0xF03232;
 			this.scoreUpdateField.selectable = false;
 			this.scoreUpdateField.defaultTextFormat = this.scoreUpdateFormat;
 			this.scoreUpdateField.text = "";
@@ -165,6 +165,7 @@
 		
 		public function setPausedVisible(visible:Boolean) {this.gamePausedBackground.visible = visible;}
 		public function setPausedText(text:String) {this.gamePausedBackground.messageBox.text = text;}
+		public function setPausedTitle(text:String) {this.gamePausedBackground.titleBox.text = text;}
 		
 		public function displayGameMessage(text:String) {
 			TweenLite.to(this.gameMessageField, 0, {alpha:1});
