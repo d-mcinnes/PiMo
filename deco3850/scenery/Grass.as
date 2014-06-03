@@ -14,6 +14,10 @@
 		}
 		
 		override public function sceneryInteraction() {
+			if(Debug.randomNumber(0, 200) > 190) {
+				GameController.getInstance().createAnimal(getDefinitionByName("deco3850.animals.Tiger") as Class, this.x);
+				return true;
+			}
 			if(Debug.randomNumber(0, 1) == 0) {
 				GameController.getInstance().createAnimal(getDefinitionByName("deco3850.animals.Rat") as Class, this.x);
 			} else {

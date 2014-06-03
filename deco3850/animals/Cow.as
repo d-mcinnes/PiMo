@@ -8,6 +8,7 @@
 			this.createTimer(7000);
 			this.setTags([]);
 			this.setScore(20);
+			//this.scaleX *= -1;
 		}
 		
 		override public function interactionAttach():Boolean {

@@ -240,7 +240,7 @@
 			screen.scaleY = 0.4;
 			screen.x = 0;
 			screen.y = 0;
-			GameController.getInstance().getStageOverlay().addChild(screen);
+			//GameController.getInstance().getStageOverlay().addChild(screen);
 			return screen;
 		}
 	}

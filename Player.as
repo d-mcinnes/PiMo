@@ -89,7 +89,7 @@
 			
 			/* Render Left Arm */
 			var leftArmElbow = getPolarPoint(neckPoint, leftArmUpperAngle, SIZE_LIMB);
-			this.createCircle(playerHeadPoint, 5);
+			//this.createCircle(playerHeadPoint, 5);
 			this.createLine(neckPoint, leftArmElbow);
 			this.createLine(leftArmElbow, getPolarPoint(leftArmElbow, leftArmLowerAngle, SIZE_LIMB));
 			this.leftPoint = getPolarPoint(leftArmElbow, leftArmLowerAngle, SIZE_LIMB);

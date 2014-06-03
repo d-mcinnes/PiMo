@@ -70,7 +70,7 @@
 		private var player:Player;
 		private var paused:Boolean = false;
 		private var foodItems:FoodItems;
-		private var animalHistory:Array = [Rabbit.getClass(), Dog.getClass(), Owl.getClass(), Tiger.getClass()];
+		private var animalHistory:Array = [];
 		
 		/* Static Variables */
 		public static var SCREEN_SIZE_X:Number = 1024;
@@ -207,7 +207,7 @@
 			this.wild = new Array();
 			this.party = new Array();
 			this.loadScenery();
-			this.generateObjective();
+			//this.generateObjective();
 		}
 		
 		public function saveScreenshot() {
@@ -235,8 +235,8 @@
 		}
 		
 		public function printScreenshot() {
-			this.gameInterface.generateFinalScreen();
-			/*var printJob:PrintJob = new PrintJob();
+			//this.gameInterface.generateFinalScreen();
+			var printJob:PrintJob = new PrintJob();
 			var printOptions:PrintJobOptions = new PrintJobOptions();
 			printOptions.printAsBitmap = true;
 			printJob.orientation = PrintJobOrientation.LANDSCAPE;
@@ -252,7 +252,7 @@
 				printJob.send();
 			} catch(e:Error) {
 				trace ("Had problem printing: " + e); 
-			}*/
+			}
 		}
 		
 		/** ***************** **/
@@ -294,12 +294,12 @@
 			this.scenery = new Array();
 			this.sceneryPosition = new Array();
 			
-			var fence:Fence = new Fence(240, GameController.GROUND_HEIGHT + 45);
+			var fence:Fence = new Fence(300, GameController.GROUND_HEIGHT + 45);
 			fence.setIsActive(true);
 			this.scenery.push(fence);
 			this.stageBackground.addChild(fence);
 			
-			var farm:Farm = new Farm(360, GameController.GROUND_HEIGHT + 50);
+			var farm:Farm = new Farm(420, GameController.GROUND_HEIGHT + 50);
 			farm.setIsActive(true);
 			this.scenery.push(farm);
 			this.stageBackground.addChild(farm);
@@ -326,7 +326,7 @@
 			//this.stageBackground.addChild(tree2);
 			
 			/* Create Grass */
-			var grass:Grass = new Grass(150, GameController.GROUND_HEIGHT + 100, 1.1);
+			var grass:Grass = new Grass(170, GameController.GROUND_HEIGHT + 100, 1.1);
 			grass.setIsActive(true);
 			this.scenery.push(grass);
 			this.stageForeground.addChild(grass);
@@ -790,12 +790,13 @@
 		
 		/** Ends the current game. **/
 		public function endGame() {
+			var score:Number = this.getScore();
 			trace("================================================================================");
 			this.printScreenshot();
 			this.gameCleanup();
 			this.startGame();
 			this.pauseGame("Enter the playing area to begin a new game.");
-			this.gameInterface.setPausedTitle("Game Over - Score: " + this.getScore());
+			this.gameInterface.setPausedTitle("Game Over - Score: " + score);
 			Debug.debugMessage("Restarting game");
 		}
 	}
